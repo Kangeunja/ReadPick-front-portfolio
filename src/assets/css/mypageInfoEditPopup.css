@@ -1,0 +1,98 @@
+.mypageInfoEdit-wrap {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.mypageInfoEdit-box {
+  width: 330px;
+  /* height: 250px; */
+  background-color: white;
+  position: fixed;
+  z-index: 100;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 30px 40px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mypageInfoEdit-title {
+  font-size: 17px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.mypageInfoEdit-sub-title {
+  font-size: 14px;
+  color: #4a4a4a;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.mypageInfoEdit-input-box {
+  display: flex;
+  width: 140px;
+  height: 30px;
+  position: relative;
+  border-bottom: 1px solid #4a4a4a;
+}
+
+.mypageInfoEdit-input {
+  width: 150px;
+  height: 30px;
+  display: block;
+  border: none;
+  outline: none;
+}
+
+.mypageInfoEdit-popup-toggle-visibility {
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  right: 0;
+  top: 10px;
+  cursor: pointer;
+}
+
+.mypageInfoEdit-popup-member-pwCheck {
+  font-size: 10px;
+}
+
+.mypageInfoEdit-popup-id-CheckMessage.success,
+.mypageInfoEdit-popup-member-pwCheck.success {
+  color: green;
+}
+
+.mypageInfoEdit-popup-id-CheckMessage.error,
+.mypageInfoEdit-popup-member-pwCheck.error {
+  color: red;
+}
+
+.mypageInfoEdit-button {
+  width: 100px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.mypageInfoEdit-button button {
+  width: 40px;
+  background: transparent;
+  border: 0;
+  margin-top: 20px;
+}
+
+.mypageInfoEdit-button button:not(:disabled):hover {
+  color: rgb(80, 80, 80);
+  cursor: pointer;
+}

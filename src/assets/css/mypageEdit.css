@@ -1,0 +1,253 @@
+.mypage-edit__container {
+  width: 1300px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.mypage-edit__img-wrap {
+  width: 100px;
+  display: flex;
+  justify-content: center;
+}
+
+.mypage-edit__img {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 23px;
+}
+
+.mypage-edit__img-has-default {
+  border: 1px solid #1b1b1b;
+}
+
+.mypage-edit__img--default {
+  width: 30px;
+  height: 30px;
+  background-image: url("../img/book-detail-review-profile.png");
+  background-size: cover;
+}
+
+.mypage-edit__img img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.mypage-edit__btn-wrap {
+  display: flex;
+  width: 100px;
+  justify-content: space-between;
+  margin-bottom: 60px;
+}
+
+.mypage-edit__btn-wrap button {
+  border: none;
+  color: white;
+  font-size: 12px;
+}
+
+.mypage-edit__btn {
+  width: 61px;
+  height: 30px;
+  background-color: #a0a0a0;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.mypage-edit__btn:hover {
+  background-color: #1e7373;
+}
+
+.mypage-edit__btn-trash {
+  width: 30px;
+  height: 30px;
+  background-color: #a0a0a0;
+  border-radius: 10px;
+  background-image: url("../img/icon-trash.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 15px 15px;
+  cursor: pointer;
+}
+
+.mypage-edit__btn-trash:not(.disabled):hover {
+  background-color: #1e7373;
+}
+
+.mypage-edit__btn-trash.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.mypage-edit__field {
+  width: 363px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin-bottom: 45px;
+}
+
+.mypage-edit__label {
+  position: absolute;
+  top: -25px;
+  left: 5px;
+  color: #454545;
+}
+
+.mypage-edit__label span {
+  color: #b80000;
+}
+
+.form-field__control {
+  display: flex;
+  align-items: center;
+}
+
+.mypage-edit__input {
+  width: 100%;
+  height: 40px;
+  border: 1px solid #e0e0e0;
+  font-size: 16px;
+  border-radius: 5px;
+  padding: 10px;
+  color: #454545;
+  box-sizing: border-box;
+}
+
+.mypage-edit__input:disabled {
+  background-color: #f5f5f5;
+  color: #9a9a9a;
+  border-color: #e0e0e0;
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+.form-field__right-slot {
+  display: flex;
+  align-items: center;
+  float: left;
+}
+
+.mypage-edit__id-edit,
+.mypage-edit__pw-edit {
+  width: 75px;
+  height: 40px;
+  background-color: #248f8f;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.mypage-edit__id-edit:hover,
+.mypage-edit__pw-edit:hover {
+  background-color: #1e7373;
+}
+
+.mypage-edit__action-group {
+  display: flex;
+  gap: 15px;
+}
+
+.mypage-edit__id-btn-group {
+  display: flex;
+  gap: 6px;
+}
+
+.mypage-edit__id-btn-group button {
+  width: 75px;
+  height: 40px;
+  background-color: #248f8f;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.mypage-edit__id-btn-group button:hover {
+  background-color: #1e7373;
+}
+
+.mypage-edit__id-check {
+  margin-left: 10px;
+}
+
+.mypage-edit__action-group button {
+  width: 174px;
+  height: 45px;
+  background-color: #248f8f;
+  border-radius: 3px;
+  border: none;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.mypage-edit__action-group button:hover {
+  background-color: #1e7373;
+}
+
+.mypage-edit__id-check-message {
+  margin-left: 5px;
+  font-size: 12px;
+}
+
+.mypage-edit__id-check-message.success {
+  color: #008000;
+}
+
+.mypage-edit__id-check-message.error {
+  color: #ff0004;
+}
+
+.mypage-edit__newPw-message {
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+.mypage-edit__newPw-message.error {
+  color: #ff0004;
+}
+
+.mypage-edit__confirmPw-message {
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+.mypage-edit__confirmPw-message.error {
+  color: #ff0004;
+}
+
+.mypage-edit__pw-cancel {
+  width: 363px;
+  height: 40px;
+  background-color: #248f8f;
+  border: none;
+  border-radius: 3px;
+  color: white;
+  margin-top: -20px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.mypage-edit__pw-cancel:hover {
+  background-color: #1e7373;
+}
+
+.form-field {
+  position: relative;
+}
+
+.mypage-edit__visible {
+  position: absolute;
+  right: 10px;
+}

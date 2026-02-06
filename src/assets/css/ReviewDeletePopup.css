@@ -1,0 +1,87 @@
+.review-popup__del {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 99;
+  overflow: hidden;
+}
+
+.review-popup__del-box {
+  width: 360px;
+  background-color: white;
+  position: fixed;
+  z-index: 100;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 15px;
+  padding: 30px;
+  box-sizing: border-box;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  opacity: 0;
+  animation: popup-slide-in 0.3s ease forwards;
+  animation-delay: 0.05s;
+}
+
+@keyframes popup-fade-in {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes popup-slide-in {
+  to {
+    opacity: 1;
+  }
+}
+
+.review-popup__del-header {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.review-popup__del-info {
+  font-size: 14px;
+  color: #333333;
+}
+
+.review-popup__del-actions {
+  margin-top: 36px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.review-del__popup-btn {
+  width: 111px;
+  height: 43px;
+  border-radius: 5px;
+  border: none;
+  background-color: transparent;
+  color: rgb(0, 0, 0);
+}
+
+.review-del__cancel-btn {
+  background-color: #b6b6b6;
+  cursor: pointer;
+}
+
+.review-del__btn {
+  background-color: #ec1818;
+  cursor: pointer;
+  color: white;
+}
+
+.review-del__btn.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

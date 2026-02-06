@@ -1,0 +1,271 @@
+.mypageInfo-popup-wrap {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.mypageInfo-popup-box {
+  width: 650px;
+  /* height: 480px; */
+  background-color: white;
+  position: fixed;
+  z-index: 100;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.mypageInfo-popup-text {
+  font-size: 23px;
+  margin-bottom: 35px;
+}
+
+.mypageInfo-popup-notice {
+  font-size: 10px;
+  text-align: center;
+  margin-bottom: 20px;
+  color: red;
+}
+
+.mypageInfo-popup-img-wrap {
+  float: left;
+  /* height: 300px; */
+  margin-right: 70px;
+}
+
+.mypageInfo-popup-img-box {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.mypageInfo-popup-img-box img {
+  width: 100px;
+  height: 100px;
+  border-radius: 25px;
+}
+
+.mypageInfo-popup-bottom-box {
+  width: 35px;
+  height: 35px;
+  background-color: #000000;
+  position: absolute;
+  border-radius: 50%;
+  right: -10px;
+  bottom: -5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mypageInfo-popup-bottom-box:hover {
+  background-color: #585858;
+  cursor: pointer;
+}
+
+.mypageInfo-popup-bottom-img {
+  width: 16px;
+  height: 14px;
+  background-image: url("/src/assets/img/icon-camera.png");
+  background-size: cover;
+}
+
+.mypageInfo-uploaded-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 25px;
+}
+
+.mypageInfo-popup-correction-wrap {
+  display: flex;
+}
+
+.mypageInfo-popup-correction-wrap button {
+  height: 30px;
+  background-color: #a0a0a0;
+  border-radius: 10px;
+  font-size: 12px;
+  text-align: center;
+  line-height: 30px;
+  cursor: pointer;
+  border: none;
+  margin-top: 5px;
+  color: white;
+}
+
+.mypageInfo-popup-correction-wrap button:hover {
+  background-color: #618d70;
+  color: white;
+}
+
+.mypageInfo-popup-edit-btn {
+  width: 65px;
+  margin-right: 5px;
+}
+
+.mypageInfo-popup-delete-btn {
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mypageInfo-popup-delete-btn img {
+  width: 15px;
+}
+
+.mypageInfo-popup-text-wrap {
+  float: left;
+}
+
+.mypageInfo-popup-text-box {
+  margin-bottom: 30px;
+}
+
+.mypageInfo-popup-text-box:last-child {
+  margin-bottom: 40px;
+}
+
+.mypageInfo-popup-text-box input {
+  width: 160px;
+  font-size: 14px;
+  margin-top: 5px;
+  float: left;
+  margin-right: 30px;
+  border: none;
+  outline: none;
+  position: relative;
+  margin-bottom: 5px;
+}
+
+.mypageInfo-popup-text-box input.id-edit {
+  width: 90px;
+  /* margin-right: 10px;  */
+}
+
+.mypageInfo-popup-text-box input::placeholder {
+  color: #353535;
+}
+
+.mypageInfo-popup-text-box button {
+  width: 60px;
+  height: 25px;
+  border: none;
+  background-color: #f3f3f3;
+  font-size: 12px;
+  cursor: pointer;
+  display: block;
+}
+
+.mypageInfo-popup-text-box button:hover {
+  background-color: #618d70;
+  color: white;
+}
+
+.mypageInfo-popup-title {
+  width: 80px;
+  font-weight: bold;
+  float: left;
+  margin-right: 20px;
+  position: relative;
+}
+
+.mypageInfo-popup-button-wrap {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.mypageInfo-popup-button-wrap button:first-child {
+  margin-right: 10px;
+}
+
+.mypageInfo-popup-message {
+  display: flex;
+}
+
+.mypageInfo-popup-id-CheckMessage {
+  width: 180px;
+  margin-left: 100px;
+  /* margin-right: 50px; */
+  font-size: 12px;
+}
+
+.mypageInfo-popup-member-pwCheck {
+  width: 180px;
+  margin-left: 120px;
+  font-size: 12px;
+}
+
+.mypageInfo-popup-id-CheckMessage.success,
+.mypageInfo-popup-member-pwCheck.success {
+  color: green;
+}
+
+.mypageInfo-popup-id-CheckMessage.error,
+.mypageInfo-popup-member-pwCheck.error {
+  color: red;
+}
+
+.mypageInfo-popup-toggle-visibility {
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  right: 200px;
+  cursor: pointer;
+}
+
+.mypage-popup-button {
+  display: block;
+  width: 160px;
+  height: 30px;
+  background-color: #74a681;
+  color: white;
+  border: none;
+  position: relative;
+  /* margin-top: 10px; */
+  font-size: 13px;
+  cursor: pointer;
+  float: left;
+  left: 170px;
+}
+
+.cancel {
+  margin-right: 30px;
+}
+
+.save:hover,
+.cancel:hover {
+  background-color: #01701d;
+}
+
+.mypage-popup-button.save.highlight {
+  background-color: #fe8686;
+  color: #fff;
+}
+
+.mypage-popup-button.save.highlight:hover {
+  background-color: #ff6b6b;
+}
+
+.mypage-popup-icon {
+  width: 20px;
+  height: 20px;
+  background-image: url(../img/icon-cancel.png);
+  background-size: cover;
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}

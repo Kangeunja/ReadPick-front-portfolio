@@ -1,0 +1,176 @@
+.profile-manage {
+  width: 100%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 200px;
+  padding-top: 50px;
+}
+
+.profile-manage__img-wrap {
+  width: 100px;
+  display: flex;
+  justify-content: center;
+}
+
+.profile-manage__img {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 23px;
+}
+
+.profile-manage__img-has-default {
+  border: 1px solid #1b1b1b;
+}
+
+.profile-manage__img--default {
+  width: 30px;
+  height: 30px;
+  background-image: url("../img/book-detail-review-profile.png");
+  background-size: cover;
+}
+
+.profile-manage__img img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.profile-manage__img-box {
+  width: 30px;
+  height: 30px;
+  background-color: #7a7a7a;
+  border: 1px solid white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  bottom: 30px;
+  left: 60px;
+  cursor: pointer;
+}
+
+.profile-manage__icon {
+  width: 16px;
+  height: 14px;
+  background-image: url("../img/icon-camera.png");
+  background-size: cover;
+}
+
+.profile-manage__btn-wrap {
+  display: flex;
+  width: 100px;
+  justify-content: space-between;
+  margin-bottom: 60px;
+}
+
+.profile-manage__btn-wrap button {
+  border: none;
+  color: white;
+  font-size: 12px;
+}
+
+.profile-manage__edit-btn {
+  width: 61px;
+  height: 30px;
+  background-color: #a0a0a0;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.profile-manage__edit-btn:hover {
+  background-color: #1e7373;
+}
+
+.profile-manage__edit_trash {
+  width: 30px;
+  height: 30px;
+  background-color: #a0a0a0;
+  border-radius: 10px;
+  background-image: url("../img/icon-trash.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 15px 15px;
+  cursor: pointer;
+}
+
+.profile-manage__edit_trash:not(.disabled):hover {
+  background-color: #1e7373;
+}
+
+.profile-manage__edit_trash.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.profile-manage__field {
+  position: relative;
+  width: 363px;
+  margin-bottom: 16px;
+}
+
+.profile-manage__input {
+  width: 100%;
+  height: 54px;
+  border: 1px solid #e0e0e0;
+  font-size: 16px;
+  border-radius: 5px;
+  padding: 23px 12px 8px;
+  box-sizing: border-box;
+}
+
+.profile-manage__label {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: #9a9a9a;
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+/* 포커스 or 값 있을 때 위로 이동 */
+.profile-manage__input:focus + .profile-manage__label,
+.profile-manage__input.has-value + .profile-manage__label {
+  top: 16px;
+  font-size: 11px;
+  color: #454545;
+}
+
+.profile-manage__label span {
+  color: #b80000;
+}
+
+.profile-manage__notice {
+  font-size: 13px;
+  color: #454545;
+  color: red;
+  margin-bottom: 10px;
+}
+
+.profile-manage__save {
+  width: 363px;
+  height: 45px;
+  background-color: #a0a0a0;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 40px;
+  cursor: not-allowed;
+}
+
+.profile-manage__save.active {
+  background-color: #1e7373;
+  cursor: pointer;
+}
+
+.profile-manage__text {
+  color: #454545;
+  text-align: center;
+}

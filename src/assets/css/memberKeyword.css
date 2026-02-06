@@ -1,0 +1,79 @@
+@import url("https://fonts.googleapis.com/css2?family=Jua&display=swap");
+
+.keyword__page {
+  width: 100%;
+}
+
+.keyword__container {
+  width: 1300px;
+  margin: 0 auto;
+}
+
+.keyword__content {
+  width: 980px;
+  float: right;
+}
+
+.keyword__count {
+  width: 100%;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eaeaea;
+  font-weight: 500;
+  margin-bottom: 40px;
+}
+
+.keyword__count span {
+  color: #248f8f;
+}
+
+.keyword__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 45px;
+  margin-bottom: 200px;
+}
+
+.keyword-card {
+  width: 160px;
+  cursor: pointer;
+}
+
+.keyword-card__image {
+  width: 160px;
+  height: 200px;
+  border: 1px solid #d9d9d9;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+}
+
+.keyword-card__image:hover {
+  transform: translateY(-4px);
+  box-shadow: 3px 2px 9.6px 1px rgba(193, 193, 193, 1);
+}
+
+.keyword-card__image img {
+  width: 100%;
+  height: 100%;
+  image-rendering: crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+.keyword-card__title {
+  width: 160px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.keyword-card__author {
+  font-size: 12px;
+  color: #373737;
+}
+
+.keyword__empty {
+  width: 100%;
+  text-align: center;
+  margin-top: 100px;
+}

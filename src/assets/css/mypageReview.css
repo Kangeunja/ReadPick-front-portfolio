@@ -1,0 +1,135 @@
+.mypage-review {
+  width: 100%;
+  padding-top: 50px;
+  margin-bottom: 200px;
+}
+
+.mypage-review__container {
+  width: 613px;
+  margin: 0 auto;
+}
+
+.mypage-review__count {
+  font-size: 14px;
+  color: #333333;
+  margin-bottom: 28px;
+}
+
+.mypage-review__con-wrap {
+  margin-bottom: 60px;
+  position: relative;
+}
+
+.mypage-review__info-wrap {
+  display: flex;
+  margin-bottom: 11px;
+}
+
+.mypage-review__img {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  margin-right: 11px;
+}
+
+.mypage-review__img img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.mypage-review__img-has-default {
+  border: 1px solid #1b1b1b;
+}
+
+.mypage-review__img--default {
+  width: 30px;
+  height: 30px;
+  background-image: url("../img/book-detail-review-profile.png");
+  background-size: cover;
+}
+
+.mypage-review__info {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  line-height: 30px;
+}
+
+.mypage-review__info p:nth-child(1) {
+  font-size: 14px;
+  color: #333333;
+}
+
+.mypage-review__info p:nth-child(2) {
+  font-size: 12px;
+  color: #797979;
+}
+
+.myage-review__add-btn {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  background-size: 1.5px 10px;
+  background-image: url("../img/book-detail-review-add.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-top: 4px;
+}
+
+.mypage-review__more-menu {
+  width: 83px;
+  background-color: white;
+  box-shadow: 3px 2px 6px 1px rgba(0, 0, 0, 0.15);
+  position: absolute;
+  right: 18px;
+  top: 0;
+  font-size: 12px;
+  text-align: center;
+  line-height: 28px;
+  padding: 5px;
+  box-sizing: border-box;
+  border-radius: 3px;
+}
+
+.mypage-review__box {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #f3f3f3;
+  box-sizing: border-box;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.mypage-review__book-img {
+  width: 60px;
+  height: 75px;
+  border-radius: 12px;
+  margin-right: 20px;
+}
+
+.mypage-review__book-img img {
+  width: 60px;
+  height: 75px;
+  border-radius: 12px;
+}
+
+.mypage-review__book-info p:nth-child(1) {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.mypage-review__book-info p:nth-child(2) {
+  font-size: 12px;
+  color: #343434;
+}
+
+.mypage-review__book-content {
+  font-size: 13px;
+  color: #333333;
+}

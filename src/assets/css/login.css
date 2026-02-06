@@ -1,0 +1,141 @@
+@import url("https://fonts.googleapis.com/css2?family=Asta+Sans:wght@300..800&family=Jua&family=McLaren&display=swap");
+
+.login-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.login-main-img {
+  flex: 1;
+  background: url("../img/login-main.png") center / cover no-repeat;
+}
+
+.login-panel {
+  width: 100%;
+  flex: 0 0 700px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-panel-inner {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-visual {
+  width: 190px;
+  height: 143px;
+  background-image: url("../img/reading-woman.png");
+  margin: 0 auto;
+}
+
+.login-title {
+  text-align: center;
+  font-size: 25px;
+  margin-bottom: 30px;
+}
+
+.login-title span {
+  color: #00822b;
+  font-family: "McLaren", sans-serif;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-input {
+  width: 400px;
+  height: 50px;
+  border: 1px solid #bcbcbc;
+  border-radius: 5px;
+  padding: 15px;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.login-input-pw {
+  position: relative;
+}
+
+.login-toggle-visibility {
+  position: absolute;
+  right: 15px;
+  top: 16px;
+}
+
+.login-Error {
+  color: red;
+  font-size: 15px;
+}
+
+.login-submit {
+  width: 400px;
+  height: 50px;
+  border: 1px solid #bcbcbc;
+  border-radius: 5px;
+  background-color: #00822b;
+  font-size: 16px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  color: white;
+  cursor: pointer;
+}
+
+.login-submit:disabled {
+  background-color: #00822b;
+  opacity: 30%;
+  cursor: not-allowed;
+}
+
+.login-actions {
+  width: 300px;
+  justify-content: space-between;
+  display: flex;
+  font-size: 16px;
+  color: rgb(43, 43, 43);
+}
+
+.login-actions button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.login-actions button:hover {
+  color: rgb(92, 92, 92);
+}
+
+/* 노트북 이하 */
+@media (max-width: 1600px) {
+  .login-panel {
+    max-width: 600px;
+  }
+
+  .login-title {
+    font-size: 20px;
+  }
+
+  .login-input {
+    max-width: 350px;
+  }
+
+  .login-submit {
+    max-width: 350px;
+  }
+
+  .login-actions {
+    max-width: 260px;
+  }
+}
+
+/* 탭 이하 */
+@media (max-width: 1024px) {
+  .login-main-img {
+    display: none;
+  }
+}

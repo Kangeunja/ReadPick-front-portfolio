@@ -1,0 +1,123 @@
+.mypage-info {
+  width: 100%;
+  box-sizing: border-box;
+  padding-top: 50px;
+  margin-bottom: 200px;
+}
+
+.mypage-info__container {
+  width: 1300px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.mypage-info__box {
+  width: 50px;
+  height: 50px;
+  background-color: #ffe019;
+  border-radius: 50%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 31px;
+}
+
+.mypage-info__icon {
+  width: 14px;
+  height: 18px;
+  background-image: url("../img/mypage-info-icon.png");
+}
+
+.mypage-info__detail {
+  text-align: center;
+}
+
+.mypage-info__detail p:nth-child(1) {
+  font-size: 24px;
+  margin-bottom: 11px;
+  font-weight: 500;
+}
+
+.mypage-info__detail p:nth-child(2) {
+  font-size: 15px;
+  color: #454545;
+  margin-bottom: 41px;
+}
+
+.mypage-info__field {
+  position: relative;
+  width: 363px;
+  margin-bottom: 16px;
+}
+
+.mypage-info____input {
+  width: 100%;
+  height: 54px;
+  border: 1px solid #e0e0e0;
+  font-size: 16px;
+  border-radius: 5px;
+  padding: 23px 12px 8px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.mypage-info__label {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: #9a9a9a;
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+.mypage-info__label span {
+  color: #b80000;
+}
+
+.mypage-info____input:focus + .mypage-info__label,
+.mypage-info____input.has-value + .mypage-info__label {
+  top: 16px;
+  font-size: 11px;
+  color: #454545;
+}
+
+.mypage-info__password-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #9a9a9a;
+}
+
+.mypage-info__password-icon:hover {
+  color: #454545;
+}
+
+.mypage-info__save {
+  width: 363px;
+  height: 45px;
+  background-color: #1e7373;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 30px;
+  cursor: pointer;
+}
+
+.mypage-info__save.active {
+  cursor: not-allowed;
+  background-color: #a0a0a0;
+}
+
+.mypage-info__error {
+  color: red;
+  font-size: 15px;
+}

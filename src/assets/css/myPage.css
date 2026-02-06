@@ -1,0 +1,183 @@
+.mypage {
+  width: 100%;
+}
+
+.mypage__container {
+  width: 1300px;
+  margin: 0 auto;
+}
+
+.mypage-title {
+  margin-bottom: 50px;
+  font-size: 30px;
+  font-family: "Jua", sans-serif;
+}
+
+.mypage-info-wrap {
+  width: 600px;
+  height: 220px;
+  box-shadow: 3px 2px 9.6px 1px rgba(0, 0, 0, 0.25);
+  margin-bottom: 70px;
+  padding: 30px 50px;
+  box-sizing: border-box;
+}
+
+.mypage-info-top-wrap {
+  display: flex;
+}
+
+.mypage-info-img-box {
+  width: 97px;
+  height: 93px;
+  background-color: #e7e7e7;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 30px;
+}
+
+.mypage-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+}
+
+.mypage-button {
+  width: 97px;
+  height: 35px;
+  background-color: #51ac99;
+  color: white;
+  display: block;
+  text-align: center;
+  font-size: 12px;
+  border: none;
+  border-radius: 5px;
+}
+
+.mypage-button:hover {
+  background-color: #3a7c6e;
+  color: white;
+  cursor: pointer;
+}
+
+.mypage-text-wrap {
+  padding-top: 30px;
+  box-sizing: border-box;
+  font-size: 17px;
+}
+
+.mypage-text-wrap span {
+  font-weight: bold;
+}
+
+.mypage-list-wrap {
+  width: 1200px;
+  background-color: white;
+  box-shadow: 3px 2px 9.6px 1px rgba(0, 0, 0, 0.25);
+  padding: 30px 50px;
+  box-sizing: border-box;
+  margin-bottom: 100px;
+}
+
+.mypage-list-title {
+  margin-bottom: 40px;
+}
+
+.mypage-list-container {
+  position: relative;
+}
+
+.nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  box-shadow: 3px 2px 9.6px 1px rgba(0, 0, 0, 0.25);
+}
+
+/* hover 시 나타남 */
+.mypage-list-container:hover .nav-arrow {
+  opacity: 1;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.nav-arrow:hover {
+  background: rgb(195, 195, 195);
+}
+
+/* 좌우 위치 */
+.nav-arrow.left {
+  left: 45px;
+}
+
+.nav-arrow.right {
+  right: 10px;
+}
+
+/* 비활성화 */
+.nav-arrow.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.mypage-list-box {
+  display: flex;
+  overflow-x: auto;
+  /* white-space: nowrap; */
+  scrollbar-width: none;
+}
+
+.mypage-list-box::-webkit-scrollbar {
+  display: none;
+}
+
+.mypage-box-wrap {
+  vertical-align: top;
+  display: inline-block;
+  /* height: 330px; */
+  cursor: pointer;
+}
+
+.mypage-list-img {
+  width: 180px;
+  height: 230px;
+  background-color: white;
+  border: 1px solid #d9d9d9;
+  box-shadow: 3px 2px 9.6px 1px rgba(193, 193, 193, 1);
+  margin-right: 40px;
+}
+
+.mypage-list-img img {
+  width: 180px;
+  height: 230px;
+}
+
+.mypage-text {
+  width: 180px;
+  margin-top: 20px;
+  white-space: normal;
+}
+
+.mypage-text p:nth-child(1) {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.mypage-text p:nth-child(2) {
+  font-size: 11px;
+}

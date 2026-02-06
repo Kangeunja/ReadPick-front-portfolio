@@ -1,0 +1,59 @@
+.isLoginPopup-wrap {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.isLoginPopup-box {
+  width: 420px;
+  height: 200px;
+  background-color: white;
+  position: fixed;
+  z-index: 100;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 40px 25px;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.isLoginPopup-box p {
+  font-size: 15px;
+}
+
+.isLoginPopup-title {
+  margin-bottom: 20px;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.isLoginPopup-btn {
+  width: 250px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.isLoginPopup-btn button {
+  width: 100px;
+  height: 35px;
+  background-color: burlywood;
+  border: none;
+  margin-top: 35px;
+  color: rgb(10, 10, 10);
+}
+
+.isLoginPopup-btn button:hover {
+  background-color: rgb(223, 159, 76);
+  cursor: pointer;
+  color: rgb(224, 224, 224);
+}

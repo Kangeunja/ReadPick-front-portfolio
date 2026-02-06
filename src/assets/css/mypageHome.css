@@ -1,0 +1,208 @@
+.mypage-home {
+  width: 100%;
+}
+
+.mypage-container {
+  width: 1300px;
+  margin: 0 auto;
+}
+
+.mypage-home__con-wrap {
+  display: flex;
+  justify-content: space-between;
+}
+
+.mypage-home__img-wrap {
+  display: flex;
+}
+
+.mypage-home__img {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+}
+
+.mypage-home__img-has-default {
+  border: 1px solid #1b1b1b;
+}
+
+.mypage-home__img--default {
+  width: 30px;
+  height: 30px;
+  background-image: url("../img/book-detail-review-profile.png");
+  background-size: cover;
+}
+
+.mypage-home__img img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.mypage-home__img-box {
+  width: 30px;
+  height: 30px;
+  background-color: #7a7a7a;
+  border: 1px solid white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  bottom: 30px;
+  left: 60px;
+  cursor: pointer;
+}
+
+.mypage-home__img-box:hover {
+  background-color: #1e7373;
+}
+
+.mypage-home__icon {
+  width: 16px;
+  height: 14px;
+  background-image: url("../img/icon-camera.png");
+  background-size: cover;
+}
+
+/* 내정보 */
+.mypage-home__info-wrap {
+  margin-left: 30px;
+}
+
+.mypage-home__info {
+  font-size: 16px;
+  color: #3a3a3a;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.mypage-home__info span {
+  font-size: 20px;
+  font-weight: 500;
+  color: black;
+}
+
+.mypage-home__btn-wrap button {
+  background-color: transparent;
+  border: none;
+  font-size: 15px;
+  color: #454545;
+  cursor: pointer;
+}
+
+.mypage-home__btn-wrap button:hover {
+  text-decoration: underline;
+}
+
+.mypage-home__btn-wrap button:not(:last-child) {
+  position: relative;
+  margin-right: 16px;
+}
+
+.mypage-home__btn-wrap button:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: -9px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 11px;
+  background-color: #454545;
+}
+
+/* 찜목록 */
+.mypage-home__favorites-container {
+  position: relative;
+}
+
+.mypage-home__favorites-title {
+  font-size: 18px;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.mypage-home__favorites-box--wrap {
+  width: 700px;
+  display: flex;
+  gap: 18px;
+  overflow-x: hidden;
+}
+
+.mypage-home__favorites-box {
+  cursor: pointer;
+}
+
+.mypage-home__favorites-con {
+  width: 119px;
+  height: 148px;
+  margin-bottom: 14px;
+}
+
+.mypage-home__favorites-img img {
+  width: 119px;
+  height: 148px;
+  border-radius: 12px;
+  border: 1px solid #d9d9d9;
+  box-sizing: border-box;
+}
+
+.mypage-home__favorites-info {
+  width: 119px;
+}
+
+.mypage-home__favorites-info p:nth-child(1) {
+  color: black;
+  font-size: 14px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.mypage-home__favorites-info p:nth-child(2) {
+  font-size: 12px;
+  color: #555555;
+}
+
+.mypage-home__nav-arrow {
+  width: 35px;
+  height: 35px;
+  background-color: white;
+  box-shadow: 3px 2px 9.6px 1px rgba(0, 0, 0, 0.25);
+  border: none;
+  border-radius: 50%;
+  position: absolute;
+  top: 45%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+}
+
+.mypage-home__favorites-container:hover .mypage-home__nav-arrow {
+  opacity: 1;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.mypage-home__nav-arrow.right {
+  right: -40px;
+}
+
+.mypage-home__nav-arrow.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.mypage-home__favorites-empty {
+  width: 700px;
+  border: 1px solid #eaeaea;
+  padding: 20px;
+  box-sizing: border-box;
+  color: #555555;
+}

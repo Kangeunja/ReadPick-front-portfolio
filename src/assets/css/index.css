@@ -1,0 +1,538 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow-x: hidden;
+  font-family: "Roboto", sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.content-wrap {
+  flex: 1;
+}
+
+article,
+aside,
+canvas,
+details,
+figcaption,
+figure,
+footer,
+header,
+main,
+menu,
+nav,
+section,
+summary {
+  display: block;
+}
+
+img,
+fieldset,
+iframe {
+  border-style: none;
+}
+
+ul,
+ol,
+li,
+dl,
+dt,
+dd {
+  list-style: none;
+}
+
+a {
+  background-color: transparent;
+  color: inherit;
+  font-size: inherit;
+  text-decoration: none;
+}
+
+/* .keyword {
+  width: 80px;
+  height: 38px;
+  border: 1px solid #303030;
+  border-radius: 20px;
+  font-size: 20px;
+  text-align: center;
+  line-height: 35px;
+  font-weight: bold;
+  margin-right: 30px;
+} */
+
+.text-wrap {
+  height: 65px;
+}
+
+.text-wrap p:nth-child(1) {
+  color: #8e8e8e;
+  font-weight: bold;
+}
+
+.book-icon {
+  width: 68px;
+  height: 68px;
+  /* background-color: #8e8e8e; */
+  background-image: url("/src/assets/img/icon-book.png");
+  float: left;
+}
+
+.today-wrap p {
+  float: left;
+  font-weight: bold;
+  font-size: 40px;
+  line-height: 68px;
+}
+
+.sub-text span {
+  font-weight: bold;
+}
+
+.book-img {
+  width: 350px;
+  height: 420px;
+  border: 1px solid black;
+  border-radius: 20px;
+  margin-top: 50px;
+}
+
+.center-title-wrap {
+  width: 300px;
+  float: left;
+}
+
+.bottom-icons {
+  width: 24px;
+  height: 24px;
+  float: left;
+}
+
+.center-title-right-wrap {
+  width: 800px;
+  float: right;
+}
+
+.center-right-wrap {
+  font-size: 20px;
+  float: right;
+}
+
+.center-right-title {
+  font-weight: bold;
+  font-size: 20px;
+  margin: 30px 0;
+}
+
+.center-right-box {
+  width: 800px;
+  height: 173px;
+  background-color: white;
+  border: 1px solid #d9d9d9;
+  border-radius: 20px;
+  box-shadow: 3px 2px 10.3px 5px rgba(0, 0, 0, 0.25);
+  display: flex;
+  padding: 20px;
+  box-sizing: border-box;
+  margin-bottom: 80px;
+}
+
+.center-right-p {
+  width: 50px;
+  height: 50px;
+  background-color: #d9d9d9;
+  border-radius: 50px;
+  margin-right: 20px;
+}
+
+.center-right-text p:nth-child(1) {
+  font-weight: bold;
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+.center-right-text p:nth-child(2) {
+  font-size: 13px;
+}
+
+.center-right-text p:nth-child(3) {
+  font-size: 12px;
+}
+
+.member-number-text {
+  position: absolute;
+  top: -30px;
+  left: 10px;
+  width: 530px;
+}
+
+/* member */
+.number {
+  float: left;
+}
+
+.require {
+  float: right;
+  line-height: 30px;
+  font-size: 12px;
+}
+
+.require span {
+  color: red;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.member-wrap {
+  width: 550px;
+  height: 600px;
+  border: 1px solid #4d4d4d;
+  border-radius: 20px;
+  margin: 80px auto;
+  padding: 30px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.member-title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 25px;
+  margin-bottom: 40px;
+}
+
+.member-text-wrap {
+  width: 450px;
+  display: flex;
+  margin: 20px auto 10px auto;
+}
+
+.icon-check-basic {
+  display: none;
+}
+
+.icon-check-all,
+.icon-check,
+.icon-check2 {
+  width: 20px;
+  height: 20px;
+  background-image: url("/src/assets/img/icon-check.png");
+  background-position: center;
+  border-radius: 50px;
+  border: 2px solid #bebebe;
+  color: #bebebe;
+  font-size: 20px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+/* 체크되었을 때 스타일 변경 */
+.icon-check-basic:checked + label .icon-check-all,
+.icon-check-basic:checked + label .icon-check,
+.icon-check-basic:checked + label .icon-check2 {
+  background-image: url("/src/assets/img/icon-check-color.png");
+  background-color: #004f14;
+  position: relative;
+  border: 2px solid #004f14;
+}
+
+.member-text,
+.member-top-text {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.member-top-box {
+  width: 460px;
+  height: 150px;
+  border: 1px solid #d0d0d0;
+  margin: 0 auto;
+  padding: 15px;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+}
+
+.member-top-wrap {
+  width: 460px;
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.member-top-con {
+  width: 420px;
+  height: 80px;
+  background-color: #ebebeb;
+  margin: 0 auto;
+  padding: 10px 15px;
+  box-sizing: border-box;
+  font-size: 12px;
+  overflow: auto;
+}
+
+.member-top-con p:nth-child(1) {
+  margin-bottom: 10px;
+}
+
+.member-check {
+  width: 460px;
+  height: 100px;
+  background-color: #d9d9d9;
+  display: block;
+  margin: 0 auto;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.member-check:hover {
+  background-color: #b0b0b0;
+}
+
+/* memberLogin */
+.member-input-wrap {
+  width: 500px;
+  height: 40px;
+  line-height: 40px;
+  display: flex;
+  /* justify-content: center; */
+  margin-bottom: 30px;
+}
+
+.member-input-text {
+  width: 120px;
+  float: left;
+  /* color: #a9a9a9; */
+}
+
+.member-input-text p {
+  float: left;
+}
+
+.member-input-text p:nth-child(2) {
+  color: red;
+}
+
+.mem-id,
+.mem-pw,
+.mem-name,
+.mem-nickName,
+.mem-email {
+  width: 260px;
+  height: 40px;
+  border: 1px solid #797979;
+  float: right;
+  padding-left: 10px;
+  box-sizing: border-box;
+  outline: none;
+  font-size: 12px;
+}
+
+.toggle-visibility {
+  width: 15px;
+  height: 15px;
+  position: relative;
+  left: -20px;
+  cursor: pointer;
+}
+
+.id-check-wrap,
+.password-wrap {
+  height: 60px;
+  position: relative;
+}
+
+.id-CheckMessage,
+.member-pwCheck {
+  font-size: 12px;
+  position: absolute;
+  bottom: -10px;
+}
+
+.id-CheckMessage.success,
+.member-pwCheck.success {
+  color: green;
+}
+
+.id-CheckMessage.error,
+.member-pwCheck.error {
+  color: red;
+}
+
+.id-check {
+  width: 80px;
+  margin-left: 20px;
+  border: none;
+  background-color: #d9d9d9;
+}
+
+.id-check:hover {
+  background-color: #b0b0b0;
+  cursor: pointer;
+}
+
+.member-pwCheck {
+  font-size: 12px;
+}
+
+.member-button-wrap {
+  display: flex;
+  justify-content: center;
+  /* margin-top: 80px; */
+}
+
+.mem-cancel:hover,
+.mem-ok:hover {
+  background-color: #b0b0b0;
+  cursor: pointer;
+}
+
+.mem-cancel,
+.mem-ok {
+  height: 50px;
+  background-color: #d9d9d9;
+  border: none;
+  display: block;
+  border-radius: 5px;
+}
+
+.mem-cancel {
+  margin-right: 15px;
+  width: 70px;
+}
+
+.mem-ok {
+  width: 120px;
+}
+
+/* popup */
+.popup-background {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.popup-box {
+  width: 650px;
+  height: 500px;
+  background-color: white;
+  position: fixed;
+  z-index: 100;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 40px 25px;
+  box-sizing: border-box;
+}
+
+.popup-container {
+  height: 350px;
+  overflow: auto;
+  margin-bottom: 10px;
+  scrollbar-width: thin;
+}
+
+.popup-title-wrap {
+  height: 30px;
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.popup-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-right: 15px;
+}
+
+.popup-sub-p {
+  font-size: 12px;
+  color: #878787;
+  /* line-height: 30px; */
+}
+
+/* .popup-title p:nth-child(1) {
+  font-size: 20px;
+  font-weight: bold;
+  margin-right: 15px;
+}
+
+.popup-title p:nth-child(2) {
+  font-size: 12px;
+  color: #878787;
+  line-height: 30px;
+} */
+
+.popup-sub-title {
+  font-size: 17px;
+  margin-bottom: 15px;
+}
+
+.popup-con {
+  width: 580px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.popup-con li {
+  width: 135px;
+  height: 35px;
+  background-color: #dadada;
+  border-radius: 30px;
+  font-size: 11px;
+  text-align: center;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.popup-con li:hover {
+  background-color: #9c9c9c;
+  color: white;
+}
+
+.popup-con li.selected {
+  background-color: #008314;
+  color: white;
+}
+
+.button-pick {
+  width: 90px;
+  height: 40px;
+  background-color: #dadada;
+  display: block;
+  border: none;
+  color: black;
+  float: right;
+  /* cursor: pointer; */
+}
+
+.button-pick.active {
+  color: white;
+  background-color: #008314;
+}
