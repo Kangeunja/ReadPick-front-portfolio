@@ -1,6 +1,9 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
 
+console.log("현재 NODE_ENV:", process.env.NODE_ENV);
+console.log("읽어온 API 주소:", process.env.REACT_APP_API_URL);
+
 // 기본 api url 설정
 // const API_BASE_URL = "http://localhost:8080/api";
 const API_BASE_URL = process.env.REACT_APP_API_URL
