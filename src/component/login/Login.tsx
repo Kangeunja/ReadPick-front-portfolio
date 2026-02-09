@@ -79,7 +79,8 @@ const Login = () => {
       })
       .then((res) => {
         console.log(res.data);
-        if (res.data !== null) {
+        if (res.data) {
+          console.log("들어오나", res.data);
           setUserInfo(res.data);
           axiosInstance
             .get("/firstAt")
