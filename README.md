@@ -3,8 +3,6 @@
 > **네이버와 알라딘 API를 활용한 실시간 도서 데이터 수집 및 개인화 추천 시스템**
 > 본 프로젝트는 로컬 개발부터 Docker 기반 클라우드 배포, 외부 API 통합 및 CORS 이슈 해결까지 전체 사이클을 직접 경험하며 구축했습니다.
 
----
-
 ## 🛠 기술 스택 및 개발 환경
 
 ### **Backend**
@@ -23,7 +21,6 @@
 * **배포:** Netlify
 * **설정 관리:** `.env` 환경 변수를 통한 API URL 동적 관리
 
----
 
 ## 🚀 데이터 파이프라인 (Data Pipeline)
 
@@ -38,20 +35,17 @@ ReadPick은 정적인 데이터에 의존하지 않고, **자동화된 5단계 �
 | **5** | **Custom Logic** | 프로젝트 전용 3단계 분류 체계로 재분류 후 DB 통합 저장 |
 
 
-
----
-
 ## 🏗 System Architecture
 
- [Client: React] <---> [Spring Boot Server (Render)] <---> [PostgreSQL]
-                                |
-                    +-----------+-----------+
-                    |                       |
-            [Naver Search API]      [Aladin Open API]
-
-
-
----
+```text
+       [ Frontend ]              [ Backend ]              [ Database ]
+      React (Netlify) <------> Spring Boot (Render) <------> PostgreSQL
+                                     |
+                                     |
+                        +------------+------------+
+                        |                         |
+               [ Naver Search API ]      [ Aladin Open API ]
+```
 
 ## 🌐 Deployment Architecture
 
@@ -67,7 +61,7 @@ ReadPick은 정적인 데이터에 의존하지 않고, **자동화된 5단계 �
 | **Netlify** | `REACT_APP_API_URL` | 백엔드 API 서버 주소 연결 |
 | **Render** | `DB_URL`, `API_KEY` | DB 접속 정보 및 외부 API 보안 키 관리 |
 
----
+
 
 ## 🔍 Troubleshooting (주요 이슈 해결)
 
