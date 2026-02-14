@@ -90,4 +90,4 @@ Render/Netlify의 Environment Variables 기능을 통해 소스코드 노출 없
 
 ## 🔗 Deep Dive
 더욱 상세한 개발 과정, 기술적 고찰 및 단계별 해결과정은 아래 노션 링크에서 확인하실 수 있습니다.
-[👉 ReadPick 개발 일지 및 트러블슈팅 상세 (Notion)]
+[👉 ReadPick 개발 일지 및 트러블슈팅 상세 (Notion)](https://www.notion.so/ReadPick-30433b915b0e80caaafbfbd06d041e09?source=copy_link)
