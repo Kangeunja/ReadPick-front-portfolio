@@ -1,47 +1,22 @@
-import { useEffect, useRef, useState } from "react";
-import axiosInstance from "../../api/axiosInstance";
+// router
 import { Outlet } from "react-router-dom";
-import "../../assets/css/myPage.css";
-import MyPageTopMenu from "../../layouts/myPageTopMenu/MypageTopMenu";
+
+// components
+import MyPageTopMenu from "../../layouts/MypageTopMenu";
+import { useUserInfoQuery } from "../../hooks/queries/useUserInfoQuery";
 
 const MyPage = () => {
-  // 회원정보
-  const [userInfo, setUserInfo] = useState({
-    nickName: "",
-    fileName: "",
-  });
-
-  useEffect(() => {
-    fetchUserInfo();
-  }, []);
-
-  const fetchUserInfo = () => {
-    axiosInstance
-      .post("/myPage/userInfo", {})
-      .then((res) => {
-        console.log(res.data);
-        setUserInfo(res.data);
-      })
-      .catch((error) => {
-        console.log(error.response?.status);
-      });
-  };
+  // 마이페이지 사용자 정보 조회
+  const { data: userInfo } = useUserInfoQuery();
 
   return (
     <>
-      <div className="mypage">
-        <div className="mypage__container">
+      <div className="w-full">
+        <div className="w-main-w mx-auto">
           <MyPageTopMenu />
-          <Outlet context={{ userInfo, fetchUserInfo }} />
+          <Outlet context={{ userInfo }} />
         </div>
       </div>
-      {/* {isShowPopup && (
-        <MypageInfoPopup
-          setUserInfo={setUserInfo}
-          userInfo={userInfo}
-          onClose={() => setIsShowPopup(false)}
-        />
-      )} */}
     </>
   );
 };

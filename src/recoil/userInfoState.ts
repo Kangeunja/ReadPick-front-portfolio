@@ -14,19 +14,11 @@ export interface User {
   adminAt: string;
   firstAt: string;
   id: string;
+  pw: string;
 }
 
 export const userInfoState = atom<User | null>({
   key: "userInfoState",
   default: null,
-  // default: {
-  //   userIdx: null,
-  //   nickName: "",
-  //   userName: "",
-  //   email: "",
-  //   adminAt: "",
-  //   firstAt: "",
-  //   id: "",
-  // },
   effects_UNSTABLE: [persistAtom], // sessionStorage에 자동 저장
 });

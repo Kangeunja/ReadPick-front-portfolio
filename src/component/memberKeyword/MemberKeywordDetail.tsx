@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import "../../assets/css/memberKeywordDetail.css";
-import TopMenu from "../../layouts/topMenu/TopMenu";
+import TopMenu from "../../layouts/TopMenu";
 import axiosInstance from "../../api/axiosInstance";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import SpinnerIcon from "../../icon/SpinnerIcon";
+import SpinnerIcon from "../../assets/icon/SpinnerIcon";
 import MemberKeywordDetailReviewPopup from "../popup/MemberKeywordDetailReviewPopup";
 import { useRecoilState } from "recoil";
 import { userInfoState } from "../../recoil/userInfoState";
@@ -11,6 +11,7 @@ import LoginRequiredPopup from "../popup/LoginRequiredPopup";
 import MemberKeywordDetailEditPopup from "../popup/MemberKeywordDetailEditPopup";
 import ReviewDeletePopup from "../popup/ReviewDeletePopup";
 import ReviewCompletePopup from "../popup/MessagePopup";
+import { Review } from "../../types/review";
 
 interface BookDetail {
   author: string;
@@ -20,15 +21,15 @@ interface BookDetail {
   link: string;
 }
 
-interface Review {
-  content: string;
-  regDate: string;
-  nickName: string;
-  bookIdx: number;
-  rvIdx: number;
-  fileName: string;
-  userIdx: number;
-}
+// interface Review {
+//   content: string;
+//   regDate: string;
+//   nickName: string;
+//   bookIdx: number;
+//   rvIdx: number;
+//   fileName: string;
+//   userIdx: number;
+// }
 
 const MemberKeywordDetail = () => {
   const navigate = useNavigate();
@@ -190,7 +191,7 @@ const MemberKeywordDetail = () => {
       })
       .then((res) => {
         if (res.data === "Y") {
-          console.log(res.data);
+          // console.log(res.data);
           setIsBookMark(true);
         } else {
           setIsBookMark(false);
@@ -340,12 +341,6 @@ const MemberKeywordDetail = () => {
     } catch (e) {
       console.error(e);
     }
-    // finally {
-    //   setTimeout(() => {
-    //     setLoading(false);
-    //   }, 200);
-    //   // setLoading(false);
-    // }
   };
 
   // 무한스크롤
@@ -501,8 +496,8 @@ const MemberKeywordDetail = () => {
 
   return (
     <>
-      <div className="keyword-detail-page">
-        <div className="keyword-detail__container">
+      <div className="w-full">
+        <div className="w-main-w mx-auto">
           <TopMenu
             keywordList={keyword}
             selectedBsIdx={bsIdx}
@@ -511,85 +506,101 @@ const MemberKeywordDetail = () => {
             onBssClick={handleBssClick}
           />
 
-          <div className="book-detail-page">
+          <div className="flex justify-between">
             <div className="book-detail">
-              <div className="book-detail__image">
+              <div
+                className="w-[340px] h-[450px] shadow-[3px_2px_15.6px_1px_rgba(193,193,193,1)]
+                mb-[25px]
+              "
+              >
                 {bookImg && (
                   <img
+                    className="w-full h-full"
                     src={bookImg.fileName.replace("coversum", "cover500")}
                     alt="책 이미지"
                   />
                 )}
               </div>
 
-              <div className="book-detail__actions">
+              <div className="w-[340px] flex justify-between">
                 <button
-                  className={
-                    isGood
-                      ? "book-detail__recommend-btn hover"
-                      : "book-detail__recommend-btn"
-                  }
+                  className={`w-[160px] h-[38px] border-none text-white
+                    rounded-[5px] text-[12px] cursor-pointer hover:bg-[#1e7373]
+                    flex items-center justify-center
+                    ${isGood ? "bg-[#1e7373]" : "bg-[#248f8f]"}
+                    `}
                   onClick={handleIsGood}
                 >
                   <div
-                    className={
-                      isGood
-                        ? "book-detail__recommend-icon hover"
-                        : "book-detail__recommend-icon"
-                    }
+                    className={`w-[20px] h-[20px] bg-cover mr-3 
+                      ${isGood ? "bg-recommend-icon-hover" : "bg-recommend-icon"}
+                      `}
                   ></div>
                   <p>{`이 책 추천해요 ${checkCount}`}</p>
                 </button>
 
                 <button
-                  className={
-                    isBookMark
-                      ? "book-detail__bookmark-btn hover"
-                      : "book-detail__bookmark-btn"
-                  }
+                  className={`w-[160px] h-[38px] border-none text-white
+                    rounded-[5px] text-[12px] cursor-pointer hover:bg-[#1e7373]
+                    flex items-center justify-center
+                      ${isBookMark ? "bg-[#1e7373]" : "bg-[#248f8f]"}
+                    `}
                   onClick={handleIsBookMark}
                 >
-                  <div className="book-detail__bookmark-icon"></div>
+                  <div className="w-[20px] h-[20px] mr-[12px] bg-bookmark-icon"></div>
                   <p>{isBookMark ? "찜했어요" : "이 책 찜해요"}</p>
                 </button>
               </div>
             </div>
 
-            <div className="book-detail__info">
+            <div className="w-[700px]">
               {bookDetail && (
                 <>
-                  <div className="book-detail__info-text">
-                    <p>{bookDetail.bookName}</p>
-                    <p>{bookDetail.author}</p>
+                  <div className="w-[700px] border-b border-[#eaeaea] pb-[13px] mb-[23px]">
+                    <p className="text-[25px] font-medium">
+                      {bookDetail.bookName}
+                    </p>
+                    <p className="text-[15px] text-[#585858]">
+                      {bookDetail.author}
+                    </p>
                   </div>
 
-                  <div className="book-detail__description">
-                    <div className="book-detail__description-title">
-                      책 소개
-                    </div>
+                  <div className="mb-[100px]">
+                    <div className="mb-[6px] font-medium">책 소개</div>
                     <div className="book-detail__description-text">
                       {isContent ? (
-                        <p>이 책의 줄거리는 아직 준비 중이에요.</p>
+                        <p className="text-[14px] text-[#555555]">
+                          이 책의 줄거리는 아직 준비 중이에요.
+                        </p>
                       ) : (
-                        <p>{bookDetail.bookContent}</p>
+                        <p className="text-[14px] text-[#555555]">
+                          {bookDetail.bookContent}
+                        </p>
                       )}
                     </div>
                   </div>
 
-                  <button
-                    className="book-detail__buy-button"
-                    onClick={() =>
-                      (window.location.href = `${bookDetail.link}`)
-                    }
+                  <a
+                    href={bookDetail.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-[157px] h-[38px] border border-[#dddddd] bg-[#f5f6f7]
+                    rounded-ee-[5px] flex items-center justify-center text-[13px] text-[#333333]
+                    cursor-pointer mb-[176px]  hover:underline 
+                    "
                   >
-                    <div className="book-detail__buy-icon"></div>
+                    <div
+                      className="w-[11px] h-[12px] mr-[12px] bg-buy-icon
+                      group-hover:bg-buy-icon-hover
+                    "
+                    ></div>
                     <p>이 책 사고싶어요.</p>
-                  </button>
+                  </a>
                 </>
               )}
 
-              <div className="book-detail__reviews">
-                <div className="book-detail__reviews-header">
+              <div className="flex justify-between items-end mb-[18px]">
+                <div className="font-medium">
                   {`이 책을 읽은 사람들의 리뷰(${totalReviewCount})`}
                 </div>
                 {!hasMyReview ? (
@@ -735,13 +746,13 @@ const MemberKeywordDetail = () => {
         />
       )}
 
-      {isReviewEditPopup && (
+      {isReviewEditPopup && selectedReview && (
         <MemberKeywordDetailEditPopup
           onSuccess={() => handleReviewSuccess("리뷰 수정이 완료되었습니다.")}
           onClose={() => setIsReviewEditPopup(false)}
           selectedReview={selectedReview}
-          bookDetail={bookDetail}
-          bookImg={bookImg}
+          bookDetail={selectedReview.book}
+          bookImg={selectedReview.bookImage}
         />
       )}
 
@@ -755,7 +766,6 @@ const MemberKeywordDetail = () => {
       {isReviewClosePopup && (
         <ReviewDeletePopup
           onClose={() => setIsReviewClosePopup(false)}
-          reviewList={reviewList}
           bookDetail={bookDetail}
         />
       )}

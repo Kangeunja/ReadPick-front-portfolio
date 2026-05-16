@@ -1,63 +1,44 @@
-import { useEffect, useRef, useState } from "react";
-import "../../assets/css/mypageHome.css";
-import { Book } from "../../types/book";
-import { BookImg } from "../../types/bookImg";
-import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../api/axiosInstance";
-import { useOutletContext } from "react-router-dom";
-import { MyPageOutletContext } from "../../types/mypage";
+// react
+import { useMemo, useRef, useState } from "react";
+
+// router
+import { useNavigate, useOutletContext } from "react-router-dom";
+
+// hooks
+import { useFavoritQuery } from "../../hooks/queries/useFavoritQuery";
+import { useFavoritImgQuery } from "../../hooks/queries/useFavoritImgQuery";
+
+// constants
+import { ROUTES } from "../../constants/routes";
+
+// types
+import type { MyPageOutletContext } from "../../types/mypage";
 
 const MyPageHome = () => {
   const navigate = useNavigate();
-  // interface 함수
   const { userInfo } = useOutletContext<MyPageOutletContext>();
 
-  // 스크롤 함수
+  // 상태 관리
   const listRef = useRef<HTMLDivElement>(null);
-  const [scrollLeft, setScrollLeft] = useState(false);
-  const [scrollRight, setScrollRight] = useState(true);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
 
-  // 유저가 선택한 찜 리스트 정보
-  const [favoriteBooks, setFavoriteBooks] = useState<Book[]>([]);
+  // query
+  const { data: favoriteBooks = [] } = useFavoritQuery();
+  const { data: favoriteBooksImg = [] } = useFavoritImgQuery();
 
-  // 유저가 선택한 찜 리스트들의 책 이미지 정보
-  const [favoriteBooksImg, setFavoriteBooksImg] = useState<BookImg[]>([]);
+  const isDefaultProfile = userInfo?.fileName === "default";
 
-  useEffect(() => {
-    fetchFavoriteBooks();
-    fetchFavoriteBooksImg();
-  }, []);
+  // 값 계산결과를 기억
+  const imageMap = useMemo(() => {
+    return new Map(favoriteBooksImg.map((img) => [img.bookIdx, img.fileName]));
+  }, [favoriteBooksImg]);
 
-  // 유저가 선택한 찜 리스트 api
-  const fetchFavoriteBooks = () => {
-    axiosInstance
-      .post("/myPage/userPickBookList", {})
-      .then((res) => {
-        setFavoriteBooks(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  // 유저가 선택한 찜 리스트들의 책 이미지 api
-  const fetchFavoriteBooksImg = () => {
-    axiosInstance
-      .post("/myPage/bookmarkImageList", {})
-      .then((res) => {
-        setFavoriteBooksImg(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  // 좌/우 버튼 각각 클릭시 3칸씩 스크롤하는 함수
+  // 이벤트
   const scrollList = (direction: "left" | "right") => {
+    // 좌/우 버튼 클릭시 3칸씩 스크롤
     if (!listRef.current) return;
-
-    const cardWidth = 180;
-    const moveAmount = cardWidth * 3;
+    const moveAmount = 180 * 3;
 
     listRef.current.scrollBy({
       left: direction === "right" ? moveAmount : -moveAmount,
@@ -65,119 +46,159 @@ const MyPageHome = () => {
     });
   };
 
-  // 현재 스크롤 위치를 기준으로 좌/우 스크롤 가능 여부를 판단
   const handleScroll = () => {
+    // 스크롤 위치에 따른 화살표 표시 여부 갱신
     if (!listRef.current) return;
     const { scrollLeft, scrollWidth, clientWidth } = listRef.current;
-
-    setScrollLeft(scrollLeft > 0);
-    setScrollRight(scrollLeft + clientWidth < scrollWidth);
+    setCanScrollLeft(scrollLeft > 0);
+    setCanScrollRight(scrollLeft + clientWidth < scrollWidth);
   };
 
   // 찜 목록중에 선택한 책 상세정보 이동
-  const goToBookDetail = (bookIdx: number) => {
-    navigate(`/member/keyword/detail/${bookIdx}`);
-  };
-
-  // 마이페이지에 프로필관리로 이동
-  const goToProfileManage = () => {
-    navigate("/mypage/profile");
-  };
-
-  // 마이페이지에 내 정보관리로 이동
-  const goToMyInfo = () => {
-    navigate("/mypage/myInfo");
-  };
-
-  const goToMyReview = () => {
-    navigate("/mypage/myReview");
+  const goToBookDetail = (bookIdx: number, bsIdx: number) => {
+    navigate(`${ROUTES.KEYWORD}/detail/${bookIdx}?bsIdx=${bsIdx}`);
   };
 
   return (
-    <div className="mypage-home">
-      <div className="mypage-container">
-        <div className="mypage-home__con-wrap">
-          <div className="mypage-home__img-wrap">
+    <div className="w-full">
+      <div className="w-main-w mx-auto">
+        <div className="flex justify-between">
+          <div className="flex">
             <div>
               <div
-                className={`mypage-home__img ${
-                  userInfo.fileName === "default"
-                    ? "mypage-home__img-has-default"
-                    : ""
-                }`}
+                className={`
+                  w-[80px] h-[80px] 
+                  flex rounded-[50px] justify-center 
+                  items-center 
+                  ${isDefaultProfile ? "border border-[#1b1b1b]" : ""}`}
               >
-                {userInfo.fileName === "default" ? (
-                  <div className="mypage-home__img--default" />
+                {isDefaultProfile ? (
+                  <div className="w-[30px] h-[30px] bg-profile.png bg-cover" />
                 ) : (
-                  <img src={userInfo.fileName} alt="프로필 이미지" />
+                  <img
+                    className="w-[30px] h-[30px] rounded-[50px]"
+                    src={userInfo?.fileName}
+                    alt="프로필 이미지"
+                  />
                 )}
               </div>
-              <div className="mypage-home__img-box" onClick={goToProfileManage}>
-                <div className="mypage-home__icon"></div>
+              <div
+                className="
+                w-[30px] h-[30px] bg-[#7a7a7a] 
+                border border-white
+                rounded-[50px] flex 
+                justify-center items-center 
+                relative bottom-[30px] left-[60px]
+                cursor-pointer
+                hover:bg-[#1e7373]
+                "
+                onClick={() => navigate(ROUTES.PROFILE)}
+              >
+                <div className="w-[16px] h-[14px] bg-camera.png bg-cover"></div>
               </div>
             </div>
 
-            <div className="mypage-home__info-wrap">
-              <div className="mypage-home__info">
+            <div className="ml-[30px]">
+              <div className="text-[#3a3a3a] h-[80px] flex flex-col justify-center">
                 <p>
-                  <span>{userInfo.nickName}</span>님
+                  <span className="text-xl font-bold">
+                    {userInfo?.nickName}
+                  </span>
+                  님
                 </p>
                 <p>마이페이지에 오신걸 환영합니다!</p>
               </div>
 
-              <div className="mypage-home__btn-wrap">
-                <button onClick={goToMyReview}>내리뷰</button>
-                <button onClick={goToMyInfo}>내 정보 관리</button>
+              <div className="flex gap-[10px] items-center">
+                <button
+                  className="mypage-home-btn
+                  hover:underline
+                "
+                  onClick={() => navigate(ROUTES.MYPAGEREVIEW)}
+                >
+                  내리뷰
+                </button>
+                <div className="w-[2px] h-[11px] bg-[#454545]" />
+                <button
+                  className="mypage-home-btn
+                  hover:underline
+                "
+                  onClick={() => navigate(ROUTES.PWCONFIRM)}
+                >
+                  내 정보 관리
+                </button>
               </div>
             </div>
           </div>
 
-          <div className="mypage-home__favorites-container">
-            {scrollLeft && (
+          <div className="relative group">
+            {canScrollLeft && (
               <button
-                className="mypage-home__nav-arrow left"
+                type="button"
+                className="mypage-nav-arrow left
+                group-hover:opacity-1 pointer-events-auto cursor-pointer
+                "
                 onClick={() => scrollList("left")}
               >
                 ◀
               </button>
             )}
 
-            <div className="mypage-home__favorites-wrap">
-              <div className="mypage-home__favorites-title">찜목록</div>
+            <div>
+              <div className="text-lg text-left mb-5">찜목록</div>
 
               <div
-                className="mypage-home__favorites-box--wrap"
+                className="w-[700px] flex gap-[18px] overflow-x-hidden"
                 ref={listRef}
                 onScroll={handleScroll}
               >
                 {favoriteBooks.length > 0 ? (
-                  favoriteBooks.map((item, index) => (
-                    <div
-                      key={index}
-                      className="mypage-home__favorites-box"
-                      onClick={() => goToBookDetail(item.bookIdx)}
-                    >
-                      <div className="mypage-home__favorites-con">
-                        <div className="mypage-home__favorites-img">
-                          {favoriteBooksImg[index] && (
-                            <img
-                              src={favoriteBooksImg[index]?.fileName.replace(
-                                "coversum",
-                                "cover500"
-                              )}
-                              alt="책 이미지"
-                            />
-                          )}
+                  favoriteBooks.map((item) => {
+                    const imageFile = imageMap.get(item.bookIdx);
+
+                    return (
+                      <div
+                        key={item.bookIdx}
+                        className="cursor-pointer"
+                        onClick={() => goToBookDetail(item.bookIdx, item.bsIdx)}
+                      >
+                        <div className="w-[119px] h-[148px] mb-[14px]">
+                          <div className="mypage-home__favorites-img">
+                            {imageFile && (
+                              <img
+                                src={imageFile?.replace("coversum", "cover500")}
+                                alt="책 이미지"
+                                className="w-[119px] h-[148px] 
+                              rounded-[12px]
+                              border border-[#d9d9d9] 
+                              box-border
+                              "
+                              />
+                            )}
+                          </div>
+                        </div>
+                        <div className="w-[119px]">
+                          <p
+                            className="text-[14px] whitespace-nowrap
+                          text-ellipsis overflow-hidden
+                        "
+                          >
+                            {item.bookName}
+                          </p>
+                          <p className="text-xs text-[#555555]">
+                            {item.author}
+                          </p>
                         </div>
                       </div>
-                      <div className="mypage-home__favorites-info">
-                        <p>{item.bookName}</p>
-                        <p>{item.author}</p>
-                      </div>
-                    </div>
-                  ))
+                    );
+                  })
                 ) : (
-                  <p className="mypage-home__favorites-empty">
+                  <p
+                    className="
+                    w-[700px] border border-[#eaeaea] 
+                    p-5 box-border 
+                    text-[#555555] text-[14px]"
+                  >
                     아직 찜한 책이 없어요.
                     <br />
                     마음에 드는 책을 찜해보세요.
@@ -185,9 +206,15 @@ const MyPageHome = () => {
                 )}
               </div>
             </div>
-            {scrollRight && favoriteBooks.length > 5 && (
+            {canScrollRight && favoriteBooks.length > 5 && (
               <button
-                className="mypage-home__nav-arrow right"
+                type="button"
+                className="
+                mypage-nav-arrow right-[-40px]
+                group-hover:opacity-1 
+                pointer-events-auto 
+                cursor-pointer
+                "
                 onClick={() => scrollList("right")}
               >
                 ▶

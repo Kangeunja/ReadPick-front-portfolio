@@ -1,11 +1,17 @@
-import BrowserRouterDom from "./router";
-import "./assets/css/index.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-// function App() {
-//   return <div className="App"></div>;
-// }
+import BrowserRouterDom from "./router";
+
+import "./index.css";
+
+const queryClient = new QueryClient();
+
 const App = () => {
-  return <BrowserRouterDom></BrowserRouterDom>;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouterDom />
+    </QueryClientProvider>
+  );
 };
 
 export default App;

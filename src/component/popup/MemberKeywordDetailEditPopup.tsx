@@ -1,39 +1,66 @@
-import { useEffect, useState } from "react";
-import axiosInstance from "../../api/axiosInstance";
-import "../../assets/css/memberkeywordDetailEditPopup.css";
+//react
+import { useState } from "react";
+
+// Components
 import ReviewWriteCancelPopup from "./ReviewWriteCancelPopup";
+
+// hooks
+import { useUpdateReviewMutation } from "../../hooks/mutations/useUpdateReviewMutation";
+
+// hooks
+import useLockBodyScroll from "../../hooks/useLockBodyScroll";
+
+// types
+import { Review } from "../../types/review";
+
+// utils
+import { getLargeBookImage } from "../../utils/image";
+import { Book, BookImg } from "../../types/book";
+
+interface MemberKeywordDetailEditPopupProps {
+  onClose: () => void;
+  onSuccess: () => void;
+  selectedReview: Review;
+  bookDetail: Book;
+  bookImg: BookImg;
+}
 
 const MemberKeywordDetailEditPopup = ({
   onClose,
-  bookDetail,
-  selectedReview,
-  bookImg,
   onSuccess,
-}: any) => {
-  console.log(bookImg.bookImageName);
-  console.log(selectedReview);
-  // 리뷰 내용
-  const [editedReview, setEditedReview] = useState(selectedReview);
+  selectedReview,
+  bookDetail,
+  bookImg,
+}: MemberKeywordDetailEditPopupProps) => {
+  // 상태 관리
+  const [editedReview, setEditedReview] = useState<Review>(selectedReview); // 리뷰 내용
+  const [isCancelPopupOpen, setIsCancelPopupOpen] = useState(false); // 리뷰 작성취소 팝업
 
-  // 리뷰 작성취소 팝업
-  const [isCancelPopupOpen, setIsCancelPopupOpen] = useState(false);
+  const { mutate: updateMutate } = useUpdateReviewMutation();
 
+  // 수정 버튼 활성화 조건
   const isSubmitEnabled =
-    editedReview.content.trim() !== "" &&
     editedReview.content.trim().length >= 10 &&
     editedReview.content !== selectedReview.content;
 
-  useEffect(() => {
-    // 팝업이 열릴 때 body의 스크롤 막기
-    document.body.style.overflow = "hidden";
-    return () => {
-      // 팝업이 닫힐 때 스크롤 복구
-      document.body.style.overflow = "auto";
-    };
-  }, []);
+  const submitButtonStyle = isSubmitEnabled
+    ? "bg-[rgba(36,143,143,1)] cursor-pointer"
+    : "bg-[rgba(36,143,143,0.5)] cursor-not-allowed";
+
+  const imageSrc = bookImg.bookImageName
+    ? getLargeBookImage(bookImg.bookImageName)
+    : getLargeBookImage(bookImg.fileName);
+
+  // 팝업 오픈시 스크롤 방지
+  useLockBodyScroll();
+
+  // 이벤트 핸들러
+  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setEditedReview((prev) => ({ ...prev, content: e.target.value }));
+  };
 
   // 취소(X) 버튼
-  const handleCancelWrite = () => {
+  const handleCancelClick = () => {
     if (editedReview.content === selectedReview.content) {
       onClose();
     } else {
@@ -41,98 +68,133 @@ const MemberKeywordDetailEditPopup = ({
     }
   };
 
-  const handleDetailPopup = (e: any) => {
-    setEditedReview((prev: any) => ({
-      ...prev,
-      content: e.target.value,
-    }));
-  };
-
   // 수정하기 버튼
-  const handleDetailPopupSave = () => {
-    axiosInstance
-      .post("/reviewUpdate", {
-        bookIdx: editedReview.bookIdx,
-        content: editedReview.content,
-      })
-      .then((res) => {
-        console.log(res);
-        if (res.data === "success") {
-          // onClose(editedReview);
+  const handleSave = () => {
+    updateMutate(
+      { bookIdx: editedReview.bookIdx, content: editedReview.content },
+      {
+        onSuccess: () => {
           onSuccess();
-          // onClose();
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+        },
 
-  // 작성취소 버튼
-  const handleCloseWritePopup = () => {
-    setIsCancelPopupOpen(false);
-    onClose();
+        onError: () => {
+          alert("리뷰 수정에 실패했습니다.");
+        },
+      },
+    );
   };
 
   return (
     <>
-      <div className="review-popup__edit">
-        <div className="review-popup__edit-box">
-          <div className="review-popup__edit-header">
+      <div
+        className="
+        fixed w-full h-full 
+        top-0 bottom-0 left-0 right-0
+        bg-[rgba(0,_0,_0,_0.4)] 
+        z-[99] 
+        "
+      >
+        <div
+          className="
+          w-[600px] h-[650px] 
+          bg-white fixed z-[100]
+          top-1/2 left-1/2 -translate-x-1/2 
+          -translate-y-1/2 p-10
+          box-border rounded-[25px]
+          "
+        >
+          <div
+            className="
+            text-[20px] 
+            flex justify-between 
+            mb-[34px] 
+            font-medium
+            "
+          >
             <p>리뷰 수정하기</p>
             <button
               type="button"
-              className="review-popup__btn review-popup__btn-cancel"
-              onClick={handleCancelWrite}
+              className="
+              border-none bg-transparent 
+              w-4 h-4 
+              bg-popup-cancel 
+              cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleCancelClick();
+              }}
             ></button>
           </div>
 
-          <div className="review-popup__edit-book">
-            {bookImg.bookImageName ? (
-              <img
-                src={bookImg.bookImageName.replace("coversum", "cover500")}
-                alt="책 이미지"
-              />
-            ) : (
-              <img
-                src={bookImg.fileName.replace("coversum", "cover500")}
-                alt="책 이미지"
-              />
-            )}
-            <div className="review-popup__edit-info">
-              {bookDetail && (
-                <>
-                  <p>{bookDetail.bookName}</p>
-                  <p>{bookDetail.author}</p>
-                </>
-              )}
+          <div className="flex mb-11">
+            <img
+              src={imageSrc}
+              alt="책 이미지"
+              className="
+                w-[119px] h-[148px] 
+                border border-[#ededed] 
+                bg-[#004f14]
+                block mr-[56px]
+                "
+            />
+            <div className="flex flex-col justify-center">
+              <p className="text-[20px] font-medium mb-[5px]">
+                {bookDetail.bookName}
+              </p>
+              <p className="text-[13px] text-[#343434]">{bookDetail.author}</p>
             </div>
           </div>
 
-          <div className="review-popup__textarea-wrap">
-            <label htmlFor="review-content" className="review-popup__label">
+          <div className="relative">
+            <label
+              htmlFor="review-content"
+              className="absolute w-[1px] h-[1px] hidden
+              [clip:rect(0,0,0,0)] whitespace-nowrap
+              "
+            >
               리뷰 내용
             </label>
 
             <textarea
               id="review-content"
               value={editedReview.content}
-              className="review-popup__edit-textarea"
+              className="
+              w-full h-[240px] 
+              border border-[#eaeaea] 
+              p-[15px] box-border
+              relative resize-none 
+              text-[15px] text-[#333] 
+              leading-[1.5] font-medium
+              tracking-[0.015em] font-noto 
+              focus:outline-none 
+              focus:border 
+              focus:border-[#555555]
+              "
               maxLength={200}
-              onChange={(e) => handleDetailPopup(e)}
+              onChange={handleContentChange}
             />
-            <p className="review-popup__count">
+            <p
+              className="
+              absolute 
+              right-[15px] bottom-[15px] 
+              text-[13px] 
+              text-[#555555]
+              "
+            >
               {editedReview.content.length} / 200
             </p>
           </div>
 
           <button
             type="button"
-            className={`review-popup__btn review-popup__btn-submit ${
-              isSubmitEnabled ? "is-active" : ""
-            }`}
+            className={`
+              w-[167px] h-[51px] 
+              text-white rounded-[5px] 
+              block mx-auto my-[25px]
+              bg-[rgba(36,143,143,0.5)] 
+              ${submitButtonStyle}`}
             disabled={!isSubmitEnabled}
-            onClick={handleDetailPopupSave}
+            onClick={handleSave}
           >
             수정하기
           </button>
@@ -141,7 +203,10 @@ const MemberKeywordDetailEditPopup = ({
 
       {isCancelPopupOpen && (
         <ReviewWriteCancelPopup
-          onConfirm={handleCloseWritePopup}
+          onConfirm={() => {
+            setIsCancelPopupOpen(false);
+            onClose();
+          }}
           onClose={() => setIsCancelPopupOpen(false)}
         />
       )}

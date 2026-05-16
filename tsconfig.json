@@ -20,7 +20,7 @@
 
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2016",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -29,12 +29,15 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
-    "moduleResolution": "node",
+    "ignoreDeprecations": "5.0",
+    "module": "Node16",
+    "types": ["node"],
+    "moduleResolution": "node16",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx"
   },
+
   "include": ["src"]
 }

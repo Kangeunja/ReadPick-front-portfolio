@@ -1,4 +1,4 @@
-.review-success__popup {
+/* .review-success__popup {
   position: fixed;
   width: 100%;
   height: 100%;
@@ -8,9 +8,9 @@
   left: 0;
   right: 0;
   overflow: hidden;
-}
+} */
 
-.review-success__popup-box {
+/* .review-success__popup-box {
   width: 250px;
   padding: 20px;
   box-sizing: border-box;
@@ -43,4 +43,4 @@
   to {
     opacity: 1;
   }
-}
+} */

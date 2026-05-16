@@ -1,146 +1,123 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+
 import axiosInstance from "../../api/axiosInstance";
-import { useNavigate } from "react-router-dom";
-import IsLoginPopup from "./IsLoginPopup";
 
-interface BssItem {
-  // bmIdx: string;
-  bsIdx: string;
-  bssIdx: string;
-  bssName: string;
+import { BsItem, SelectedItem } from "../../types/userPick";
+
+interface Props {
+  onClose: () => void;
 }
 
-interface BsItem {
-  bsName: string;
-  bssList: BssItem[];
-}
-
-interface SelectedItem {
-  // bmIdx: string;
-  bsIdx: string;
-  bssIdx: string;
-  // bssName: string;
-}
-
-const MemberLoginPopup = ({ onClose }: any) => {
-  const [bsName, setBsName] = useState<BsItem[]>([]);
+const MemberLoginPopup = ({ onClose }: Props) => {
+  const [bsData, setBsData] = useState<BsItem[]>([]);
   const [selectedItems, setSelectedItems] = useState<SelectedItem[]>([]);
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    axiosInstance
-      .get("/userPick")
-      .then((res) => {
-        // console.log(res.data);
-        setBsName(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    // 팝업이 열릴 때 body의 스크롤 막기
-    document.body.style.overflow = "hidden";
-    return () => {
-      // 팝업이 닫힐 때 스크롤 복구
-      document.body.style.overflow = "auto";
-    };
+  // 관심사 목록 가져오기
+  const fetchUserPicks = useCallback(async () => {
+    try {
+      const res = await axiosInstance.get("/userPick");
+      setBsData(res.data);
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
-  // 사용자가 선택한 항목
+  useEffect(() => {
+    fetchUserPicks();
+    document.body.style.overflow = "hidden"; // 팝업이 열릴 때 body의 스크롤 막기
+    return () => {
+      document.body.style.overflow = "auto"; // 팝업이 닫힐 때 스크롤 복구
+    };
+  }, [fetchUserPicks]);
+
+  // 항목 선택/해제 핸들러
   const handleSelect = (item: SelectedItem) => {
-    // console.log(item);
     setSelectedItems((prev) => {
-      const exists = prev.some((selected) => selected.bssIdx === item.bssIdx);
-      if (exists) {
+      const isAlreadySelected = prev.some(
+        (selected) => selected.bssIdx === item.bssIdx,
+      );
+
+      if (isAlreadySelected) {
         return prev.filter((selected) => selected.bssIdx !== item.bssIdx); // 이미 선택 항목이면 제거
-      } else if (prev.length < 4) {
+      }
+
+      if (prev.length < 4) {
         return [...prev, item];
       }
+
       return prev;
     });
-    // setSelectedItems((prev) =>
-    //   prev.includes(bssName)
-    //     ? prev.filter((item) => item !== bssName)
-    //     : [...prev, bssName]
-    // );
-    // setSelectedItems((prev) => {
-    //   if (prev.includes(bssName)) {
-    //     return prev.filter((item) => item !== bssName); // 이미 선택 항목이면 제거
-    //   } else if (prev.length < 4) {
-    //     return [...prev, bssName];
-    //   }
-    //   return prev; // 4개 초과시 추가 안함
-    // });
   };
-  console.log(selectedItems);
 
-  // 선택완료 api
-  const handleSelectedItems = () => {
-    if (selectedItems.length === 0) {
-      alert("관심사를 선택해주세요.");
-      return;
-    } else if (selectedItems.length < 4) {
-      // alert("관심사를 최대 4개까지 선택해주세요.");
-      return;
-    }
+  // 선택 완료 제출
+  const handleSelectedItems = async () => {
+    if (selectedItems.length === 0) return alert("관심사를 선택해주세요.");
+    if (selectedItems.length < 4) return;
+
     const formattedData = selectedItems.map((item) => [
       item.bsIdx,
       item.bssIdx,
     ]);
-    console.log(formattedData);
 
-    axiosInstance
-      .post("/userPickResult", formattedData)
-      .then((res) => {
-        console.log(res);
-        if (res.data === "success") {
-          onClose();
-          // navigate("/");
-        }
-        // setLoginPopup(true);
-      })
-      .catch((error) => {
-        console.log("User selected failed", error);
-      });
+    try {
+      const res = await axiosInstance.post("/userPickResult", formattedData);
+      if (res.data === "success") onClose();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <>
-      <div className="popup-background">
-        <div className="popup-box">
-          <div className="popup-title-wrap">
-            <div className="popup-title">관심사 PICK</div>
-            <div className="popup-sub-p">
+      <div
+        className="fixed w-full h-full top-0 bottom-0 left-0 right-0 bg-[rgba(0,0,0,0.4)]
+        z-[99] 
+      "
+      >
+        <div
+          className=" h-[500px] bg-white fixed z-[100] 
+          top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 py-[40px] px-[25px] box-border
+        "
+        >
+          <div className="h-[30px] flex mb-[10px]">
+            <div className="text-xl font-bold mr-[15px]">관심사 PICK</div>
+            <div className="text-xs text-[#878787]">
               <p>관심사 키워드를 통해 오늘의 책 또는 관련책을 추천해줍니다.</p>
               <p> (최대4개까지 선택해주세요.)</p>
             </div>
           </div>
-          <div className="popup-container">
-            {bsName.map((item) => (
+          <div
+            className="h-[350px] overflow-auto mb-[10px] scrollbar-thin 
+            [&::-webkit-scrollbar]:w-1.5
+            [&::-webkit-scrollbar-track]:bg-transparent
+            [&::-webkit-scrollbar-thumb]:bg-gray-300
+            [&::-webkit-scrollbar-thumb]:rounded-full"
+          >
+            {bsData.map((item) => (
               <div key={item.bsName}>
-                <div className="popup-sub-title">{`# ${item.bsName}`}</div>
-                <ul className="popup-con">
+                <div className="text-[17px] mb-[15px]">{`# ${item.bsName}`}</div>
+                <ul className="w-[580px] mb-5 flex flex-wrap gap-[10px]">
                   {item.bssList.map((item) => (
                     <li
                       key={item.bssIdx}
                       onClick={() =>
                         handleSelect({
-                          // bmIdx: item.bmIdx,
                           bsIdx: item.bsIdx,
                           bssIdx: item.bssIdx,
-                          // bssName: item.bssName,
                         })
                       }
-                      className={
-                        selectedItems.some(
-                          (selected) => selected.bssIdx === item.bssIdx
-                        )
-                          ? "selected"
-                          : ""
-                      }
-                      // className={
-                      //   selectedItems.includes(item.bssName) ? "selected" : ""
-                      // }
+                      className={`w-[130px] h-[35px] border border-[#c9c9c9] rounded-[5px] text-[11px] text-center
+                          mb-[10px] flex justify-center items-center cursor-pointer
+                          hover:border-[#248f8f] 
+                          hover:shadow-[0_8px_20px_rgba(36,143,143,0.15)]
+                          "
+                        ${
+                          selectedItems.some(
+                            (selected) => selected.bssIdx === item.bssIdx,
+                          )
+                            ? "bg-[#008314] text-white"
+                            : "bg-gray-50 text-black"
+                        }`}
                     >
                       {item.bssName}
                     </li>
@@ -150,8 +127,10 @@ const MemberLoginPopup = ({ onClose }: any) => {
             ))}
           </div>
           <button
-            className={`button-pick ${
-              selectedItems.length === 4 ? "active" : ""
+            className={`w-[90px] h-10 border border-[#c9c9c9] text-[14px] float-right ${
+              selectedItems.length === 4
+                ? "bg-[#008314] text-white"
+                : "bg-gray-50 text-black cursor-not-allowed"
             }`}
             onClick={handleSelectedItems}
           >

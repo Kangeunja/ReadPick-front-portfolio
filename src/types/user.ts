@@ -8,3 +8,9 @@ export interface UserBaseDTO {
   adminAt: string;
   firstAt: string;
 }
+
+export interface UserInfo {
+  userIdx: number;
+  nickName: string;
+  fileName: string;
+}

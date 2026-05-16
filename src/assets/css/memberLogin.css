@@ -1,0 +1,122 @@
+/* .require {
+  float: right;
+  line-height: 30px;
+  font-size: 12px;
+} */
+
+/* .require span {
+  color: red;
+  font-weight: bold;
+  margin-right: 5px;
+} */
+
+/* .member-input-wrap {
+  width: 500px;
+  height: 40px;
+  line-height: 40px;
+  display: flex;
+  margin-bottom: 30px;
+} */
+
+/* .member-input-text {
+  width: 120px;
+  float: left;
+} */
+
+/* .member-input-text p {
+  float: left;
+} */
+
+/* .member-input-text p:nth-child(2) {
+  color: red;
+} */
+
+/* .mem-id,
+.mem-pw,
+.mem-name,
+.mem-nickName,
+.mem-email {
+  width: 260px;
+  height: 40px;
+  border: 1px solid #797979;
+  float: right;
+  padding-left: 10px;
+  box-sizing: border-box;
+  outline: none;
+  font-size: 12px;
+} */
+
+/* .toggle-visibility {
+  position: relative;
+  right: 35px;
+  top: 7.5px;
+  cursor: pointer;
+} */
+
+/* .id-check-wrap,
+.password-wrap {
+  height: 60px;
+  position: relative;
+} */
+/* 
+.id-CheckMessage,
+.member-pwCheck {
+  font-size: 12px;
+  position: absolute;
+  bottom: -10px;
+} */
+
+/* .id-CheckMessage.success,
+.member-pwCheck.success {
+  color: green;
+} */
+
+/* .id-CheckMessage.error,
+.member-pwCheck.error {
+  color: red;
+}
+
+.id-check {
+  width: 80px;
+  margin-left: 20px;
+  border: none;
+  background-color: #d9d9d9;
+}
+
+.id-check:hover {
+  background-color: #b0b0b0;
+  cursor: pointer;
+}
+
+.member-pwCheck {
+  font-size: 12px;
+}
+
+.member-button-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.mem-cancel:hover,
+.mem-ok:hover {
+  background-color: #b0b0b0;
+  cursor: pointer;
+}
+
+.mem-cancel,
+.mem-ok {
+  height: 50px;
+  background-color: #d9d9d9;
+  border: none;
+  display: block;
+  border-radius: 5px;
+}
+
+.mem-cancel {
+  margin-right: 15px;
+  width: 70px;
+}
+
+.mem-ok {
+  width: 120px;
+} */
