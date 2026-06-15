@@ -30,7 +30,7 @@
 .profile-manage__img--default {
   width: 30px;
   height: 30px;
-  background-image: url("../img/book-detail-review-profile.png");
+  /* background-image: url("../img/book-detail-review-profile.png"); */
   background-size: cover;
 }
 
@@ -58,7 +58,7 @@
 .profile-manage__icon {
   width: 16px;
   height: 14px;
-  background-image: url("../img/icon-camera.png");
+  background-image: url('../img/icon-camera.png');
   background-size: cover;
 }
 
@@ -92,7 +92,7 @@
   height: 30px;
   background-color: #a0a0a0;
   border-radius: 10px;
-  background-image: url("../img/icon-trash.png");
+  background-image: url('../img/icon-trash.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size: 15px 15px;

@@ -13,3 +13,16 @@ export interface BookImg {
   fileType: string | null;
   bookImageName?: string;
 }
+
+export interface BookDetail {
+  author: string;
+  bookName: string;
+  bookContent: string;
+  bookIdx: number;
+  link: string;
+  bookImageName: string;
+}
+
+export interface BookImg {
+  fileName: string;
+}

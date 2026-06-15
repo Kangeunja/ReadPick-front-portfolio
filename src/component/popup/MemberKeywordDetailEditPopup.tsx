@@ -1,37 +1,30 @@
 //react
-import { useState } from "react";
+import { useState } from 'react';
 
 // Components
-import ReviewWriteCancelPopup from "./ReviewWriteCancelPopup";
+import ReviewWriteCancelPopup from './ReviewWriteCancelPopup';
 
 // hooks
-import { useUpdateReviewMutation } from "../../hooks/mutations/useUpdateReviewMutation";
+import { useUpdateReviewMutation } from '../../hooks/mutations/useUpdateReviewMutation';
 
 // hooks
-import useLockBodyScroll from "../../hooks/useLockBodyScroll";
+import useLockBodyScroll from '../../hooks/useLockBodyScroll';
 
 // types
-import { Review } from "../../types/review";
+import { Review } from '../../types/review';
 
 // utils
-import { getLargeBookImage } from "../../utils/image";
-import { Book, BookImg } from "../../types/book";
+import { getLargeBookImage } from '../../utils/image';
+import { Book, BookDetail } from '../../types/book';
 
 interface MemberKeywordDetailEditPopupProps {
   onClose: () => void;
   onSuccess: () => void;
   selectedReview: Review;
-  bookDetail: Book;
-  bookImg: BookImg;
+  bookDetail: BookDetail | Book | Review;
 }
 
-const MemberKeywordDetailEditPopup = ({
-  onClose,
-  onSuccess,
-  selectedReview,
-  bookDetail,
-  bookImg,
-}: MemberKeywordDetailEditPopupProps) => {
+const MemberKeywordDetailEditPopup = ({ onClose, onSuccess, selectedReview, bookDetail }: MemberKeywordDetailEditPopupProps) => {
   // 상태 관리
   const [editedReview, setEditedReview] = useState<Review>(selectedReview); // 리뷰 내용
   const [isCancelPopupOpen, setIsCancelPopupOpen] = useState(false); // 리뷰 작성취소 팝업
@@ -39,17 +32,9 @@ const MemberKeywordDetailEditPopup = ({
   const { mutate: updateMutate } = useUpdateReviewMutation();
 
   // 수정 버튼 활성화 조건
-  const isSubmitEnabled =
-    editedReview.content.trim().length >= 10 &&
-    editedReview.content !== selectedReview.content;
+  const isSubmitEnabled = editedReview.content.trim().length >= 10 && editedReview.content !== selectedReview.content;
 
-  const submitButtonStyle = isSubmitEnabled
-    ? "bg-[rgba(36,143,143,1)] cursor-pointer"
-    : "bg-[rgba(36,143,143,0.5)] cursor-not-allowed";
-
-  const imageSrc = bookImg.bookImageName
-    ? getLargeBookImage(bookImg.bookImageName)
-    : getLargeBookImage(bookImg.fileName);
+  const submitButtonStyle = isSubmitEnabled ? 'bg-[rgba(36,143,143,1)] cursor-pointer' : 'bg-[rgba(36,143,143,0.5)] cursor-not-allowed';
 
   // 팝업 오픈시 스크롤 방지
   useLockBodyScroll();
@@ -78,7 +63,7 @@ const MemberKeywordDetailEditPopup = ({
         },
 
         onError: () => {
-          alert("리뷰 수정에 실패했습니다.");
+          alert('리뷰 수정에 실패했습니다.');
         },
       },
     );
@@ -86,39 +71,13 @@ const MemberKeywordDetailEditPopup = ({
 
   return (
     <>
-      <div
-        className="
-        fixed w-full h-full 
-        top-0 bottom-0 left-0 right-0
-        bg-[rgba(0,_0,_0,_0.4)] 
-        z-[99] 
-        "
-      >
-        <div
-          className="
-          w-[600px] h-[650px] 
-          bg-white fixed z-[100]
-          top-1/2 left-1/2 -translate-x-1/2 
-          -translate-y-1/2 p-10
-          box-border rounded-[25px]
-          "
-        >
-          <div
-            className="
-            text-[20px] 
-            flex justify-between 
-            mb-[34px] 
-            font-medium
-            "
-          >
+      <div className="fixed bottom-0 left-0 right-0 top-0 z-[99] h-full w-full bg-black/40">
+        <div className="fixed left-1/2 top-1/2 box-border w-[500px] -translate-x-1/2 -translate-y-1/2 bg-white p-[30px]">
+          <div className="mb-[20px] flex justify-between text-[17px]">
             <p>리뷰 수정하기</p>
             <button
               type="button"
-              className="
-              border-none bg-transparent 
-              w-4 h-4 
-              bg-popup-cancel 
-              cursor-pointer"
+              className="h-4 w-4 cursor-pointer border-none bg-transparent bg-popup-cancel"
               onClick={(e) => {
                 e.stopPropagation();
                 handleCancelClick();
@@ -126,73 +85,37 @@ const MemberKeywordDetailEditPopup = ({
             ></button>
           </div>
 
-          <div className="flex mb-11">
+          <div className="mb-11 flex">
             <img
-              src={imageSrc}
+              src={getLargeBookImage(bookDetail.bookImageName)}
               alt="책 이미지"
-              className="
-                w-[119px] h-[148px] 
-                border border-[#ededed] 
-                bg-[#004f14]
-                block mr-[56px]
-                "
+              className="mr-[56px] block h-[148px] w-[119px] border border-[#ededed]"
+              referrerPolicy="no-referrer"
             />
             <div className="flex flex-col justify-center">
-              <p className="text-[20px] font-medium mb-[5px]">
-                {bookDetail.bookName}
-              </p>
-              <p className="text-[13px] text-[#343434]">{bookDetail.author}</p>
+              <p className="mb-[5px] text-[14px] font-bold">{bookDetail.bookName}</p>
+              <p className="text-[12px] text-[#343434]">{bookDetail.author}</p>
             </div>
           </div>
 
           <div className="relative">
-            <label
-              htmlFor="review-content"
-              className="absolute w-[1px] h-[1px] hidden
-              [clip:rect(0,0,0,0)] whitespace-nowrap
-              "
-            >
+            <label htmlFor="review-content" className="absolute hidden h-[1px] w-[1px] whitespace-nowrap [clip:rect(0,0,0,0)]">
               리뷰 내용
             </label>
 
             <textarea
               id="review-content"
               value={editedReview.content}
-              className="
-              w-full h-[240px] 
-              border border-[#eaeaea] 
-              p-[15px] box-border
-              relative resize-none 
-              text-[15px] text-[#333] 
-              leading-[1.5] font-medium
-              tracking-[0.015em] font-noto 
-              focus:outline-none 
-              focus:border 
-              focus:border-[#555555]
-              "
+              className="relative box-border h-[240px] w-full resize-none border border-[#eaeaea] p-[15px] font-noto text-[15px] font-medium leading-[1.5] tracking-[0.015em] text-[#333] focus:border focus:border-[#555555] focus:outline-none"
               maxLength={200}
               onChange={handleContentChange}
             />
-            <p
-              className="
-              absolute 
-              right-[15px] bottom-[15px] 
-              text-[13px] 
-              text-[#555555]
-              "
-            >
-              {editedReview.content.length} / 200
-            </p>
+            <p className="absolute bottom-[15px] right-[15px] text-[13px] text-[#555555]">{editedReview.content.length} / 200</p>
           </div>
 
           <button
             type="button"
-            className={`
-              w-[167px] h-[51px] 
-              text-white rounded-[5px] 
-              block mx-auto my-[25px]
-              bg-[rgba(36,143,143,0.5)] 
-              ${submitButtonStyle}`}
+            className={`mx-auto mt-[20px] block h-[40px] w-[140px] bg-[rgba(36,143,143,0.5)] text-[13px] text-white ${submitButtonStyle}`}
             disabled={!isSubmitEnabled}
             onClick={handleSave}
           >

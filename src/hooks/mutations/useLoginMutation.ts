@@ -1,18 +1,19 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation } from '@tanstack/react-query';
 
-import useAuthStore from "../../store/authStore";
-import { login } from "../../api/authApi";
+import { login } from '../../api/authApi';
+
+import useAuthStore from '../../store/authStore';
 
 export const useLoginMutation = () => {
   const setUser = useAuthStore((state) => state.setUser);
 
   return useMutation({
-    mutationFn: (loginData: { id: string; pw: string }) => login(loginData),
+    mutationFn: login,
 
     onSuccess: (res) => {
-      if (res !== "fail") {
-        setUser(res);
-      }
+      if (res === 'fail') return;
+      const { pw, ...user } = res;
+      setUser(user);
     },
   });
 };

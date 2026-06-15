@@ -1,44 +1,36 @@
-// library
-import { NavLink, useLocation } from "react-router-dom";
-// constants
-import { ROUTES } from "../constants/routes";
+import { NavLink, useLocation } from 'react-router-dom';
+
+import { ROUTES } from '../constants/routes';
+
+const MENU_MAP = {
+  [ROUTES.PROFILE]: '프로필 관리',
+  [ROUTES.PWCONFIRM]: '내 정보 관리',
+  [ROUTES.MYPAGEREVIEW]: '내리뷰',
+};
 
 const MyPageTopMenu = () => {
-  const location = useLocation();
+  const { pathname } = useLocation();
 
-  const isProfilePage = location.pathname.startsWith(ROUTES.PROFILE);
-  const isInfoPage = location.pathname.startsWith(ROUTES.PWCONFIRM);
-  const isReviewPage = location.pathname.startsWith(ROUTES.MYPAGEREVIEW);
+  const currentMenuKey = Object.keys(MENU_MAP).find((item) => pathname.startsWith(item));
+  const currentMenuName = currentMenuKey ? MENU_MAP[currentMenuKey] : null;
 
-  const getNavLinkClass = ({ isActive }: { isActive: boolean }) =>
-    `nav-link-item ${isActive ? "active" : ""}`;
+  const getNavLinkClass = ({ isActive }: { isActive: boolean }) => `nav-link-item ${isActive ? 'active' : ''}`;
 
   return (
-    <div className="py-5 px-0 box-border flex">
-      <div className="w-3 h-[13px] mr-[10px] mt-[3px] bg-keyword-home"></div>
+    <div className="box-border flex px-0 py-5">
+      <div className="bg-icon-home mr-[10px] mt-[3px] h-[13px] w-3"></div>
 
       <NavLink to={ROUTES.MYPAGE} end className={getNavLinkClass}>
         마이페이지
       </NavLink>
 
-      {isProfilePage && (
-        <NavLink to={ROUTES.PROFILE} className={getNavLinkClass}>
-          <span className="mypage-header__arrow" />
-          프로필 관리
-        </NavLink>
-      )}
-
-      {isInfoPage && (
-        <NavLink to={ROUTES.PWCONFIRM} className={getNavLinkClass}>
-          <span className="nav-arrow-icon" />내 정보 관리
-        </NavLink>
-      )}
-
-      {isReviewPage && (
-        <NavLink to={ROUTES.MYPAGEREVIEW} className={getNavLinkClass}>
-          <span className="nav-arrow-icon" />
-          내리뷰
-        </NavLink>
+      {currentMenuKey && currentMenuName && (
+        <>
+          <span className="bg-icon-arrow mr-1 mt-[3px] inline-block h-3 w-3 bg-contain bg-no-repeat" />
+          <NavLink to={currentMenuKey} className={getNavLinkClass}>
+            {currentMenuName}
+          </NavLink>
+        </>
       )}
     </div>
   );

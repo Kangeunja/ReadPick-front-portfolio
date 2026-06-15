@@ -1,58 +1,48 @@
-// react
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from 'react';
 
-// Router
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from 'react-router-dom';
 
-// Hooks
-import { useLogoutMutation } from "../hooks/mutations/useLogoutMutation";
+import { useLogoutMutation } from '../hooks/mutations/useLogoutMutation';
 
-// Store
-import useAuthStore from "../store/authStore";
+import useAuthStore from '../store/authStore';
 
-// Constants
-import { ROUTES } from "../constants/routes";
+import { ROUTES } from '../constants/routes';
+import { useOutsideClick } from '../hooks/useOutsideClick';
 
 interface HeaderProps {
   className?: string;
 }
 
-const SEARCH_OPTIONS = ["도서명", "작가명"];
+const SEARCH_OPTIONS = ['도서명', '작가명'];
 
 const Header = ({ className }: HeaderProps) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const selectRef = useRef<HTMLDivElement>(null); // selectRef 영역 DOM을 감지하기 위한 Ref
+
   const user = useAuthStore((state) => state.user);
   const { mutate: logoutMutate } = useLogoutMutation();
+
+  const getParam = (key: string, fallback: string) => {
+    return new URLSearchParams(location.search).get(key) || fallback;
+  };
 
   // 상태 관리
   const [isFocused, setIsFocused] = useState(false); // 검색포커싱
   const [isOpen, setIsOpen] = useState(false); // selectbox 클릭유무
-  const [selected, setSelected] = useState("선택"); // 선택된 selectbox
-  const [keyword, setKeyword] = useState(""); // 검색어 상태
+  const [selected, setSelected] = useState('선택'); // 선택된 selectbox
+  const [keyword, setKeyword] = useState(''); // 검색어 상태
+
+  const selectRef = useOutsideClick(() => setIsOpen(false));
 
   // url 검색옵션과 키워드 추출
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    setSelected(params.get("option") || "선택");
-    setKeyword(params.get("keyword") || "");
+    setSelected(getParam('option', '선택'));
+    setKeyword(getParam('keyword', ''));
   }, [location.search]);
-
-  // 바깥 클릭시 닫기
-  useEffect(() => {
-    const handleOutsideClick = (e: MouseEvent) => {
-      if (selectRef.current && !selectRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-    window.addEventListener("click", handleOutsideClick);
-    return () => window.removeEventListener("click", handleOutsideClick);
-  }, []);
 
   // 검색 이동
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && selected !== "선택" && keyword.trim()) {
+    if (e.key === 'Enter' && selected !== '선택' && keyword.trim()) {
       const params = new URLSearchParams({
         option: selected,
         keyword,
@@ -64,66 +54,41 @@ const Header = ({ className }: HeaderProps) => {
 
   // 로그아웃 api
   const handleLogout = () => {
-    if (!window.confirm("로그아웃하시겠습니까?")) return;
+    if (!window.confirm('로그아웃하시겠습니까?')) return;
+
     logoutMutate(undefined, {
-      onSuccess: (res) => {
-        if (res === "success") {
-          alert("로그아웃되었습니다.");
-          navigate(ROUTES.MAIN);
-        }
+      onSuccess: () => {
+        alert('로그아웃되었습니다.');
+        navigate(ROUTES.MAIN);
       },
       onError: (error) => {
-        console.error("로그아웃 중 에러 발생:", error);
-        alert("로그아웃에 실패했습니다.");
+        console.error('로그아웃 중 에러 발생:', error);
+        alert('로그아웃에 실패했습니다.');
       },
     });
   };
 
   return (
-    <div className={`w-full h-[120px] border border-gray-line ${className}`}>
-      <div
-        className="
-        w-[1300px] h-[100px] my-[20px] mx-auto 
-        flex justify-between items-center"
-      >
-        <div
-          className="w-[127px] h-[54px] bg-logo-png bg-cover cursor-pointer"
-          onClick={() => navigate(ROUTES.MAIN)}
-        ></div>
+    <div className={`h-[120px] w-full border border-gray-line ${className}`}>
+      <div className="mx-auto my-[20px] flex h-[100px] w-main-w items-center justify-around">
+        <div className="h-[54px] w-[127px] cursor-pointer bg-main-logo bg-cover" onClick={() => navigate(ROUTES.MAIN)}></div>
+
         <div>
           <div className="relative float-left mr-5" ref={selectRef}>
             <div
-              className="
-              w-[90px] h-[45px] bg-white border-[0.5px] 
-              border-solid border-[#c4bfbf] rounded-[10px]
-              p-[10px] box-border flex items-center cursor-pointer
-              justify-between text-[#797979]
-              "
+              className="box-border flex h-[45px] w-[90px] cursor-pointer items-center justify-between rounded-[10px] border-[0.5px] border-solid border-borderLightGray bg-white p-[10px] text-memberColor"
               onClick={() => setIsOpen((prev) => !prev)}
             >
-              <p
-                className={
-                  selected === "선택" ? "text-[#5e5e5e]" : "text-black"
-                }
-              >
-                {selected}
-              </p>
-              <div className="w-3 h-3 bg-select-arrow"></div>
+              <p className={selected === '선택' ? 'text-[#5e5e5e]' : 'text-black'}>{selected}</p>
+              <div className="h-3 w-3 bg-select-arrow"></div>
             </div>
 
             {isOpen && (
-              <ul
-                className="
-              w-[90px] border-[0.5px] border-solid border-[#c4bfbf]
-              rounded-[10px] p-[10px] box-border absolute top-[calc(100%+5px)]
-              shadow-[0 4px 8px rgba(0, 0, 0, 0.1)] bg-white z-10
-              "
-              >
+              <ul className="shadow-[0_4px_8px_rgba(0, 0, 0, 0.1)] absolute top-[calc(100%+5px)] z-[10] box-border w-[90px] rounded-[10px] border-[0.5px] border-solid border-borderLightGray bg-white p-[10px]">
                 {SEARCH_OPTIONS.map((item) => (
                   <li
                     key={item}
-                    className="transition-colors duration-200 
-                    cursor-pointer block hover:bg-[#f2f2f2]"
+                    className="block cursor-pointer transition-colors duration-200 hover:bg-[#f2f2f2]"
                     onClick={() => {
                       setSelected(item);
                       setIsOpen(false);
@@ -137,15 +102,11 @@ const Header = ({ className }: HeaderProps) => {
           </div>
 
           <div
-            className={`w-[400px] h-[45px] border border-[#d7d5d5] 
-              rounded-[10px] flex items-center
-              ${isFocused ? "border-[#393939]" : ""}`}
+            className={`flex h-[45px] w-[400px] items-center rounded-[10px] border border-[#d7d5d5] ${isFocused ? 'border-borderMColor' : ''}`}
           >
-            <i className="w-[25px] h-[25px] bg-search-icon bg-cover ml-5 float-left"></i>
+            <i className="float-left ml-5 h-[25px] w-[25px] bg-icon-search bg-cover"></i>
             <input
-              className="w-[350px] h-full outline-none border-none
-                ml-[15px] text-[#393939] text-base bg-transparent
-              "
+              className="ml-[15px] h-full w-[350px] border-none bg-transparent text-base text-borderMColor outline-none"
               type="search"
               placeholder="원하는 도서명이나 작가명을 검색해보세요."
               onFocus={() => setIsFocused(true)}
@@ -157,34 +118,22 @@ const Header = ({ className }: HeaderProps) => {
           </div>
         </div>
 
-        <div className="h-[50px] leading-[50px] flex">
+        <div className="flex h-[50px] leading-[50px]">
           {user ? (
             <>
-              <button
-                className="side-btn mr-[15px] hover:text-[#393939]"
-                onClick={() => navigate(ROUTES.MYPAGE)}
-              >
+              <button className="side-btn mr-[15px] hover:text-borderMColor" onClick={() => navigate(ROUTES.MYPAGE)}>
                 마이페이지
               </button>
-              <button
-                className="side-btn mr-[15px] hover:text-[#393939]"
-                onClick={handleLogout}
-              >
+              <button className="side-btn mr-[15px] hover:text-borderMColor" onClick={handleLogout}>
                 로그아웃
               </button>
             </>
           ) : (
             <>
-              <button
-                className="side-btn mr-[15px] hover:text-[#393939]"
-                onClick={() => navigate(ROUTES.LOGIN)}
-              >
+              <button className="side-btn mr-[15px] hover:text-borderMColor" onClick={() => navigate(ROUTES.LOGIN)}>
                 로그인
               </button>
-              <button
-                className="side-btn mr-[15px] hover:text-[#393939]"
-                onClick={() => navigate(ROUTES.MEMBER)}
-              >
+              <button className="side-btn mr-[15px] hover:text-borderMColor" onClick={() => navigate(ROUTES.MEMBER)}>
                 회원가입
               </button>
             </>

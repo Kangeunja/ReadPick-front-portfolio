@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 interface Props {
   message: string;
@@ -15,14 +15,8 @@ const MessagePopup = ({ message, onFinish }: Props) => {
   }, [onFinish]);
 
   return (
-    <div className="fixed w-full h-full z-[99] top-0 bottom-0 left-0 right-0 overflow-hidden">
-      <div
-        className="w-[250px] h-[50px] box-border p-5 bg-[rgb(56,56,56)] text-white
-      flex justify-center items-center text-[15px] rounded-[5px] fixed
-      top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 animate-popup 
-      whitespace-pre-line text-center
-      "
-      >
+    <div className="fixed bottom-0 left-0 right-0 top-0 z-[999] flex h-full w-full items-center justify-center">
+      <div className="fixed box-border flex h-[50px] w-[250px] animate-popup items-center justify-center whitespace-pre-line rounded-[5px] bg-[rgb(56,56,56)] p-5 text-center text-[15px] text-white opacity-0">
         <p>{message}</p>
       </div>
     </div>

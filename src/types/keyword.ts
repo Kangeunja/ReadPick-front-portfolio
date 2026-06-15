@@ -6,3 +6,10 @@ export interface BsItem {
     bssName: string;
   }[];
 }
+
+export interface KeywordParams {
+  bsIdx: string | null;
+  bssIdx: string | null;
+  option: string | null;
+  keywordText: string | null;
+}

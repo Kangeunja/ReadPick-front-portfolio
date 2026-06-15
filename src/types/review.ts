@@ -1,4 +1,4 @@
-import { Book, BookImg } from "./book";
+import { Book, BookImg } from './book';
 
 export interface Review {
   nickName: string;
@@ -14,6 +14,11 @@ export interface Review {
 
   book: Book;
   bookImage: BookImg;
+}
+
+export interface insertReviewParams {
+  bookIdx: number;
+  content: string;
 }
 
 export interface UpdateReviewParams {
