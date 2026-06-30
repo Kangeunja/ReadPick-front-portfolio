@@ -1,9 +1,10 @@
-export interface Book {
+export interface BookItem {
   bookIdx: number;
-  bookName: string;
-  author: string;
   bsIdx: number;
-  bookImageName?: string;
+  bookName: string;
+  bookImageName: string;
+  bsName: string;
+  author: string;
 }
 
 export interface BookImg {
@@ -11,6 +12,14 @@ export interface BookImg {
   fileIdx: number;
   fileName: string;
   fileType: string | null;
+  bookImageName?: string;
+}
+
+export interface Book {
+  bookIdx: number;
+  bookName: string;
+  author: string;
+  bsIdx: number;
   bookImageName?: string;
 }
 

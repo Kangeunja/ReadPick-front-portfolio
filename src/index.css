@@ -96,9 +96,21 @@ a {
     @apply fixed box-border flex flex-col items-center justify-center bg-white delay-[0.05s];
   }
 
+  .animation-fadeIn-popup {
+    @apply fixed bottom-0 left-0 right-0 top-0 z-[99] flex h-full w-full animate-popup-bg-fade items-center justify-center bg-black/40 opacity-0;
+  }
+
+  .animation-fadeIn-box {
+    @apply fixed flex w-[360px] animate-popup-box-fade flex-col justify-center bg-white p-[30px] text-center opacity-0 delay-[0.05s];
+  }
+
+  .animation-review-box {
+    @apply fixed box-border w-[500px] bg-white p-[30px];
+  }
+
   /* login */
   .input-box {
-    @apply border-borderLightColor mb-[20px] box-border h-[50px] w-[400px] rounded-[5px] border p-[15px] text-base laptop-lg:max-w-[350px];
+    @apply mb-[20px] box-border h-[50px] w-[400px] rounded-[5px] border border-borderLightColor p-[15px] text-base laptop-lg:max-w-[350px];
   }
 
   /* member */
@@ -107,7 +119,7 @@ a {
   }
 
   .member-label {
-    @apply peer-checked:border-pointColor peer-checked:bg-pointColor text-borderLightColor border-borderLightColor mr-[10px] h-5 w-5 cursor-pointer rounded-[50px] border-2 bg-icon-check bg-center peer-checked:bg-icon-check-color;
+    @apply mr-[10px] h-5 w-5 cursor-pointer rounded-[50px] border-2 border-borderLightColor bg-icon-check bg-center text-borderLightColor peer-checked:border-pointColor peer-checked:bg-pointColor peer-checked:bg-icon-check-color;
   }
 
   .check-box {
@@ -120,6 +132,11 @@ a {
 
   .member-btn:hover {
     @apply hover:text-white;
+  }
+
+  /* header */
+  .side-btn {
+    @apply block cursor-pointer border-none bg-none;
   }
 
   /* main */
@@ -138,10 +155,6 @@ a {
 
   .feature-title-p {
     @apply w-[280px] text-[12px] text-[#373737];
-  }
-
-  .side-btn {
-    @apply block cursor-pointer border-none bg-none;
   }
 
   .nav-link-item {

@@ -1,18 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useOutletContext } from 'react-router-dom';
 
-import MemberKeywordDetailEditPopup from '../../component/popup/MemberKeywordDetailEditPopup';
+import { useQueryClient } from '@tanstack/react-query';
+
+import MemberKeywordDetailEditPopup from '../../component/popup/KeywordBookDetailEditPopup';
 import ReviewDeletePopup from '../../component/popup/ReviewDeletePopup';
-import ReviewCompletePopup from '../../component/popup/MessagePopup';
+import ReviewCompletePopup from '../../component/common/MessagePopup';
 import MyReviewItem from './components/MyReviewItem';
 
 import { MyPageOutletContext } from '../../types/mypage';
 import { Review } from '../../types/review';
 
-import { useReviewQuery } from '../../hooks/queries/useReviewQueries';
 import { useOutsideClick } from '../../hooks/useOutsideClick';
-import { useQueryClient } from '@tanstack/react-query';
+import { useMyReviewQuery } from './hooks/useMyReviewQuery';
 
 const MyReviewsPage = () => {
   const queryClient = useQueryClient();
@@ -24,10 +25,11 @@ const MyReviewsPage = () => {
   const [completeMessage, setCompleteMessage] = useState<string | null>(null); // 완료 팝업 메시지 상태
   const [popupType, setPopupType] = useState<'EDIT' | 'DELETE' | null>(null);
 
-  // 리뷰 리스트 데이터 호출
-  const { data: reviewData = [] } = useReviewQuery();
+  // 메모리 누수 방지를 위한 타이머 레퍼런스
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  console.log(selectedReview);
+  // 리뷰 리스트 데이터 호출
+  const { data: reviewData = [] } = useMyReviewQuery();
 
   const moreMenuRef = useOutsideClick(() => setOpenMoreReviewId(null));
 
@@ -46,13 +48,20 @@ const MyReviewsPage = () => {
   const handleReviewSuccess = (message: string) => {
     setCompleteMessage(message);
 
-    setTimeout(() => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
       setPopupType(null);
       setCompleteMessage(null);
 
       queryClient.invalidateQueries({ queryKey: ['myReviews'] });
     }, 1000);
   };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   return (
     <>
@@ -70,7 +79,6 @@ const MyReviewsPage = () => {
                 userInfo={userInfo}
                 onToggleMenu={handleToggleMenu}
                 handleOpenPopup={handleOpenPopup}
-                onCloseMenu={() => setOpenMoreReviewId(null)}
               />
             ))
           ) : (
@@ -94,11 +102,11 @@ const MyReviewsPage = () => {
         />
       )}
 
-      {popupType === 'DELETE' && selectedReview !== null && (
+      {popupType === 'DELETE' && selectedReview && (
         <ReviewDeletePopup
           onSuccess={() => handleReviewSuccess('리뷰가 삭제되었습니다.')}
           onClose={() => setPopupType(null)}
-          bookDetail={selectedReview}
+          bookIdx={selectedReview.bookIdx}
         />
       )}
     </>

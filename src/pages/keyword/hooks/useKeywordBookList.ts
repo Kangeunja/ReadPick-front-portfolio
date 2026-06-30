@@ -1,8 +1,8 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { ROUTES } from '../../../constants/routes';
+import { ROUTES } from 'constants/routes';
 
-import { useKeywordBooksQuery } from '../../../hooks/queries/useKeywordQueries';
+import { useKeywordBooksQuery } from 'hooks/queries/useKeywordQueries';
 
 export const useKeywordBookList = () => {
   const navigate = useNavigate();
@@ -10,12 +10,15 @@ export const useKeywordBookList = () => {
   const queryParams = new URLSearchParams(location.search);
 
   // URL 파라미터 추출
-  const bsIdx = queryParams.get('bsIdx');
-  const bssIdx = queryParams.get('bssIdx');
+  const rawBsIdx = queryParams.get('bsIdx');
+  const rawBssIdx = queryParams.get('bssIdx');
   const option = queryParams.get('option');
   const keywordText = queryParams.get('keyword');
 
-  const { data, isLoading } = useKeywordBooksQuery({ bssIdx, bsIdx, option, keywordText });
+  const bsIdx = rawBsIdx ? Number(rawBsIdx) : null;
+  const bssIdx = rawBssIdx ? Number(rawBssIdx) : null;
+
+  const { data, isLoading } = useKeywordBooksQuery({ bsIdx, bssIdx, option, keywordText });
 
   // 이벤트 핸들러
   const handleCategoryChange = (type: string, idx: number) => {
@@ -29,13 +32,13 @@ export const useKeywordBookList = () => {
   };
 
   return {
-    handleCategoryChange,
-    goToDetail,
+    bsIdx,
+    bssIdx,
+    keywordText,
     books: data?.books || [],
     images: data?.images || [],
     isLoading,
-    keywordText,
-    bsIdx,
-    bssIdx,
+    handleCategoryChange,
+    goToDetail,
   };
 };

@@ -11,7 +11,6 @@ export interface Review {
   author: string;
   bookIdx: number;
   content: string;
-
   book: Book;
   bookImage: BookImg;
 }

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import useAuthStore from '../store/authStore';
+import useAuthStore from 'store/authStore';
 
 // console.log("현재 NODE_ENV:", process.env.NODE_ENV);
 console.log('읽어온 API 주소:', process.env.REACT_APP_API_URL);
@@ -25,6 +25,7 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
+      localStorage.removeItem('accessToken');
       useAuthStore.getState().logout();
       // window.location.href = "/login";
     }

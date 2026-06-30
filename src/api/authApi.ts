@@ -1,5 +1,5 @@
 import api from './axiosInstance';
-import { LoginRequest, SignupFormData } from '../types/auth';
+import { LoginRequest, SignupFormData } from 'types/auth';
 
 // 회원가입
 export const signup = async (data: SignupFormData) => {

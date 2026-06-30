@@ -4,26 +4,30 @@ import { useNavigate, useOutletContext } from 'react-router-dom';
 
 import { ROUTES } from '../../constants/routes';
 
-import { getLargeBookImage } from '../../utils/image';
+import FavoriteBookCard from './components/FavoriteBookCard';
+
+import type { MyPageOutletContext } from '../../types/mypage';
 
 import { useCarousel } from '../../hooks/useCarousel';
 import { useFavoritImgQuery, useFavoritQuery } from '../../hooks/queries/useFavoriteQueries';
 
-import type { MyPageOutletContext } from '../../types/mypage';
-
 const MyPageDashboardPage = () => {
   const navigate = useNavigate();
   const { userInfo } = useOutletContext<MyPageOutletContext>();
+  console.log(userInfo.fileName);
 
   const { listRef, canScrollLeft, canScrollRight, scroll, handleScroll } = useCarousel();
 
   const { data: favoriteBooks = [] } = useFavoritQuery();
   const { data: favoriteBooksImg = [] } = useFavoritImgQuery();
 
-  const isDefaultProfile = userInfo?.fileName === 'default';
+  const isDefaultImage = userInfo.fileName === 'default';
 
   // 값 계산결과를 기억
   const imageMap = useMemo(() => {
+    if (!Array.isArray(favoriteBooksImg) || favoriteBooksImg.length === 0) {
+      return new Map<number, string>();
+    }
     return new Map(favoriteBooksImg.map((img) => [img.bookIdx, img.fileName]));
   }, [favoriteBooksImg]);
 
@@ -38,16 +42,16 @@ const MyPageDashboardPage = () => {
         <div className="flex">
           <div>
             <div
-              className={`flex h-[80px] w-[80px] items-center justify-center rounded-[50px] ${isDefaultProfile ? 'border border-[#1b1b1b]' : ''}`}
+              className={`flex h-[80px] w-[80px] items-center justify-center rounded-[50px] ${isDefaultImage ? 'border border-[#1b1b1b]' : ''}`}
             >
-              {isDefaultProfile ? (
+              {isDefaultImage ? (
                 <div className="h-[30px] w-[30px] bg-icon-default bg-cover object-cover" />
               ) : (
-                <img className="h-[30px] w-[30px] rounded-[50px]" src={userInfo?.fileName} alt="프로필 이미지" />
+                <img className="h-[80px] w-[80px] rounded-[50px]" src={userInfo.fileName} alt="프로필 이미지" />
               )}
             </div>
             <div
-              className="relative bottom-[30px] left-[60px] flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-[50px] border border-white bg-[#7a7a7a] hover:bg-bgColor"
+              className="relative bottom-[30px] left-[60px] flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-[50px] border border-white bg-[#7a7a7a] hover:bg-btnhoverColor"
               onClick={() => navigate(ROUTES.PROFILE)}
             >
               <div className="h-[14px] w-[16px] bg-icon-camera bg-cover"></div>
@@ -74,62 +78,49 @@ const MyPageDashboardPage = () => {
           </div>
         </div>
 
-        <div className="group relative">
-          {canScrollLeft && (
-            <button
-              type="button"
-              className="mypage-nav-arrow group-hover:opacity-1 pointer-events-auto left-[-50px] cursor-pointer"
-              onClick={() => scroll('left')}
-            >
-              ◀
-            </button>
-          )}
+        <div className="flex flex-col">
+          <div className="mb-5 text-left text-lg">찜목록</div>
 
-          <div>
-            <div className="mb-5 text-left text-lg">찜목록</div>
+          <div className="relative">
+            {canScrollLeft && (
+              <button
+                type="button"
+                className="mypage-nav-arrow pointer-events-auto left-[-50px] cursor-pointer"
+                onClick={() => scroll('left')}
+              >
+                ◀
+              </button>
+            )}
+
             <div className="flex w-[700px] gap-[18px] overflow-x-hidden scroll-smooth" ref={listRef} onScroll={handleScroll}>
               {favoriteBooks.length > 0 ? (
-                favoriteBooks.map((item) => {
-                  const imageFile = imageMap.get(item.bookIdx);
-
-                  return (
-                    <div key={item.bookIdx} className="shrink-0 cursor-pointer" onClick={() => goToBookDetail(item.bookIdx, item.bsIdx)}>
-                      <div className="mb-[14px] h-[148px] w-[119px]">
-                        {imageFile ? (
-                          <img
-                            src={getLargeBookImage(imageFile)}
-                            alt="책 이미지"
-                            className="border-borderLightColor box-border h-[148px] w-[119px] rounded-[12px] border"
-                          />
-                        ) : (
-                          <div className="h-full w-full animate-pulse bg-gray-200" />
-                        )}
-                      </div>
-                      <div className="w-[119px]">
-                        <p className="overflow-hidden text-ellipsis whitespace-nowrap text-[14px] font-bold">{item.bookName}</p>
-                        <p className="text-[11px] text-[#555555]">{item.author}</p>
-                      </div>
-                    </div>
-                  );
-                })
+                favoriteBooks.map((item) => (
+                  <FavoriteBookCard
+                    key={item.bookIdx}
+                    item={item}
+                    imageFile={imageMap.get(item.bookIdx)}
+                    onClick={() => goToBookDetail(item.bookIdx, item.bsIdx)}
+                  />
+                ))
               ) : (
-                <p className="box-border w-[700px] border border-borderLineColor p-5 text-[14px] text-[#555555]">
+                <p className="box-border w-[700px] border border-borderGrayColor p-5 text-[14px] text-[#555555]">
                   아직 찜한 책이 없어요.
                   <br />
                   마음에 드는 책을 찜해보세요.
                 </p>
               )}
             </div>
+
+            {canScrollRight && favoriteBooks.length > 0 && (
+              <button
+                type="button"
+                className="mypage-nav-arrow pointer-events-auto right-[-50px] cursor-pointer"
+                onClick={() => scroll('right')}
+              >
+                ▶
+              </button>
+            )}
           </div>
-          {canScrollRight && favoriteBooks.length > 5 && (
-            <button
-              type="button"
-              className="mypage-nav-arrow group-hover:opacity-1 pointer-events-auto right-[-50px] cursor-pointer"
-              onClick={() => scroll('right')}
-            >
-              ▶
-            </button>
-          )}
         </div>
       </div>
     </div>

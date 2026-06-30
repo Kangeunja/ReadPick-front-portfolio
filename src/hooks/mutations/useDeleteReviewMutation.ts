@@ -1,22 +1,20 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteReview } from '../../api/reviewApi';
 
-export const useDeleteReviewMutation = () => {
+export const useDeleteReviewMutation = (bookIdx: number) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: deleteReview,
+
     // onSuccess: () => {
-    //   queryClient.invalidateQueries({
-    //     queryKey: ['myReviews'],
-    //   });
+    //   queryClient.invalidateQueries({ queryKey: ['myReviews'] });
+    //   queryClient.invalidateQueries({ queryKey: ['bookDetail', bookIdx] });
+    //   queryClient.invalidateQueries({ queryKey: ['reviewCount', bookIdx] });
 
-    //   queryClient.invalidateQueries({
+    //   queryClient.resetQueries({
     //     queryKey: ['reviewList', bookIdx],
-    //   });
-
-    //   queryClient.invalidateQueries({
-    //     queryKey: ['bookDetail', bookIdx],
+    //     exact: true,
     //   });
     // },
   });

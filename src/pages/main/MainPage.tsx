@@ -1,11 +1,11 @@
-import { MainFeatures } from './components/MainFeatures';
 import { MainBookCard } from './components/MainBookCard';
+import { MainFeatures } from './components/MainFeatures';
+
+import { getLargeBookImage } from 'utils/image';
 
 import { useMainData } from './hooks/useMainData';
 
-import { getLargeBookImage } from '../../utils/image';
-
-import { keywordSubtitles } from '../../types/keywordSubtitles';
+import { keywordSubtitles } from 'types/keyword';
 
 const MainPage = () => {
   const { isLogin, todayBookData, keywordListData, genreBookData, isLoading, gotoDetail, handleKeyWordIdx } = useMainData();
@@ -17,10 +17,11 @@ const MainPage = () => {
       </div>
     );
   }
+
   return (
     <div className="w-full pt-5">
       <div
-        className="bg-pointColor relative mx-auto mb-[80px] box-border h-[400px] w-main-w cursor-pointer rounded-[20px] p-[30px]"
+        className="relative mx-auto mb-[80px] box-border h-[400px] w-main-w cursor-pointer rounded-[20px] bg-pointColor p-[30px]"
         onClick={() => {
           if (todayBookData) {
             gotoDetail(todayBookData.bookIdx, todayBookData.bsIdx);
@@ -51,11 +52,11 @@ const MainPage = () => {
             <p className="sub-title-p">관심 있는 주제를 선택하면 관련 도서를 볼 수 있어요</p>
           </div>
 
-          <div className="flex w-full flex-wrap gap-x-[50px] gap-y-5">
+          <div className="flex w-full flex-wrap gap-x-[50px] gap-y-[20px]">
             {keywordListData.map((item) => (
               <div
                 key={item.bsIdx}
-                className="hover:border-pointColor hover:shadow-borderShadow box-border flex h-[80px] w-[200px] cursor-pointer flex-col items-center justify-center rounded-[8px] border border-[#cbcbcb] font-inter transition-all duration-[0.25s] ease-in-out hover:-translate-y-1"
+                className="box-border flex h-[80px] w-[200px] cursor-pointer flex-col items-center justify-center rounded-[8px] border border-[#cbcbcb] font-inter transition-all duration-[0.25s] ease-in-out hover:-translate-y-1 hover:border-pointColor hover:shadow-borderShadow"
                 onClick={() => handleKeyWordIdx(item.bsIdx)}
               >
                 <p className="text-[12px]">{keywordSubtitles[item.bsName]}</p>
@@ -80,7 +81,7 @@ const MainPage = () => {
               ))}
             </div>
           ) : (
-            <div className="flex h-40 w-container-w items-center justify-center rounded-[15px] border border-[#e5e5e5] text-center text-[12px]">
+            <div className="flex h-40 w-container-w items-center justify-center rounded-[15px] border border-borderLightColor text-center text-[12px]">
               {isLogin ? (
                 <p>
                   맞춤추천을 준비하고 있어요 <br />

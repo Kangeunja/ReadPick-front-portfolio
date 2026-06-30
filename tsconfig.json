@@ -20,6 +20,7 @@
 
 {
   "compilerOptions": {
+    "baseUrl": "./src",
     "target": "es2016",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -29,7 +30,7 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "ignoreDeprecations": "5.0",
+    "ignoreDeprecations": "6.0",
     "module": "Node16",
     "types": ["node"],
     "moduleResolution": "node16",

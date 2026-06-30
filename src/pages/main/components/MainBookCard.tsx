@@ -1,13 +1,12 @@
-import { useHover } from '../../../hooks/useHover';
+import { getLargeBookImage } from 'utils/image';
 
-import { getLargeBookImage } from '../../../utils/image';
+import { useHover } from 'hooks/useHover';
+import { BookItem } from 'types/book';
 
-import { BookItem } from '../../../types/main';
-
-interface MainBookCardProps {
+type MainBookCardProps = {
   item: BookItem;
   gotoDetail: (bookIdx: number, bsIdx: number) => void;
-}
+};
 
 export const MainBookCard = ({ item, gotoDetail }: MainBookCardProps) => {
   const [isHovered, hoverProps] = useHover();

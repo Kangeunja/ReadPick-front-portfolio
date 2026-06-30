@@ -1,4 +1,4 @@
-import { UserProfile } from "./userProfile";
+import { UserProfile } from './user';
 
 export interface MyPageOutletContext {
   userInfo: UserProfile;

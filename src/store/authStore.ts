@@ -4,6 +4,7 @@ import { User } from '../types/user';
 
 interface AuthState {
   user: User | null; // 현재 로그인 유저
+  isInitialized: boolean;
   setUser: (user: User) => void; // 로그인 저장
   logout: () => void;
 }
@@ -12,16 +13,20 @@ const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       user: null,
+      isInitialized: false,
 
-      setUser: (user) => set({ user }),
+      setUser: (user) => set({ user, isInitialized: true }),
 
       logout: () => {
-        set({ user: null });
-        localStorage.removeItem('auth-storage');
+        localStorage.removeItem('accessToken');
+        set({ user: null, isInitialized: true });
+
+        // localStorage.removeItem('auth-storage');
       },
     }),
     {
       name: 'auth-storage',
+      partialize: (state) => ({ user: state.user }),
     },
   ),
 );

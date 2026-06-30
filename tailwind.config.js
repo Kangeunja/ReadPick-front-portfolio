@@ -23,13 +23,15 @@ module.exports = {
         'icon-default': "url('/src/assets/img/icon-default.png')",
         'icon-camera': "url('/src/assets/img/icon-camera.png')",
         'icon-add': "url('/src/assets/img/icon-add.png')",
+        'icon-buy': "url('/src/assets/img/icon-buy.png')",
+        'icon-cancel': "url('/src/assets/img/icon-cancel.png')",
+        'icon-trash': "url('/src/assets/img/icon-trash.png')",
+        'icon-pw-check': "url('/src/assets/img/icon-pw-check.png')",
 
         'like-line-hover': "url('/src/assets/img/icon-good-line-hover.png')",
-        'popup-cancel': "url('/src/assets/img/book-detail-cancel.png')",
-        'my-page-icon': "url('/src/assets/img/mypage-info-icon.png')",
-        'trash-icon': "url('/src/assets/img/icon-trash.png')",
+
         'bookmark-icon': "url('/src/assets/img/book-detail-bookmark.png')",
-        'buy-icon': "url('/src/assets/img/book-detail-buy.png')",
+
         'buy-icon-hover': "url('/src/assets/img/book-detail-buy-hover.png')",
         'review-icon': "url('/src/assets/img/book-detail-reviews.png')",
         'review-icon-hover': "url('/src/assets/img/book-detail-reviews-hover.png')",
@@ -51,12 +53,12 @@ module.exports = {
         borderLightColor: '#c9c9c9',
         pointColor: '#248f8f',
         mainBoxColor: '#f2f2f2',
-
-        memberColor: '#797979',
-        borderLightGray: '#c4bfbf',
+        borderGrayColor: '#eaeaea',
+        textGrayColor: '#555555',
+        btnhoverColor: '#1e7373',
         borderMColor: '#393939',
-        borderLineColor: '#eaeaea',
-        bgColor: '#1e7373',
+
+        borderLightGray: '#c4bfbf',
       },
 
       spacing: {

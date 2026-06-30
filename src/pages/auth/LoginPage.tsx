@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
-
 import { useNavigate } from 'react-router-dom';
 
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
-import { checkFirstVisit } from '../../api/authApi';
-
-import { ROUTES } from '../../constants/routes';
-
+import FormField from 'component/common/FormField';
 import IsLoginPopup from './components/IsLoginPopup';
 import FirstVisitPopup from './components/FirstVisitPopup';
 
-import { ID_REGEX, PW_REGEX } from '../../utils/validation';
+import { checkFirstVisit } from 'api/authApi';
 
-import { useLoginMutation } from '../../hooks/mutations/useLoginMutation';
+import { ROUTES } from 'constants/routes';
+
+import { ID_REGEX, PW_REGEX } from 'utils/validation';
+
+import { useLoginMutation } from 'hooks/mutations/useAuthMutation';
 
 type LoginFormData = {
   username: string;
@@ -29,20 +29,26 @@ type LoginErrorData = {
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { mutate } = useLoginMutation();
+  const { mutate: loginMutate } = useLoginMutation();
 
-  // 상태 관리
-  const [userLogin, setUserLogin] = useState<LoginFormData>({ username: '', password: '' }); // 로그인 입력값 상태 관리
-  const [isPasswordVisible, setPasswordVisible] = useState(false); // 비밀번호 토글 상태
+  // 로그인 입력값 상태 관리
+  const [userLogin, setUserLogin] = useState<LoginFormData>({ username: '', password: '' });
+  // 비밀번호 토글 상태
+  const [isPasswordVisible, setPasswordVisible] = useState(false);
+  // 로그인 에러 메세지
+  const [loginErrorMessage, setLoginErrorMessage] = useState<LoginErrorData>({ username: '', password: '', submit: '' });
   const [isSignupCompletePopupOpen, setSignupCompletePopupOpen] = useState(false); // 회원가입 완료 팝업
   const [isFirstVisitPopupOpen, setFirstVisitPopupOpen] = useState(false); // 관심사 선택창 팝업
-  const [loginErrorMessage, setLoginErrorMessage] = useState<LoginErrorData>({ username: '', password: '', submit: '' }); // 로그인 에러 메세지
+
+  const currentErrorMessage = loginErrorMessage.username || loginErrorMessage.password || loginErrorMessage.submit;
 
   const validateField = (name: string, value: string) => {
-    if (value === '') return '';
+    if (!value || value.trim() === '') {
+      return '';
+    }
 
     if (name === 'username') {
-      return ID_REGEX.test(value) ? '' : '아이디는 영문, 숫자 조합 6~15자여야 합니다.';
+      return ID_REGEX.test(value) ? '' : '아이디는 6~15자의 영문 혹은 영문+숫자 조합이어야 합니다.';
     }
 
     if (name === 'password') {
@@ -52,14 +58,9 @@ const LoginPage = () => {
     return '';
   };
 
-  // 아이디, 비밀번호 입력값 변경 및 유효성 검사
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    setUserLogin((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  // ===== 아이디, 비밀번호 입력값 변경 및 유효성 검사 =====
+  const handleChange = (name: string, value: string) => {
+    setUserLogin((prev) => ({ ...prev, [name]: value }));
 
     setLoginErrorMessage((prev) => ({
       ...prev,
@@ -68,11 +69,11 @@ const LoginPage = () => {
     }));
   };
 
-  // 로그인 api 함수
+  // ===== 로그인 api 함수 =====
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
-    mutate(
+    loginMutate(
       {
         id: userLogin.username,
         pw: userLogin.password,
@@ -103,8 +104,6 @@ const LoginPage = () => {
     );
   };
 
-  const currentErrorMessage = loginErrorMessage.username || loginErrorMessage.password || loginErrorMessage.submit;
-
   return (
     <>
       <div className="flex min-h-screen">
@@ -117,45 +116,46 @@ const LoginPage = () => {
               <br />
               <span className="font-McLaren text-[#00822b]">ReadPick</span>에서 한번 만나보세요
             </div>
+
             <form className="flex flex-col items-center" onSubmit={handleLogin}>
-              <input
+              <FormField
+                id="username"
+                className="input-box"
                 name="username"
                 type="text"
                 placeholder="아이디를 입력해주세요."
                 maxLength={15}
                 value={userLogin.username}
-                onChange={handleChange}
-                autoComplete="username"
-                className="input-box"
+                onChange={(value) => handleChange('username', value)}
               />
 
-              <div className="relative">
-                <input
-                  name="password"
-                  type={isPasswordVisible ? 'text' : 'password'}
-                  placeholder="비밀번호를 입력해주세요."
-                  maxLength={15}
-                  value={userLogin.password}
-                  onChange={handleChange}
-                  autoComplete="current-password"
-                  className="input-box"
-                />
+              <FormField
+                id="password"
+                className="input-box"
+                name="password"
+                type={isPasswordVisible ? 'text' : 'password'}
+                placeholder="비밀번호를 입력해주세요."
+                maxLength={15}
+                value={userLogin.password}
+                onChange={(value) => handleChange('password', value)}
+                rightSlot={
+                  <span onClick={() => setPasswordVisible(!isPasswordVisible)}>
+                    {isPasswordVisible ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                  </span>
+                }
+              />
 
-                <span className="absolute right-[15px] top-[16px] cursor-pointer" onClick={() => setPasswordVisible(!isPasswordVisible)}>
-                  {isPasswordVisible ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                </span>
-              </div>
-              {currentErrorMessage && <p className="relative text-[14px] text-[red]">{currentErrorMessage}</p>}
+              {currentErrorMessage && <p className="text-[14px] text-[#ff0004]">{currentErrorMessage}</p>}
 
               <button
                 type="submit"
+                className="mb-[20px] mt-[15px] h-[50px] w-[400px] cursor-pointer rounded-[5px] border border-borderLightColor bg-pointColor text-white disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400 laptop-lg:max-w-[350px]"
                 disabled={!ID_REGEX.test(userLogin.username) || !PW_REGEX.test(userLogin.password)}
-                className="border-borderLightColor bg-pointColor mb-[20px] mt-[15px] h-[50px] w-[400px] cursor-pointer rounded-[5px] border text-white disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400 laptop-lg:max-w-[350px]"
               >
                 로그인
               </button>
 
-              <div className="text-[rgb(43, 43, 43)] flex w-[250px] items-center justify-between text-[14px]">
+              <div className="flex w-[250px] items-center justify-between text-[14px] text-[rgb(43_43_43)]">
                 <button type="button" className="hover:underline" onClick={() => navigate(ROUTES.MEMBER)}>
                   회원가입
                 </button>

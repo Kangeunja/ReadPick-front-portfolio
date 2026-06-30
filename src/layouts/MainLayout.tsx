@@ -1,23 +1,23 @@
 import { useEffect } from 'react';
-
 import { Outlet, useLocation } from 'react-router-dom';
 
 import Header from './Header';
 import Footer from './Footer';
 
-import { useAuthQuery } from '../hooks/queries/useAuthQuery';
-
 import useAuthStore from '../store/authStore';
+
+import { useAuthQuery } from '../hooks/queries/useAuthQuery';
 
 const MainLayout = () => {
   const location = useLocation();
   const isMain = location.pathname === '/';
 
+  const isInitialized = useAuthStore((state) => state.isInitialized);
   const setUser = useAuthStore((state) => state.setUser);
   const logout = useAuthStore((state) => state.logout);
 
   // 앱 시작시 로그인 상태 검증
-  const { data, isSuccess, isError } = useAuthQuery();
+  const { data, isSuccess, isError, isFetching } = useAuthQuery();
 
   useEffect(() => {
     if (isSuccess && data) {
@@ -29,10 +29,14 @@ const MainLayout = () => {
     }
   }, [data, isSuccess, isError, setUser, logout]);
 
+  if (!isInitialized || isFetching) {
+    return <div>로그인 상태 확인 중... 🔐</div>;
+  }
+
   return (
-    <div className={`group flex h-screen flex-col ${isMain ? 'layout--main' : ''}`}>
+    <div className="flex h-screen flex-col">
       {/* 헤더 */}
-      <Header className="group-[.layout--main]:border-none" />
+      <Header isMain={isMain} />
 
       <main className="flex-1">
         <Outlet />

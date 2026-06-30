@@ -1,10 +1,11 @@
 export interface SignupFormData {
+  id: string;
   userName: string;
   nickName: string;
-  id: string;
+  email: string;
   pw: string;
   pwConfirm: string;
-  email: string;
+  currentPw?: string;
 }
 
 export interface LoginRequest {

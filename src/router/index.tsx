@@ -1,21 +1,21 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Layout from '../layouts/MainLayout';
 import Main from '../pages/main/MainPage';
-import MemberLogin from '../pages/auth/member/MemberLogin';
-import MemberKeyword from '../pages/keyword/KeywordBookListPage';
-import MemberKeywordDetail from '../pages/keyword/KeywordBookDetailPage';
+import MemberLogin from '../pages/auth/MemberLoginPage';
+import KeywordBookListPage from '../pages/keyword/KeywordBookListPage';
+import KeywordBookDetailPage from '../pages/keyword/KeywordBookDetailPage';
 import MyPage from '../pages/mypage/MyPage';
 import { RecoilRoot } from 'recoil';
 import Admin from '../component/admin/Admin';
 import AdminMain from '../component/admin/AdminMain';
 import ScrollTop from '../component/common/ScrollTop';
 import MyPageHome from '../pages/mypage/MyPageDashboardPage';
-import ProfileManage from '../component/mypage/ProfileManage';
+import ProfileManage from '../pages/mypage/MyProfilePage';
 import MyPageReview from '../pages/mypage/MyReviewsPage';
 import Member from '../pages/auth/MemberPage';
-import MemberAgreement from '../pages/auth/member/MemberAgreement';
+import MemberAgreement from '../pages/auth/MemberAgreementPage';
 import { ROUTES } from '../constants/routes';
-import PasswordConfirm from '../component/mypage/PasswordConfirm';
+import PasswordConfirm from '../pages/mypage/MyPageEditGuard';
 import { USER_ROLE } from '../constants/role';
 import ProtectedRoute from './ProtectedRoute';
 import LoginPage from '../pages/auth/LoginPage';
@@ -29,15 +29,15 @@ const BrowserRouterDom = () => {
           <Route element={<Layout />}>
             <Route path={ROUTES.MAIN} element={<Main />}></Route>
 
-            <Route path={ROUTES.KEYWORD} element={<MemberKeyword />}></Route>
-            <Route path={ROUTES.KEYWORDDETAIL} element={<MemberKeywordDetail />}></Route>
+            <Route path={ROUTES.KEYWORD} element={<KeywordBookListPage />}></Route>
+            <Route path={ROUTES.KEYWORDDETAIL} element={<KeywordBookDetailPage />}></Route>
 
             <Route
               path={ROUTES.MYPAGE}
               element={
-                <ProtectedRoute>
-                  <MyPage />
-                </ProtectedRoute>
+                // <ProtectedRoute>
+                <MyPage />
+                // </ProtectedRoute>
               }
             >
               <Route index element={<MyPageHome />} />
