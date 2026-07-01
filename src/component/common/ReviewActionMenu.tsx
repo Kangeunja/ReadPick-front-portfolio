@@ -1,5 +1,5 @@
 import { MutableRefObject } from 'react';
-import { Review } from '../../types/review';
+import { Review } from 'types/review';
 
 interface ReviewActionMenuProps {
   item: Review;

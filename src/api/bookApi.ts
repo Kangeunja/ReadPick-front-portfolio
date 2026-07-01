@@ -1,5 +1,5 @@
 import api from './axiosInstance';
-import { BookItem, BookDetail, BookImg } from '../types/book';
+import { BookItem, BookDetail, BookImg } from 'types/book';
 
 // 오늘의 책 api
 export const getTodayBook = async (): Promise<BookItem> => {

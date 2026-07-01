@@ -5,6 +5,10 @@ export const useOutsideClick = (callback: () => void) => {
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('.more-btn')) {
+        return;
+      }
       if (ref.current && !ref.current.contains(e.target as Node)) {
         callback();
       }

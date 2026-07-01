@@ -4,7 +4,7 @@ import { SearchCategory } from 'types/keyword';
 import { BookItem, BookImg } from 'types/book';
 
 // 소분류 키워드 리스트 조회 api
-export const getKeywordList = async () => {
+export const getSubCategoryList = async () => {
   const res = await api.get('/bssListByBsIdx');
   return res.data;
 };

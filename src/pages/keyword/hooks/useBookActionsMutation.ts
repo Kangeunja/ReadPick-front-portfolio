@@ -1,34 +1,36 @@
+import { useParams } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { reportReview } from '../../../api/reviewApi';
-import { toggleBookmark, toggleRecommend } from '../../../api/userPickApi';
+import { reportReview } from 'api/reviewApi';
+import { toggleBookmark, toggleRecommend } from 'api/userPickApi';
 
-export const useBookActionsMutation = (bookIdx: number) => {
+export const useBookActionsMutation = () => {
   const queryClient = useQueryClient();
+
+  const { bookIdx } = useParams();
+  const bookIdxNumber = bookIdx ? Number(bookIdx) : 0;
 
   // 추천 mutation
   const { mutate: recommendMutation } = useMutation({
-    mutationFn: () => toggleRecommend(bookIdx),
+    mutationFn: () => toggleRecommend(bookIdxNumber),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['isRecommend', bookIdx] });
-      queryClient.invalidateQueries({ queryKey: ['recommedCount', bookIdx] });
+      queryClient.invalidateQueries({ queryKey: ['isRecommend', bookIdxNumber] });
+      queryClient.invalidateQueries({ queryKey: ['recommedCount', bookIdxNumber] });
     },
   });
 
   // 찜 mutation
   const { mutate: bookmarkMutation } = useMutation({
-    mutationFn: () => toggleBookmark(bookIdx),
+    mutationFn: () => toggleBookmark(bookIdxNumber),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['isBookmark', bookIdx] });
+      queryClient.invalidateQueries({ queryKey: ['isBookmark', bookIdxNumber] });
     },
   });
 
   // 신고 mutation
   const { mutate: reportReviewMutation } = useMutation({
     mutationFn: (rvIdx: number) => reportReview(rvIdx),
-    onSuccess: () => {
-      alert('신고가 정상적으로 접수되었습니다.');
-    },
+    onSuccess: () => {},
     onError: (error) => {
       console.error('신고 실패:', error);
     },

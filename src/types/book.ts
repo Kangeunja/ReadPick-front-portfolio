@@ -1,37 +1,39 @@
-export interface BookItem {
+export interface BaseBook {
   bookIdx: number;
-  bsIdx: number;
   bookName: string;
   bookImageName: string;
-  bsName: string;
   author: string;
 }
 
+export interface BookItem extends BaseBook {
+  bsIdx: number;
+  bsName: string;
+}
+
+export interface BookDetail extends BaseBook {
+  bookContent: string;
+  link: string;
+  bookImageName: string;
+}
+
+export interface BaseBookImg {}
 export interface BookImg {
   bookIdx: number;
-  fileIdx: number;
   fileName: string;
-  fileType: string | null;
-  bookImageName?: string;
 }
+
+// export interface BookImg {
+//   bookIdx: number;
+//   fileIdx: number;
+//   fileName: string;
+//   fileType: string | null;
+//   bookImageName?: string;
+// }
 
 export interface Book {
   bookIdx: number;
   bookName: string;
   author: string;
   bsIdx: number;
-  bookImageName?: string;
-}
-
-export interface BookDetail {
-  author: string;
-  bookName: string;
-  bookContent: string;
-  bookIdx: number;
-  link: string;
   bookImageName: string;
-}
-
-export interface BookImg {
-  fileName: string;
 }

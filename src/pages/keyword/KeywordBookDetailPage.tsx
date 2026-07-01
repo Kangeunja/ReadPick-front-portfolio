@@ -1,16 +1,17 @@
-import SpinnerIcon from '../../assets/icon/SpinnerIcon';
+import SpinnerIcon from 'assets/icon/SpinnerIcon';
 
 import TopMenu from './components/TopMenu';
 import LoginRequiredPopup from './components/LoginRequiredPopup';
 import KeywordBookDetailWritePopup from './components/KeywordBookDetailWritePopup';
-import KeywordBookDetailEditPopup from '../../component/popup/KeywordBookDetailEditPopup';
-import ReviewDeletePopup from '../../component/popup/ReviewDeletePopup';
-import ReviewCompletePopup from '../../component/common/MessagePopup';
+import KeywordBookDetailEditPopup from 'component/popup/KeywordBookDetailEditPopup';
+import ReviewDeletePopup from 'component/popup/ReviewDeletePopup';
+import ReviewCompletePopup from 'component/common/MessagePopup';
 import ReviewItem from './components/ReviewItem';
 
-import { getLargeBookImage } from '../../utils/image';
+import { getLargeBookImage } from 'utils/image';
 
 import { useKeywordBookDetail } from './hooks/useKeywordBookDetail';
+import { useBookActionsMutation } from './hooks/useBookActionsMutation';
 
 const KeywordBookDetailPage = () => {
   const {
@@ -18,33 +19,33 @@ const KeywordBookDetailPage = () => {
     keywordList,
     bsIdx,
     bssIdx,
-    handleBsClick,
-    handleBssClick,
+    handleCategoryChange,
     bookDetail,
     bookImg,
     isRecommend,
-    handleIsGood,
     recommedCount,
     isBookmark,
-    handleIsBookMark,
     reviewCount,
+    handleActionClick,
     handleOpenReviewPopup,
-    setPopup,
-    popup,
+    hasMyReview,
     reviews,
-    fetchMoreReview,
-    hasMore,
-    loading,
+    moreMenuRef,
     openMoreReviewId,
     handleToggleMoreMenu,
     handleOpenPopup,
-    selectedReview,
-    completeMessage,
-    handleReviewSuccess,
-    moreMenuRef,
-    hasMyReview,
+    loading,
     bottomObserverRef,
+    hasMore,
+    popup,
+    completeMessage,
+    handleClosePopup,
+    handleReviewSuccess,
+    selectedReview,
+    handleReportReview,
   } = useKeywordBookDetail();
+
+  const { recommendMutation, bookmarkMutation } = useBookActionsMutation();
 
   const isContentEmpty = !bookDetail?.bookContent || bookDetail.bookContent.trim() === '';
 
@@ -55,8 +56,8 @@ const KeywordBookDetailPage = () => {
           keywordList={keywordList}
           selectedBsIdx={bsIdx}
           selectedBssIdx={bssIdx}
-          onBsClick={handleBsClick}
-          onBssClick={handleBssClick}
+          onBsClick={(idx) => handleCategoryChange('bs', idx)}
+          onBssClick={(idx) => handleCategoryChange('bss', idx)}
         />
 
         <div className="flex justify-between">
@@ -68,7 +69,7 @@ const KeywordBookDetailPage = () => {
             <div className="flex w-[340px] justify-between">
               <button
                 className={`flex h-[38px] w-[160px] cursor-pointer items-center justify-center rounded-[5px] border-none text-[12px] text-white hover:bg-pointColor ${isRecommend ? 'bg-pointColor' : 'bg-[rgba(85,85,85,0.5)]'} `}
-                onClick={handleIsGood}
+                onClick={() => handleActionClick(() => recommendMutation())}
               >
                 <div
                   className={`mr-3 h-[20px] w-[20px] bg-cover ${isRecommend ? 'bg-icon-recommend-white' : 'bg-icon-recommend-line'} `}
@@ -78,7 +79,7 @@ const KeywordBookDetailPage = () => {
 
               <button
                 className={`flex h-[38px] w-[160px] cursor-pointer items-center justify-center rounded-[5px] border-none text-[12px] text-white hover:bg-pointColor ${isBookmark ? 'bg-pointColor' : 'bg-[rgba(85,85,85,0.5)]'} `}
-                onClick={handleIsBookMark}
+                onClick={() => handleActionClick(() => bookmarkMutation())}
               >
                 <div className="mr-[12px] h-[20px] w-[20px] bg-bookmark-icon"></div>
                 <p>{isBookmark ? '찜했어요' : '이 책 찜해요'}</p>
@@ -119,7 +120,7 @@ const KeywordBookDetailPage = () => {
                 onClick={handleOpenReviewPopup}
               >
                 <div className="mr-[5px] h-[15px] w-[15px] bg-review-icon"></div>
-                <p>{!hasMyReview ? '리뷰 작성하기' : '리뷰 수정하기'}</p>
+                <p>{hasMyReview ? '리뷰 수정하기' : '리뷰 작성하기'}</p>
               </button>
             </div>
 
@@ -131,14 +132,16 @@ const KeywordBookDetailPage = () => {
                       key={item.rvIdx}
                       item={item}
                       user={user}
-                      onToggleMoreMenu={handleToggleMoreMenu}
-                      openMoreReviewId={openMoreReviewId}
                       moreMenuRef={moreMenuRef}
+                      openMoreReviewId={openMoreReviewId}
+                      onToggleMoreMenu={handleToggleMoreMenu}
                       handleOpenPopup={handleOpenPopup}
+                      handleReportReview={handleReportReview}
                     />
                   ))}
                   <div className="mt-6 flex min-h-[40px] w-full flex-col items-center justify-center">
                     {loading && <SpinnerIcon />}
+
                     <div ref={bottomObserverRef} className="h-2 w-full bg-transparent" />
                     {!hasMore && !loading && reviews.length > 0 && (
                       <div className="flex w-full flex-col items-center justify-center gap-1 py-12">
@@ -160,15 +163,15 @@ const KeywordBookDetailPage = () => {
         </div>
       </div>
 
-      {popup === 'LOGIN' && <LoginRequiredPopup onClose={() => setPopup(null)} />}
-      {completeMessage && <ReviewCompletePopup message={completeMessage} onFinish={() => setPopup(null)} />}
+      {popup === 'LOGIN' && <LoginRequiredPopup onClose={handleClosePopup} />}
+      {completeMessage && <ReviewCompletePopup message={completeMessage} onFinish={handleClosePopup} />}
 
       {bookDetail && (
         <>
           {popup === 'WRITE' && (
             <KeywordBookDetailWritePopup
               onSuccess={() => handleReviewSuccess('리뷰 작성이 완료되었습니다.', bookDetail.bookIdx)}
-              onClose={() => setPopup(null)}
+              onClose={handleClosePopup}
               bookDetail={bookDetail}
             />
           )}
@@ -176,7 +179,7 @@ const KeywordBookDetailPage = () => {
           {popup === 'EDIT' && selectedReview && (
             <KeywordBookDetailEditPopup
               onSuccess={() => handleReviewSuccess('리뷰 수정이 완료되었습니다.', bookDetail.bookIdx)}
-              onClose={() => setPopup(null)}
+              onClose={handleClosePopup}
               selectedReview={selectedReview}
               bookDetail={bookDetail}
             />
@@ -185,7 +188,7 @@ const KeywordBookDetailPage = () => {
           {popup === 'DELETE' && (
             <ReviewDeletePopup
               onSuccess={() => handleReviewSuccess('리뷰가 삭제되었습니다.', bookDetail.bookIdx)}
-              onClose={() => setPopup(null)}
+              onClose={handleClosePopup}
               bookIdx={bookDetail.bookIdx}
             />
           )}

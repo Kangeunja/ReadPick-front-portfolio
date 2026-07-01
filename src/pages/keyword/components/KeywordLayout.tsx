@@ -3,7 +3,7 @@ import { useState } from 'react';
 import TopMenu from './TopMenu';
 import KeywordNav from './KeywordNav';
 
-import { useKeywordQuery } from 'hooks/queries/useKeywordQueries';
+import { useSubCategoryQuery } from 'hooks/queries/useKeywordQueries';
 
 type KeywordLayoutProps = {
   selectedBsIdx: number | null;
@@ -17,7 +17,7 @@ const KeywordLayout = ({ selectedBsIdx, selectedBssIdx, onBsClick, onBssClick }:
   const [keywordToggle, setKeywordToggle] = useState<number | null>(selectedBsIdx);
   const [prevSelectedBsIdx, setPrevSelectedBsIdx] = useState<number | null>(selectedBsIdx);
 
-  const { data: keywordList = [] } = useKeywordQuery();
+  const { data: keywordList = [] } = useSubCategoryQuery();
 
   if (selectedBsIdx !== prevSelectedBsIdx) {
     setKeywordToggle(selectedBsIdx);

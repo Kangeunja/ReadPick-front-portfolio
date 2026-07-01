@@ -1,18 +1,29 @@
 import { MutableRefObject } from 'react';
-import { Review } from '../../../types/review';
-import { User } from '../../../types/user';
-import { ReviewActionMenu } from '../../../component/common/ReviewActionMenu';
 
-interface ReviewItemProps {
+import { ReviewActionMenu } from 'component/common/ReviewActionMenu';
+
+import { Review } from 'types/review';
+import { User } from 'types/user';
+
+type ReviewItemProps = {
   item: Review;
   user: User | null;
+  moreMenuRef: MutableRefObject<HTMLDivElement | null>;
   onToggleMoreMenu: (rvIdx: number) => void;
   openMoreReviewId: number | null;
-  moreMenuRef: MutableRefObject<HTMLDivElement | null>;
-  handleOpenPopup: (type: 'EDIT' | 'DELETE' | 'REPORT', review: Review) => void;
-}
+  handleOpenPopup: (type: 'EDIT' | 'DELETE', review: Review) => void;
+  handleReportReview: (rvIdx: number) => void;
+};
 
-const ReviewItem = ({ item, user, onToggleMoreMenu, openMoreReviewId, moreMenuRef, handleOpenPopup }: ReviewItemProps) => {
+const ReviewItem = ({
+  item,
+  user,
+  moreMenuRef,
+  onToggleMoreMenu,
+  openMoreReviewId,
+  handleOpenPopup,
+  handleReportReview,
+}: ReviewItemProps) => {
   return (
     <div className="relative mb-[23px] box-border flex w-[700px] justify-normal border border-borderGrayColor p-[20px]">
       <div
@@ -39,11 +50,15 @@ const ReviewItem = ({ item, user, onToggleMoreMenu, openMoreReviewId, moreMenuRe
           <div className="flex items-center">
             <p className="text-memberColor mr-[5px] text-[12px] leading-[20px]">{item.regDate}</p>
             <div
-              className="relative h-[20px] w-[20px] cursor-pointer bg-icon-add bg-center bg-no-repeat"
-              onClick={() => onToggleMoreMenu(item.rvIdx)}
+              className="more-btn relative h-[20px] w-[20px] cursor-pointer bg-icon-add bg-center bg-no-repeat"
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleMoreMenu(item.rvIdx);
+              }}
             ></div>
           </div>
         </div>
+
         {openMoreReviewId === item.rvIdx &&
           (item.userIdx === user?.userIdx ? (
             <div className="absolute right-[45px] top-[30px]">
@@ -54,7 +69,7 @@ const ReviewItem = ({ item, user, onToggleMoreMenu, openMoreReviewId, moreMenuRe
               className="absolute right-[45px] top-[30px] z-10 w-[83px] rounded-[5px] bg-white p-[5px] text-center text-[12px] leading-[28px] shadow-[3px_2px_6px_1px_rgba(0,0,0,0.15)]"
               ref={moreMenuRef}
             >
-              <button className="cursor-pointer border-none bg-transparent text-gray-700" onClick={() => handleOpenPopup('REPORT', item)}>
+              <button className="cursor-pointer border-none bg-transparent text-gray-700" onClick={() => handleReportReview(item.rvIdx)}>
                 신고하기
               </button>
             </div>

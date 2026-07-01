@@ -11,7 +11,7 @@ export interface KeywordParams {
   bsIdx: number | null;
   bssIdx: number | null;
   option: string | null;
-  keywordText: string | null;
+  keyword: string | null;
 }
 
 export const keywordSubtitles: Record<string, string> = {

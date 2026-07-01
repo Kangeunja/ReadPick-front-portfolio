@@ -1,37 +1,35 @@
 import { useEffect, useRef, useState } from 'react';
-
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-
+import { useNavigate, useParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
-
-import useAuthStore from '../../../store/authStore';
 
 import { useBookDetailQueries } from './useBookDetailQueries';
 import { useBookActionsMutation } from './useBookActionsMutation';
 import { useReviewListQuery } from './useReviewListQuery';
 
-import { Review } from '../../../types/review';
+import useAuthStore from 'store/authStore';
 
-import { useKeywordQuery } from '../../../hooks/queries/useKeywordQueries';
-import { useOutsideClick } from '../../../hooks/useOutsideClick';
+import { ROUTES } from 'constants/routes';
+
+import { Review } from 'types/review';
+
+import { useSubCategoryQuery } from 'hooks/queries/useKeywordQueries';
+import { useOutsideClick } from 'hooks/useOutsideClick';
+import { useBookSearchParams } from 'hooks/useBookSearchParams';
 
 export const useKeywordBookDetail = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const queryClient = useQueryClient();
   const user = useAuthStore((state) => state.user);
   const bottomObserverRef = useRef<HTMLDivElement | null>(null);
 
   // URL 쿼리 스트링에서 대분류(bsIdx) 및 소분류(bssIdx) ID 추출
-  const queryParams = new URLSearchParams(location.search);
-  const bsIdx = Number(queryParams.get('bsIdx')) || null;
-  const bssIdx = Number(queryParams.get('bssIdx')) || null;
+  const { bsIdx, bssIdx } = useBookSearchParams();
 
   const { bookIdx } = useParams();
   const bookIdxNumber = bookIdx ? Number(bookIdx) : null;
 
   // 소분류 키워드 목록 조회
-  const { data: keywordList } = useKeywordQuery();
+  const { data: keywordList } = useSubCategoryQuery();
   const {
     bookDetail: bookDetailQuery,
     bookImg: bookImgQuery,
@@ -39,20 +37,16 @@ export const useKeywordBookDetail = () => {
     recommedCount: recommedCountQuery,
     isBookmark: isBookmarkQuery,
     reviewCount: reviewCountQuery,
-  } = useBookDetailQueries(bookIdxNumber || 0);
-  const { recommendMutation, bookmarkMutation, reportReviewMutation } = useBookActionsMutation(bookIdxNumber || 0);
-  const {
-    data: reviewPages,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useReviewListQuery(bookIdxNumber || 0, reviewCountQuery.data || 0);
+  } = useBookDetailQueries();
+  const { reportReviewMutation } = useBookActionsMutation();
+  const { data: reviewPages, fetchNextPage, hasNextPage, isFetchingNextPage } = useReviewListQuery(reviewCountQuery.data);
 
   const [openMoreReviewId, setOpenMoreReviewId] = useState<number | null>(null);
-  const [selectedReview, setSelectedReview] = useState<Review | null>(null);
-  const [completeMessage, setCompleteMessage] = useState<string | null>(null);
-  const [popup, setPopup] = useState<'LOGIN' | 'WRITE' | 'EDIT' | 'DELETE' | 'REPORT' | null>(null);
   const [isLocalLoading, setIsLocalLoading] = useState(false);
+  const [popup, setPopup] = useState<'LOGIN' | 'WRITE' | 'EDIT' | 'DELETE' | 'REPORT' | null>(null);
+  const [selectedReview, setSelectedReview] = useState<Review | null>(null);
+
+  const [completeMessage, setCompleteMessage] = useState<string | null>(null);
 
   const reviews = reviewPages?.pages.flat() || [];
   const myReview = reviews.find((rv) => rv.userIdx === user?.userIdx);
@@ -90,30 +84,22 @@ export const useKeywordBookDetail = () => {
     return () => observer.disconnect();
   }, [hasNextPage, isFetchingNextPage, isLocalLoading, fetchMoreReview]);
 
-  const handleBsClick = (bsIdx: number) => {
-    navigate(`/member/keyword?bsIdx=${bsIdx}`);
+  // ===== 이벤트 핸들러 =====
+  const handleCategoryChange = (type: string, idx: number) => {
+    const path = type === 'bs' ? `${ROUTES.KEYWORD}?bsIdx=${idx}` : `${ROUTES.KEYWORD}?bsIdx=${bsIdx}&bssIdx=${idx}}`;
+    navigate(path);
   };
 
-  const handleBssClick = (bssIdx: number) => {
-    navigate(`/member/keyword?bsIdx=${bsIdx}&bssIdx=${bssIdx}`);
-  };
-
-  const handleIsGood = () => {
+  // ===== 책 추천, 찜 액션 버튼 클릭 시 로그인 여부 확인 후 액션 수행 =====
+  const handleActionClick = (action: () => void) => {
     if (!user) {
       setPopup('LOGIN');
       return;
     }
-    recommendMutation();
+    action();
   };
 
-  const handleIsBookMark = () => {
-    if (!user) {
-      setPopup('LOGIN');
-      return;
-    }
-    bookmarkMutation();
-  };
-
+  // ===== 리뷰 작성 버튼 클릭 시 로그인 여부 확인 후 팝업 오픈 =====
   const handleOpenReviewPopup = () => {
     if (!user) return setPopup('LOGIN');
     if (!bookDetailQuery.data) return;
@@ -126,16 +112,47 @@ export const useKeywordBookDetail = () => {
     }
   };
 
+  // ===== 리뷰 더보기 메뉴 토글 =====
   const handleToggleMoreMenu = (rvIdx: number) => {
     setOpenMoreReviewId((prev) => (prev === rvIdx ? null : rvIdx));
   };
 
-  const handleOpenPopup = (type: 'EDIT' | 'DELETE' | 'REPORT', review: Review) => {
+  // ===== 리뷰 팝업 오픈 =====
+  const handleOpenPopup = (type: 'EDIT' | 'DELETE', review: Review) => {
     setSelectedReview(review);
     setPopup(type);
     setOpenMoreReviewId(null);
   };
 
+  // ===== 리뷰 신고 처리 =====
+  const handleReportReview = (rvIdx: number) => {
+    if (!user) {
+      setPopup('LOGIN');
+      setOpenMoreReviewId(null);
+      return;
+    }
+
+    reportReviewMutation(rvIdx, {
+      onSuccess: (res) => {
+        if (res === 'reportReview:fail') {
+          setCompleteMessage('이미 신고하셨거나 처리할 수 없는 리뷰입니다.');
+        } else {
+          setCompleteMessage('신고가 접수되었습니다.');
+        }
+
+        setOpenMoreReviewId(null);
+
+        setTimeout(() => {
+          setCompleteMessage(null);
+        }, 2000);
+      },
+      onError: () => {
+        alert('신고 처리 중 오류가 발생했습니다.');
+      },
+    });
+  };
+
+  // ===== 리뷰 작성, 수정, 삭제 후 성공 시 처리 =====
   const handleReviewSuccess = (message: string, bookIdx: number) => {
     setCompleteMessage(message);
 
@@ -154,14 +171,9 @@ export const useKeywordBookDetail = () => {
     }, 500);
   };
 
-  const handleIsReport = (rvIdx: number) => {
-    if (!user) {
-      setPopup('LOGIN');
-      setOpenMoreReviewId(null);
-    } else {
-      reportReviewMutation(rvIdx);
-      setOpenMoreReviewId(null);
-    }
+  // ===== 팝업 닫기 =====
+  const handleClosePopup = () => {
+    setPopup(null);
   };
 
   return {
@@ -169,32 +181,29 @@ export const useKeywordBookDetail = () => {
     keywordList: keywordList || [],
     bsIdx,
     bssIdx,
-    handleBsClick,
-    handleBssClick,
+    handleCategoryChange,
     bookDetail: bookDetailQuery.data,
     bookImg: bookImgQuery.data,
     isRecommend: isRecommendQuery.data,
-    handleIsGood,
     recommedCount: recommedCountQuery.data,
     isBookmark: isBookmarkQuery.data,
-    handleIsBookMark,
     reviewCount: reviewCountQuery.data,
+    handleActionClick,
     handleOpenReviewPopup,
-    setPopup,
-    popup,
+    hasMyReview,
     reviews,
-    fetchMoreReview,
-    hasMore: hasNextPage,
-    loading: isFetchingNextPage || isLocalLoading,
+    moreMenuRef,
     openMoreReviewId,
     handleToggleMoreMenu,
     handleOpenPopup,
-    selectedReview,
-    completeMessage,
-    handleReviewSuccess,
-    handleIsReport,
-    moreMenuRef,
-    hasMyReview,
+    loading: isFetchingNextPage || isLocalLoading,
     bottomObserverRef,
+    hasMore: hasNextPage,
+    popup,
+    completeMessage,
+    handleClosePopup,
+    handleReviewSuccess,
+    selectedReview,
+    handleReportReview,
   };
 };

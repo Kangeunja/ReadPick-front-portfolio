@@ -4,7 +4,7 @@ import BookCard from './components/BookCard';
 import { useKeywordBookList } from './hooks/useKeywordBookList';
 
 const KeywordBookListPage = () => {
-  const { bsIdx, bssIdx, keywordText, books, images, isLoading, handleCategoryChange, goToDetail } = useKeywordBookList();
+  const { bsIdx, bssIdx, keyword, books, images, isLoading, handleCategoryChange, goToDetail } = useKeywordBookList();
 
   return (
     <div className="w-full">
@@ -37,7 +37,7 @@ const KeywordBookListPage = () => {
                 ))
               ) : (
                 <p className="mp-[100px] w-full text-center text-[14px] text-[#555555]">
-                  {keywordText ? '검색 결과가 없습니다.' : '도서 데이터가 없습니다.'}
+                  {keyword ? '검색 결과가 없습니다.' : '도서 데이터가 없습니다.'}
                 </p>
               )}
             </div>

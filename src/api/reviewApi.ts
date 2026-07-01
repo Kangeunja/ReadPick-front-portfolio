@@ -13,6 +13,7 @@ export const getReviewList = async (bookIdx: number): Promise<Review[]> => {
   return res.data;
 };
 
+// 리뷰 더보기 api
 export const getMoreReviewList = async (lastRvIdx: number): Promise<Review[]> => {
   const res = await api.get('/reviewMore', { params: { rvIdx: lastRvIdx } });
   return res.data;

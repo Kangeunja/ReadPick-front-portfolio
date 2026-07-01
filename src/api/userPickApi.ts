@@ -17,12 +17,6 @@ export const checkRecommend = async (bookIdx: number): Promise<boolean> => {
   return res.data === 'Y';
 };
 
-// 책 추천해요 토글 api
-export const toggleRecommend = async (bookIdx: number): Promise<boolean> => {
-  const res = await api.post(`/recommend`, null, { params: { bookIdx } });
-  return res.data === '추천완료';
-};
-
 // 책 추천 수 api
 export const getBookRecommendCount = async (bookIdx: number) => {
   const res = await api.get(`/recCount`, { params: { bookIdx } });
@@ -33,6 +27,12 @@ export const getBookRecommendCount = async (bookIdx: number) => {
 export const checkBookmark = async (bookIdx: number): Promise<boolean> => {
   const res = await api.get(`/isBookmark`, { params: { bookIdx } });
   return res.data === 'Y';
+};
+
+// 책 추천해요 토글 api
+export const toggleRecommend = async (bookIdx: number): Promise<boolean> => {
+  const res = await api.post(`/recommend`, null, { params: { bookIdx } });
+  return res.data === '추천완료';
 };
 
 // 찜해요 토클 api

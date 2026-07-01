@@ -1,10 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 
-import { ROUTES } from '../../../constants/routes';
+import { ROUTES } from 'constants/routes';
 
-import { useLockBodyScroll } from '../../../hooks/useLockBodyScroll';
+import { useLockBodyScroll } from 'hooks/useLockBodyScroll';
 
-const LoginRequiredPopup = ({ onClose }: any) => {
+type LoginRequiredPopupProps = {
+  onClose: () => void;
+};
+
+const LoginRequiredPopup = ({ onClose }: LoginRequiredPopupProps) => {
   const navigate = useNavigate();
 
   useLockBodyScroll();

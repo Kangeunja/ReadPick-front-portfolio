@@ -2,10 +2,10 @@ import { getLargeBookImage } from 'utils/image';
 
 import { useHover } from 'hooks/useHover';
 
-import { Book } from 'types/book';
+import { BookItem } from 'types/book';
 
 type BookCardProps = {
-  item: Book;
+  item: BookItem;
   imgUrl?: string;
   onCardClick: (id: number) => void;
 };
