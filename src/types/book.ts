@@ -3,10 +3,10 @@ export interface BaseBook {
   bookName: string;
   bookImageName: string;
   author: string;
+  bsIdx: number;
 }
 
 export interface BookItem extends BaseBook {
-  bsIdx: number;
   bsName: string;
 }
 
@@ -16,19 +16,10 @@ export interface BookDetail extends BaseBook {
   bookImageName: string;
 }
 
-export interface BaseBookImg {}
 export interface BookImg {
   bookIdx: number;
   fileName: string;
 }
-
-// export interface BookImg {
-//   bookIdx: number;
-//   fileIdx: number;
-//   fileName: string;
-//   fileType: string | null;
-//   bookImageName?: string;
-// }
 
 export interface Book {
   bookIdx: number;

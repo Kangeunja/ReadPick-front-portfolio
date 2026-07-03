@@ -1,34 +1,32 @@
-import { useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
-
-import { useBookDetailQueries } from './useBookDetailQueries';
-import { useBookActionsMutation } from './useBookActionsMutation';
-import { useReviewListQuery } from './useReviewListQuery';
-
-import useAuthStore from 'store/authStore';
-
-import { ROUTES } from 'constants/routes';
-
-import { Review } from 'types/review';
 
 import { useSubCategoryQuery } from 'hooks/queries/useKeywordQueries';
 import { useOutsideClick } from 'hooks/useOutsideClick';
 import { useBookSearchParams } from 'hooks/useBookSearchParams';
+import { useBookDetailQueries } from 'hooks/queries/useBookQueries';
+import { useBookActionsMutation } from './useBookActionsMutation';
+import { useReviewListQuery } from './useReviewListQuery';
+import { useAuthStore } from 'store/authStore';
+import { usePopupStore } from 'store/popupStore';
+import { ROUTES } from 'constants/routes';
+import { Review } from 'types/review';
 
 export const useKeywordBookDetail = () => {
+  // 외부 라이브러리 및 내장 훅
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const user = useAuthStore((state) => state.user);
   const bottomObserverRef = useRef<HTMLDivElement | null>(null);
 
-  // URL 쿼리 스트링에서 대분류(bsIdx) 및 소분류(bssIdx) ID 추출
+  // 전역 상태 스토어
+  const user = useAuthStore((state) => state.user);
+  const openPopup = usePopupStore((state) => state.openPopup);
+
+  // URL 쿼리 스트링 및 파라미터 추출
   const { bsIdx, bssIdx } = useBookSearchParams();
 
-  const { bookIdx } = useParams();
-  const bookIdxNumber = bookIdx ? Number(bookIdx) : null;
-
-  // 소분류 키워드 목록 조회
+  // 서버 데이터 조회
   const { data: keywordList } = useSubCategoryQuery();
   const {
     bookDetail: bookDetailQuery,
@@ -38,23 +36,25 @@ export const useKeywordBookDetail = () => {
     isBookmark: isBookmarkQuery,
     reviewCount: reviewCountQuery,
   } = useBookDetailQueries();
-  const { reportReviewMutation } = useBookActionsMutation();
   const { data: reviewPages, fetchNextPage, hasNextPage, isFetchingNextPage } = useReviewListQuery(reviewCountQuery.data);
 
-  const [openMoreReviewId, setOpenMoreReviewId] = useState<number | null>(null);
-  const [isLocalLoading, setIsLocalLoading] = useState(false);
+  // 서버 데이터 변경
+  const { reportReviewMutation } = useBookActionsMutation();
+
+  // 로컬 상태
   const [popup, setPopup] = useState<'LOGIN' | 'WRITE' | 'EDIT' | 'DELETE' | 'REPORT' | null>(null);
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
+  const [openMoreReviewId, setOpenMoreReviewId] = useState<number | null>(null);
+  const [isLocalLoading, setIsLocalLoading] = useState(false);
 
-  const [completeMessage, setCompleteMessage] = useState<string | null>(null);
-
+  // 데이터 기반으로 가공한 변수
   const reviews = reviewPages?.pages.flat() || [];
   const myReview = reviews.find((rv) => rv.userIdx === user?.userIdx);
   const hasMyReview = !!myReview;
 
   const moreMenuRef = useOutsideClick(() => setOpenMoreReviewId(null));
 
-  const fetchMoreReview = () => {
+  const fetchMoreReview = useCallback(() => {
     if (!hasNextPage || isFetchingNextPage) return;
 
     setIsLocalLoading(true);
@@ -63,7 +63,7 @@ export const useKeywordBookDetail = () => {
       fetchNextPage();
       setIsLocalLoading(false);
     }, 1000);
-  };
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   useEffect(() => {
     if (!hasNextPage || isFetchingNextPage || isLocalLoading) return;
@@ -86,7 +86,7 @@ export const useKeywordBookDetail = () => {
 
   // ===== 이벤트 핸들러 =====
   const handleCategoryChange = (type: string, idx: number) => {
-    const path = type === 'bs' ? `${ROUTES.KEYWORD}?bsIdx=${idx}` : `${ROUTES.KEYWORD}?bsIdx=${bsIdx}&bssIdx=${idx}}`;
+    const path = type === 'bs' ? `${ROUTES.KEYWORD}?bsIdx=${idx}` : `${ROUTES.KEYWORD}?bsIdx=${bsIdx}&bssIdx=${idx}`;
     navigate(path);
   };
 
@@ -135,16 +135,12 @@ export const useKeywordBookDetail = () => {
     reportReviewMutation(rvIdx, {
       onSuccess: (res) => {
         if (res === 'reportReview:fail') {
-          setCompleteMessage('이미 신고하셨거나 처리할 수 없는 리뷰입니다.');
+          openPopup('이미 신고하셨거나 처리할 수 없는 리뷰입니다.');
         } else {
-          setCompleteMessage('신고가 접수되었습니다.');
+          openPopup('신고가 접수되었습니다.');
         }
 
         setOpenMoreReviewId(null);
-
-        setTimeout(() => {
-          setCompleteMessage(null);
-        }, 2000);
       },
       onError: () => {
         alert('신고 처리 중 오류가 발생했습니다.');
@@ -154,21 +150,18 @@ export const useKeywordBookDetail = () => {
 
   // ===== 리뷰 작성, 수정, 삭제 후 성공 시 처리 =====
   const handleReviewSuccess = (message: string, bookIdx: number) => {
-    setCompleteMessage(message);
+    openPopup(message);
 
-    setTimeout(() => {
-      if (bookIdx || bookIdxNumber) {
-        queryClient.invalidateQueries({ queryKey: ['myReviews'] });
-        queryClient.invalidateQueries({ queryKey: ['reviewList', bookIdx] });
-        queryClient.invalidateQueries({ queryKey: ['reviewCount', bookIdx] });
-        queryClient.invalidateQueries({ queryKey: ['bookDetail', bookIdx] });
-      }
-      setPopup(null);
-      setCompleteMessage(null);
+    if (bookIdx) {
+      queryClient.invalidateQueries({ queryKey: ['myReviews'] });
+      queryClient.invalidateQueries({ queryKey: ['reviewList', bookIdx] });
+      queryClient.invalidateQueries({ queryKey: ['reviewCount', bookIdx] });
+      queryClient.invalidateQueries({ queryKey: ['bookDetail', bookIdx] });
+    }
+    setPopup(null);
 
-      // 리액트 쿼리 mutation 파트에서 자동으로 캐시를 무효화 시켜서
-      // 화면에 새 데이터가 저절로 호출됨
-    }, 500);
+    // 리액트 쿼리 mutation 파트에서 자동으로 캐시를 무효화 시켜서
+    // 화면에 새 데이터가 저절로 호출됨
   };
 
   // ===== 팝업 닫기 =====
@@ -200,7 +193,6 @@ export const useKeywordBookDetail = () => {
     bottomObserverRef,
     hasMore: hasNextPage,
     popup,
-    completeMessage,
     handleClosePopup,
     handleReviewSuccess,
     selectedReview,

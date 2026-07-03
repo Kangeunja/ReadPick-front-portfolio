@@ -1,33 +1,40 @@
 import { useState } from 'react';
 
-import ReviewWriteCancelPopup from '../../pages/keyword/components/ReviewWriteCancelPopup';
+import { useAutoFocus } from 'hooks/useAutoFocus';
+import { useLockBodyScroll } from 'hooks/useLockBodyScroll';
+import { useUpdateReviewMutation } from 'hooks/mutations/useReviewMutations';
+import { Review } from 'types/review';
+import { BookDetail } from 'types/book';
+import { getLargeBookImage } from 'utils/image';
 
-import { Review } from '../../types/review';
-import { Book, BookDetail } from '../../types/book';
+import ReviewWriteCancelPopup from 'components/popup/ReviewWriteCancelPopup';
 
-import { getLargeBookImage } from '../../utils/image';
-
-import { useLockBodyScroll } from '../../hooks/useLockBodyScroll';
-import { useUpdateReviewMutation } from '../../pages/keyword/hooks/useUpdateReviewMutation';
-import { useAutoFocus } from '../../hooks/useAutoFocus';
-
-interface KeywordBookDetailEditPopupProps {
+type ReviewEditPopupProps = {
   onClose: () => void;
   onSuccess: () => void;
   selectedReview: Review;
-  bookDetail: BookDetail | Book | Review;
-}
+  bookDetail: BookDetail | Review;
+};
 
-const KeywordBookDetailEditPopup = ({ onClose, onSuccess, selectedReview, bookDetail }: KeywordBookDetailEditPopupProps) => {
-  const [content, setContent] = useState(selectedReview.content); // 리뷰 내용
-  const [isCancelPopupOpen, setIsCancelPopupOpen] = useState(false); // 리뷰 작성취소 팝업
+const ReviewEditPopup = ({ onClose, onSuccess, selectedReview, bookDetail }: ReviewEditPopupProps) => {
+  // 서버 데이터 조회
+  const { mutate: updateMutate, isPending } = useUpdateReviewMutation();
 
-  const { mutate: updateMutate } = useUpdateReviewMutation(bookDetail.bookIdx);
+  // 로컬 상태
+  const [content, setContent] = useState(selectedReview.content);
+  const [isCancelPopupOpen, setIsCancelPopupOpen] = useState(false);
 
   const textAreaRef = useAutoFocus<HTMLTextAreaElement>(isCancelPopupOpen);
 
   // 팝업 오픈시 스크롤 방지
   useLockBodyScroll();
+
+  // 변수 및 핸들러 정리
+  const trimmedContent = content.trim();
+  const trimmedOriginal = selectedReview.content.trim();
+
+  // 수정 버튼 활성화 조건
+  const isSubmitEnabled = trimmedContent.length >= 10 && trimmedContent !== trimmedOriginal && !isPending;
 
   const handleCancelClick = () => {
     if (content.trim() === selectedReview.content.trim()) {
@@ -44,6 +51,8 @@ const KeywordBookDetailEditPopup = ({ onClose, onSuccess, selectedReview, bookDe
 
   // 수정하기
   const handleEditReview = () => {
+    if (isPending) return;
+
     updateMutate(
       { bookIdx: selectedReview.bookIdx, content: content },
       {
@@ -57,9 +66,6 @@ const KeywordBookDetailEditPopup = ({ onClose, onSuccess, selectedReview, bookDe
       },
     );
   };
-
-  // 수정 버튼 활성화 조건
-  const isSubmitEnabled = content.trim().length >= 10 && content.trim() !== selectedReview.content.trim();
 
   return (
     <>
@@ -128,4 +134,4 @@ const KeywordBookDetailEditPopup = ({ onClose, onSuccess, selectedReview, bookDe
     </>
   );
 };
-export default KeywordBookDetailEditPopup;
+export default ReviewEditPopup;

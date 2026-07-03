@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getSubCategoryList, getMainKeywordList, searchBooks, fetchBooksByBsIdx, fetchBooksByBssIdx } from 'api/searchApi';
+import { getSubCategoryList, getMainKeywordList, searchBooks, fetchBooksByBsIdx, fetchBooksByBssIdx } from 'api/bookSearchApi';
 import { KeywordParams } from 'types/keyword';
 
 // 소분류 키워드 전체 목록 조회

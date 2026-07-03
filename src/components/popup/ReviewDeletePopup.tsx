@@ -1,20 +1,20 @@
-import { useDeleteReviewMutation } from '../../hooks/mutations/useDeleteReviewMutation';
-import { useLockBodyScroll } from '../../hooks/useLockBodyScroll';
+import { useDeleteReviewMutation } from 'hooks/mutations/useReviewMutations';
+import { useLockBodyScroll } from 'hooks/useLockBodyScroll';
 
-interface ReviewDeletePopupProps {
+type ReviewDeletePopupProps = {
   onSuccess: () => void;
   onClose: () => void;
   bookIdx: number | undefined;
-}
+};
 
 const ReviewDeletePopup = ({ onClose, onSuccess, bookIdx }: ReviewDeletePopupProps) => {
-  const { mutate: deleteMutate } = useDeleteReviewMutation(bookIdx || 0);
+  const { mutate: deleteMutate, isPending } = useDeleteReviewMutation();
 
   // 팝업 오픈시 스크롤 방지
   useLockBodyScroll();
 
   const handleReviewDelete = () => {
-    if (!bookIdx) {
+    if (!bookIdx || isPending) {
       return;
     }
 

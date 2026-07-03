@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { checkFirstVisit } from 'api/authApi';
+
+import { useLoginMutation } from 'hooks/mutations/useAuthMutation';
+import { ROUTES } from 'constants/routes';
+import { ID_REGEX, PW_REGEX } from 'utils/validation';
+
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
-import FormField from 'component/common/FormField';
+import FormField from 'components/common/FormField';
 import IsLoginPopup from './components/IsLoginPopup';
 import FirstVisitPopup from './components/FirstVisitPopup';
-
-import { checkFirstVisit } from 'api/authApi';
-
-import { ROUTES } from 'constants/routes';
-
-import { ID_REGEX, PW_REGEX } from 'utils/validation';
-
-import { useLoginMutation } from 'hooks/mutations/useAuthMutation';
 
 type LoginFormData = {
   username: string;

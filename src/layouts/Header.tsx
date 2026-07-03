@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import useAuthStore from 'store/authStore';
-
-import { ROUTES } from 'constants/routes';
-
 import { useOutsideClick } from 'hooks/useOutsideClick';
 import { useLogoutMutation } from 'hooks/mutations/useAuthMutation';
+import { useAuthStore } from 'store/authStore';
+import { ROUTES } from 'constants/routes';
 
 type HeaderProps = {
   isMain: boolean;

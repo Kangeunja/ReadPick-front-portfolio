@@ -3,14 +3,15 @@ import api from './axiosInstance';
 import { SearchCategory } from 'types/keyword';
 import { BookItem, BookImg } from 'types/book';
 
-// 소분류 키워드 리스트 조회 api
-export const getSubCategoryList = async () => {
-  const res = await api.get('/bssListByBsIdx');
+// 대분류 키워드 리스트 조회 api
+export const getMainKeywordList = async (): Promise<SearchCategory[]> => {
+  const res = await api.get('/bsList');
   return res.data;
 };
 
-export const getMainKeywordList = async (): Promise<SearchCategory[]> => {
-  const res = await api.get('/bsList');
+// 소분류 키워드 리스트 조회 api
+export const getSubCategoryList = async () => {
+  const res = await api.get('/bssListByBsIdx');
   return res.data;
 };
 

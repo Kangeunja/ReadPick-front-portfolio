@@ -1,21 +1,17 @@
 import { useMemo } from 'react';
-
 import { useNavigate, useOutletContext } from 'react-router-dom';
 
-import { ROUTES } from '../../constants/routes';
+import { useCarousel } from 'hooks/useCarousel';
+import { useFavoritImgQuery, useFavoritQuery } from './hooks/useUserInfoQueries';
+import { ROUTES } from 'constants/routes';
+import type { MyPageOutletContext } from 'types/mypage';
 
 import FavoriteBookCard from './components/FavoriteBookCard';
 
-import type { MyPageOutletContext } from '../../types/mypage';
-
-import { useCarousel } from '../../hooks/useCarousel';
-import { useFavoritImgQuery, useFavoritQuery } from '../../hooks/queries/useFavoriteQueries';
-
-const MyPageDashboardPage = () => {
+const MyDashboardPage = () => {
   const navigate = useNavigate();
-  const { userInfo } = useOutletContext<MyPageOutletContext>();
-  console.log(userInfo.fileName);
 
+  const { userInfo } = useOutletContext<MyPageOutletContext>();
   const { listRef, canScrollLeft, canScrollRight, scroll, handleScroll } = useCarousel();
 
   const { data: favoriteBooks = [] } = useFavoritQuery();
@@ -127,4 +123,4 @@ const MyPageDashboardPage = () => {
   );
 };
 
-export default MyPageDashboardPage;
+export default MyDashboardPage;

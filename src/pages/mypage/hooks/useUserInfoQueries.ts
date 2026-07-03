@@ -1,7 +1,17 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { deleteProfileImage, getUserInfo, updateProfileImage, updateUserInfo } from '../../../api/mypageApi';
-import { UserProfile } from '../../../types/user';
 
+import { UserProfile } from 'types/user';
+
+import {
+  deleteProfileImage,
+  getFavoriteBooks,
+  getFavoriteBooksImages,
+  getUserInfo,
+  updateProfileImage,
+  updateUserInfo,
+} from 'api/mypageApi';
+
+// 사용자 정보 조회
 export const useUserInfoQuery = () => {
   return useQuery({
     queryKey: ['userInfo'],
@@ -9,6 +19,35 @@ export const useUserInfoQuery = () => {
   });
 };
 
+// 찜 목록 조회
+export const useFavoritQuery = () => {
+  return useQuery({
+    queryKey: ['favorit'],
+    queryFn: getFavoriteBooks,
+  });
+};
+
+// 찜 목록 이미지 조회
+export const useFavoritImgQuery = () => {
+  return useQuery({
+    queryKey: ['favoritImg'],
+    queryFn: getFavoriteBooksImages,
+  });
+};
+
+// 프로필 이미지 삭제
+export const useDeleteProfileImageMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteProfileImage,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['userInfo'] });
+    },
+  });
+};
+
+// 프로필 이미지 등록/수정
 export const useUpdateProfileMutation = () => {
   const queryClient = useQueryClient();
 
@@ -20,6 +59,7 @@ export const useUpdateProfileMutation = () => {
   });
 };
 
+// 회원정보 수정
 export const useUpdateUserInfoMutation = () => {
   const queryClient = useQueryClient();
 
@@ -33,18 +73,6 @@ export const useUpdateUserInfoMutation = () => {
       }
       return result;
     },
-    // mutationFn: (userInfo: UserProfile) => updateUserInfo(userInfo),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['userInfo'] });
-    },
-  });
-};
-
-export const useDeleteProfileImageMutation = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: deleteProfileImage,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['userInfo'] });
     },

@@ -1,42 +1,40 @@
 import { useState } from 'react';
 
-import ReviewWriteCancelPopup from './ReviewWriteCancelPopup';
+import { useLockBodyScroll } from 'hooks/useLockBodyScroll';
+import { useInsertReviewMutation } from 'hooks/mutations/useReviewMutations';
+import { useAutoFocus } from 'hooks/useAutoFocus';
+import { BookDetail } from 'types/book';
+import { getLargeBookImage } from 'utils/image';
 
-import { Book, BookDetail } from '../../../types/book';
+import ReviewWriteCancelPopup from 'components/popup/ReviewWriteCancelPopup';
 
-import { getLargeBookImage } from '../../../utils/image';
-
-import { useLockBodyScroll } from '../../../hooks/useLockBodyScroll';
-import { useInsertReviewMutation } from '../../../hooks/mutations/useInsertReviewMutation';
-import { useAutoFocus } from '../../../hooks/useAutoFocus';
-
-interface KeywordBookDetailWritePopupProps {
+type ReviewWritePopupProps = {
   onClose: () => void;
   onSuccess: () => void;
-  bookDetail: BookDetail | Book;
-}
+  bookDetail: BookDetail;
+};
 
-const KeywordBookDetailWritePopup = ({ onClose, onSuccess, bookDetail }: KeywordBookDetailWritePopupProps) => {
-  const { mutate: insertMutate } = useInsertReviewMutation(bookDetail.bookIdx);
+const ReviewWritePopup = ({ onClose, onSuccess, bookDetail }: ReviewWritePopupProps) => {
+  const { mutate: insertMutate, isPending } = useInsertReviewMutation();
 
   const [text, setText] = useState(''); // 텍스트 빈값으로 저장
   const [isCancelPopupOpen, setIsCancelPopupOpen] = useState(false); // 리뷰 작성취소 팝업
 
   const textAreaRef = useAutoFocus<HTMLTextAreaElement>(isCancelPopupOpen);
 
-  // 팝업 오픈시 스크롤 방지
+  // 10자 이상 체크 변수
+  const isSubmitEnabled = text.trim().length >= 10 && !isPending;
+
+  // 스크롤 방지
   useLockBodyScroll();
 
+  // 리뷰 작성 취소 버튼 클릭 시
   const handleCancelClick = () => {
     if (text.trim() !== '') {
       setIsCancelPopupOpen(true);
     } else {
       onClose();
     }
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setText(e.target.value);
   };
 
   // 등록하기
@@ -53,9 +51,6 @@ const KeywordBookDetailWritePopup = ({ onClose, onSuccess, bookDetail }: Keyword
       },
     );
   };
-
-  // 10자 이상 체크 변수
-  const isSubmitEnabled = text.trim().length >= 10;
 
   return (
     <>
@@ -96,7 +91,7 @@ const KeywordBookDetailWritePopup = ({ onClose, onSuccess, bookDetail }: Keyword
               className="relative box-border h-[240px] w-full resize-none border border-borderGrayColor p-[15px] font-noto text-[15px] font-medium leading-[1.5] tracking-[0.015em] text-[#333] placeholder:text-[#898989] focus:border focus:border-textGrayColor focus:outline-none"
               placeholder="내용을 10자 이상 적어주세요. 주제와 무관한 문의, 악플등의 글은 임의 삭제될수 있습니다."
               maxLength={200}
-              onChange={handleInputChange}
+              onChange={(e) => setText(e.target.value)}
             />
             <p className="absolute bottom-[15px] right-[15px] text-[13px] text-textGrayColor">{text.length} / 200</p>
           </div>
@@ -125,4 +120,4 @@ const KeywordBookDetailWritePopup = ({ onClose, onSuccess, bookDetail }: Keyword
   );
 };
 
-export default KeywordBookDetailWritePopup;
+export default ReviewWritePopup;

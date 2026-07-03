@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react';
 
 export const useCarousel = () => {
-  const listRef = useRef<HTMLDivElement>(null);
-
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const listRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
     // 좌/우 버튼 클릭시 3칸씩 스크롤

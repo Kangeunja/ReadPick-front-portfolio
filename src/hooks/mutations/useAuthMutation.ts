@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { signup, checkIdApi, login, logout } from 'api/authApi';
-import useAuthStore from 'store/authStore';
+import { useAuthStore } from 'store/authStore';
 
 // 회원가입
 export const useSignupMutation = () => {

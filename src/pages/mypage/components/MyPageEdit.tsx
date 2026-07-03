@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
-import FormField from '../../../component/common/FormField';
-import MessagePopup from '../../../component/common/MessagePopup';
+import FormField from '../../../components/common/FormField';
+import MessagePopup from '../../../components/popup/MessagePopup';
 import MypageProfileDeletePopup from './MypageImgDeletePopup';
 import ProfileImageUploader from './ProfileImageUploader';
 
@@ -22,7 +22,7 @@ const MyPageEdit = ({ userInfo, fetchUserInfo }: any) => {
     previewUrl,
     handleFileChange,
     selectedFile,
-    isDeleted,
+    // isDeleted,
     handleRemoveTempImage,
     isTempImage,
     handleSetDeleteState,
@@ -296,12 +296,12 @@ const MyPageEdit = ({ userInfo, fetchUserInfo }: any) => {
           >
             취소
           </button>
-          <button
+          {/* <button
             className="h-[40px] w-[174px] cursor-pointer rounded-[3px] border bg-gray-100 text-[12px] font-bold text-gray-700 hover:bg-pointColor hover:text-white"
             onClick={() => handleSave({ isDeleted, selectedFile, previewUrl })}
           >
             저장
-          </button>
+          </button> */}
         </div>
       </div>
 
@@ -314,9 +314,9 @@ const MyPageEdit = ({ userInfo, fetchUserInfo }: any) => {
         />
       )}
 
-      {successMessage && <MessagePopup message={successMessage} onFinish={clearSuccessMessage} />}
+      {/* {successMessage && <MessagePopup message={successMessage} onFinish={clearSuccessMessage} />} */}
 
-      {error && (
+      {/* {error && (
         <MessagePopup
           message={error.message}
           onFinish={() => {
@@ -324,7 +324,7 @@ const MyPageEdit = ({ userInfo, fetchUserInfo }: any) => {
             clearError();
           }}
         />
-      )}
+      )} */}
     </>
   );
 };

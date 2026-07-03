@@ -2,28 +2,15 @@ export interface User {
   userIdx: number;
   nickName: string;
   userName: string;
+  fileName: string;
   email: string;
   adminAt: string;
   firstAt: string;
   id: string;
 }
 
-export interface UserInfo {
-  userIdx: number;
-  nickName: string;
-  fileName: string;
-}
-
-export interface UserProfile {
-  userName: string;
-  fileName: string;
-  nickName: string;
-  id: string;
+export interface UserProfile extends User {
   pw: string;
-  email: string;
-  adminAt: string;
-  firstAt: string;
-  userIdx: number;
 }
 
 export interface UserPickSubCategory {

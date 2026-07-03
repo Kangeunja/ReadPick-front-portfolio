@@ -1,10 +1,11 @@
-import { getLargeBookImage } from '../../../utils/image';
+import { BookDetail } from 'types/book';
+import { getLargeBookImage } from 'utils/image';
 
-interface FavoriteBookCardProps {
-  item: { bookIdx: number; bsIdx: number; bookName: string; author: string };
+type FavoriteBookCardProps = {
+  item: BookDetail;
   imageFile?: string;
   onClick: (bookIdx: number, bsIdx: number) => void;
-}
+};
 
 const FavoriteBookCard = ({ item, imageFile, onClick }: FavoriteBookCardProps) => {
   return (

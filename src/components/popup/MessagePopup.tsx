@@ -1,18 +1,19 @@
 import { useEffect } from 'react';
+import { usePopupStore } from 'store/popupStore';
 
-interface Props {
-  message: string;
-  onFinish: () => void;
-}
+const MessagePopup = () => {
+  const { message, closePopup } = usePopupStore();
 
-const MessagePopup = ({ message, onFinish }: Props) => {
   useEffect(() => {
+    if (!message) return;
     const timer = setTimeout(() => {
-      onFinish();
+      closePopup();
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [onFinish]);
+  }, [message, closePopup]);
+
+  if (!message) return null;
 
   return (
     <div className="fixed bottom-0 left-0 right-0 top-0 z-[999] flex h-full w-full items-center justify-center">

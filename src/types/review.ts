@@ -1,4 +1,4 @@
-import { Book, BookImg } from './book';
+import { BookDetail, BookImg } from './book';
 
 export interface Review {
   nickName: string;
@@ -11,7 +11,7 @@ export interface Review {
   author: string;
   bookIdx: number;
   content: string;
-  book: Book;
+  book: BookDetail;
   bookImage: BookImg;
 }
 

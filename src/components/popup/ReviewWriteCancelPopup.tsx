@@ -1,7 +1,7 @@
-interface ReviewWriteCancelPopupProps {
+type ReviewWriteCancelPopupProps = {
   onConfirm: () => void;
   onClose: () => void;
-}
+};
 
 const ReviewWriteCancelPopup = ({ onConfirm, onClose }: ReviewWriteCancelPopupProps) => {
   return (

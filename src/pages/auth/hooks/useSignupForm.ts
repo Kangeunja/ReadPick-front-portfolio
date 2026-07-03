@@ -2,20 +2,18 @@ import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useCheckIdMutation, useSignupMutation } from 'hooks/mutations/useAuthMutation';
-
 import { checkEmailLive, checkIdLive, checkNickNameLive, checkPwConfirmLive, checkPwLive, checkUserNameLive } from 'utils/liveValidator';
 import { validateFormSubmit } from 'utils/submitValidator';
-
-import { SignupFormData } from 'types/auth';
 import { ROUTES } from 'constants/routes';
+import { SignupFormData } from 'types/auth';
 
 type ErrorState = Partial<Record<keyof SignupFormData, string>>;
 
 export const useSignupForm = () => {
   const navigate = useNavigate();
 
-  // 모든 input 요소들의 위치(참조값)를 저장하는 보관함
-  const inputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
+  const { mutate: checkIdMutate } = useCheckIdMutation();
+  const { mutate: signUpMutate } = useSignupMutation();
 
   // 회원정보 입력 폼 상태
   const [userInfo, setUserInfo] = useState<SignupFormData>({
@@ -42,8 +40,8 @@ export const useSignupForm = () => {
   //  실시간 에러메세지 상태
   const [errors, setErrors] = useState<ErrorState>({});
 
-  const { mutate: checkIdMutate } = useCheckIdMutation();
-  const { mutate: signUpMutate } = useSignupMutation();
+  // 모든 input 요소들의 위치(참조값)를 저장하는 보관함
+  const inputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
 
   // ===== field change handler =====
   const handleChange = (name: string, value: string) => {

@@ -1,8 +1,7 @@
 import { useState } from 'react';
 
-import { useUserPickQuery } from '../hooks/useUserPickQuery';
 import { useLockBodyScroll } from 'hooks/useLockBodyScroll';
-import { useUserPickMutation } from 'hooks/mutations/useUserPickMutation';
+import { useUserPickMutation, useUserPickQuery } from 'hooks/useUserPick';
 
 type Props = {
   onConfirm: () => void;

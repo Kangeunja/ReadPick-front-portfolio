@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { ROUTES } from 'constants/routes';
 
-import useAuthStore from 'store/authStore';
+import { useAuthStore } from 'store/authStore';
 
 import { useBsListQuery } from 'hooks/queries/useKeywordQueries';
 import { useGenreBooksQuery, useTodayBookQuery } from 'hooks/queries/useBookQueries';

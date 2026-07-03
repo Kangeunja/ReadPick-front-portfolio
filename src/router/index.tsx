@@ -1,30 +1,32 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Layout from '../layouts/MainLayout';
-import Main from '../pages/main/MainPage';
-import MemberLogin from '../pages/auth/MemberLoginPage';
-import KeywordBookListPage from '../pages/keyword/KeywordBookListPage';
-import KeywordBookDetailPage from '../pages/keyword/KeywordBookDetailPage';
-import MyPage from '../pages/mypage/MyPage';
+import Layout from 'layouts/MainLayout';
+import Main from 'pages/main/MainPage';
+import MemberLogin from 'pages/auth/MemberLoginPage';
+import KeywordBookListPage from 'pages/book/KeywordBookListPage';
+import KeywordBookDetailPage from 'pages/book/KeywordBookDetailPage';
+import MyPage from 'pages/mypage/MyPage';
 import { RecoilRoot } from 'recoil';
-import Admin from '../component/admin/Admin';
-import AdminMain from '../component/admin/AdminMain';
-import ScrollTop from '../component/common/ScrollTop';
-import MyPageHome from '../pages/mypage/MyPageDashboardPage';
-import ProfileManage from '../pages/mypage/MyProfilePage';
-import MyPageReview from '../pages/mypage/MyReviewsPage';
-import Member from '../pages/auth/MemberPage';
-import MemberAgreement from '../pages/auth/MemberAgreementPage';
-import { ROUTES } from '../constants/routes';
-import PasswordConfirm from '../pages/mypage/MyPageEditGuard';
-import { USER_ROLE } from '../constants/role';
+import Admin from 'components/admin/Admin';
+import AdminMain from 'components/admin/AdminMain';
+import ScrollTop from 'components/common/ScrollTop';
+import MyPageHome from 'pages/mypage/MyDashboardPage';
+import ProfileManage from 'pages/mypage/MyProfilePage';
+import MyPageReview from 'pages/mypage/MyReviewsPage';
+import Member from 'pages/auth/MemberPage';
+import MemberAgreement from 'pages/auth/MemberAgreementPage';
+import { ROUTES } from 'constants/routes';
+import PasswordConfirm from 'pages/mypage/MyPageEditGuard';
+import { USER_ROLE } from 'constants/role';
 import ProtectedRoute from './ProtectedRoute';
-import LoginPage from '../pages/auth/LoginPage';
+import LoginPage from 'pages/auth/LoginPage';
+import MessagePopup from 'components/popup/MessagePopup';
 
 const BrowserRouterDom = () => {
   return (
     <RecoilRoot>
       <BrowserRouter>
         <ScrollTop />
+        <MessagePopup />
         <Routes>
           <Route element={<Layout />}>
             <Route path={ROUTES.MAIN} element={<Main />}></Route>

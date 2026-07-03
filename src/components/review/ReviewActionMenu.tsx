@@ -1,12 +1,12 @@
 import { MutableRefObject } from 'react';
 import { Review } from 'types/review';
 
-interface ReviewActionMenuProps {
+type ReviewActionMenuProps = {
   item: Review;
   currentUserIdx: number | undefined;
   moreMenuRef: MutableRefObject<HTMLDivElement | null>;
   handleOpenPopup: (type: 'EDIT' | 'DELETE', review: Review) => void;
-}
+};
 
 export const ReviewActionMenu = ({ item, currentUserIdx, moreMenuRef, handleOpenPopup }: ReviewActionMenuProps) => {
   return (

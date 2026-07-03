@@ -1,9 +1,9 @@
 import { MutableRefObject } from 'react';
 
-import { ReviewActionMenu } from 'component/common/ReviewActionMenu';
-
 import { Review } from 'types/review';
 import { User } from 'types/user';
+
+import { ReviewActionMenu } from 'components/review/ReviewActionMenu';
 
 type ReviewItemProps = {
   item: Review;

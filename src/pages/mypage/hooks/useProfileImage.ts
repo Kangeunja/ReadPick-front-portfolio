@@ -1,9 +1,20 @@
 import { useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
-import { MyPageOutletContext } from '../../../types/mypage';
+import { useNavigate, useOutletContext } from 'react-router-dom';
+
+import { MyPageOutletContext } from 'types/mypage';
+import { useDeleteProfileImageMutation, useUpdateProfileMutation, useUpdateUserInfoMutation } from './useUserInfoQueries';
+import { ROUTES } from 'constants/routes';
+import { usePopupStore } from 'store/popupStore';
 
 export const useProfileImage = () => {
   const { userInfo } = useOutletContext<MyPageOutletContext>();
+  const openPopup = usePopupStore((state) => state.openPopup);
+
+  const navigate = useNavigate();
+
+  const { mutateAsync: uploadProfileImage } = useUpdateProfileMutation();
+  const { mutateAsync: updateUserInfoMutate } = useUpdateUserInfoMutation();
+  const { mutateAsync: deleteProfileImageAsync } = useDeleteProfileImageMutation();
 
   // 화면 표시용 이미지 URL (기존 이미지 주소)
   const [previewUrl, setPreviewUrl] = useState<string | null>(
@@ -13,8 +24,9 @@ export const useProfileImage = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   // 기존 서버 이미지 삭제 예정 여부 (기존 이미지 삭제 시 사용)
   const [isDeleted, setIsDeleted] = useState(false);
+  // 닉네임 수정용 로컬 상태
+  const [editedNickName, setEditedNickName] = useState(userInfo.nickName);
 
-  // 완료 팝업 메시지 상태
   const [completeMessage, setCompleteMessage] = useState<string | null>(null);
 
   // 기본 프로필 이미지 조건
@@ -22,6 +34,15 @@ export const useProfileImage = () => {
 
   // 파일이 선택되었거나, 원래 이미지가 있었는데 프리뷰가 완전히 비워진(삭제된) 경우 임시 상태
   const isTempImage = selectedFile !== null || isDeleted;
+  const isNameModified = editedNickName !== userInfo.nickName;
+
+  // 완료 팝업 메시지 상태
+  const modifiedCount = [isTempImage, isNameModified].filter(Boolean).length;
+
+  // 닉네임 입력 값 로컬 상태 업데이트
+  const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditedNickName(e.target.value);
+  };
 
   // 프로필 사진 선택/미리보기 처리함수, 실제 서버 저장은 handleSave에서 진행
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,6 +53,41 @@ export const useProfileImage = () => {
       const imgUrl = URL.createObjectURL(file);
       setPreviewUrl(imgUrl);
       e.target.value = '';
+    }
+  };
+
+  // 저장하기 버튼
+  const handleFinalSave = async () => {
+    if (!modifiedCount) return;
+
+    const promises = [];
+
+    if (isDeleted) {
+      promises.push(deleteProfileImageAsync());
+    }
+
+    if (previewUrl && selectedFile) {
+      const isDefault = userInfo.fileName === 'default';
+      promises.push(uploadProfileImage({ file: selectedFile, isDefaultImage: isDefault }));
+    }
+
+    if (editedNickName && editedNickName !== userInfo.nickName) {
+      promises.push(
+        updateUserInfoMutate({
+          ...userInfo,
+          nickName: editedNickName,
+        }),
+      );
+    }
+
+    try {
+      await Promise.all(promises);
+      setSelectedFile(null);
+
+      openPopup('변경 사항이 저장되었습니다.');
+      setTimeout(() => navigate(ROUTES.MYPAGE), 1000);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -47,35 +103,25 @@ export const useProfileImage = () => {
     }
   };
 
-  const clearSelectedFile = () => {
-    setSelectedFile(null);
-  };
-
+  // 프로필 이미지 삭제 함수
   const handleSetDeleteState = () => {
     setIsDeleted(true);
     setSelectedFile(null); // 업로드 대기파일 비우기
     setPreviewUrl(null); // 미리보기를 기본 이미지(null) 상태로 변경
   };
 
-  const messageChange = (message: string | null) => {
-    setCompleteMessage(message);
-    setSelectedFile(null);
-    setIsDeleted(false);
-    setPreviewUrl(null);
-  };
-
   return {
     isDefaultImage,
     previewUrl,
     userInfo,
-    isTempImage,
     handleFileChange,
     selectedFile,
-    isDeleted,
+    editedNickName,
+    handleIdChange,
+    modifiedCount,
+    handleFinalSave,
+    isTempImage,
     handleRemoveTempImage,
-    clearSelectedFile,
     handleSetDeleteState,
-    messageChange,
-    completeMessage,
   };
 };

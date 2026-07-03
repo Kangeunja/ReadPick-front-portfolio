@@ -1,20 +1,19 @@
 import { MutableRefObject } from 'react';
 
-import { ReviewActionMenu } from '../../../component/common/ReviewActionMenu';
+import { Review } from 'types/review';
+import { User } from 'types/user';
+import { getLargeBookImage } from 'utils/image';
 
-import { getLargeBookImage } from '../../../utils/image';
+import { ReviewActionMenu } from 'components/review/ReviewActionMenu';
 
-import { Review } from '../../../types/review';
-import { UserInfo } from '../../../types/user';
-
-interface MyReviewItemProps {
+type MyReviewItemProps = {
   item: Review;
   openMoreReviewId: number | null;
   moreMenuRef: MutableRefObject<HTMLDivElement | null>;
-  userInfo: UserInfo;
+  userInfo: User;
   onToggleMenu: (rvIdx: number) => void;
   handleOpenPopup: (type: 'EDIT' | 'DELETE', review: Review) => void;
-}
+};
 
 const MyReviewItem = ({ item, openMoreReviewId, moreMenuRef, userInfo, onToggleMenu, handleOpenPopup }: MyReviewItemProps) => {
   return (

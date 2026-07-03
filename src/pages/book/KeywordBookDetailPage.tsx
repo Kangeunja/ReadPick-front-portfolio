@@ -1,17 +1,15 @@
 import SpinnerIcon from 'assets/icon/SpinnerIcon';
 
-import TopMenu from './components/TopMenu';
-import LoginRequiredPopup from './components/LoginRequiredPopup';
-import KeywordBookDetailWritePopup from './components/KeywordBookDetailWritePopup';
-import KeywordBookDetailEditPopup from 'component/popup/KeywordBookDetailEditPopup';
-import ReviewDeletePopup from 'component/popup/ReviewDeletePopup';
-import ReviewCompletePopup from 'component/common/MessagePopup';
-import ReviewItem from './components/ReviewItem';
-
-import { getLargeBookImage } from 'utils/image';
-
 import { useKeywordBookDetail } from './hooks/useKeywordBookDetail';
 import { useBookActionsMutation } from './hooks/useBookActionsMutation';
+import { getLargeBookImage } from 'utils/image';
+
+import TopMenu from './components/TopMenu';
+import LoginRequiredPopup from './components/LoginRequiredPopup';
+import ReviewWritePopup from './components/ReviewWritePopup';
+import ReviewEditPopup from 'components/popup/ReviewEditPopup';
+import ReviewDeletePopup from 'components/popup/ReviewDeletePopup';
+import ReviewItem from './components/ReviewItem';
 
 const KeywordBookDetailPage = () => {
   const {
@@ -38,7 +36,6 @@ const KeywordBookDetailPage = () => {
     bottomObserverRef,
     hasMore,
     popup,
-    completeMessage,
     handleClosePopup,
     handleReviewSuccess,
     selectedReview,
@@ -164,12 +161,11 @@ const KeywordBookDetailPage = () => {
       </div>
 
       {popup === 'LOGIN' && <LoginRequiredPopup onClose={handleClosePopup} />}
-      {completeMessage && <ReviewCompletePopup message={completeMessage} onFinish={handleClosePopup} />}
 
       {bookDetail && (
         <>
           {popup === 'WRITE' && (
-            <KeywordBookDetailWritePopup
+            <ReviewWritePopup
               onSuccess={() => handleReviewSuccess('리뷰 작성이 완료되었습니다.', bookDetail.bookIdx)}
               onClose={handleClosePopup}
               bookDetail={bookDetail}
@@ -177,7 +173,7 @@ const KeywordBookDetailPage = () => {
           )}
 
           {popup === 'EDIT' && selectedReview && (
-            <KeywordBookDetailEditPopup
+            <ReviewEditPopup
               onSuccess={() => handleReviewSuccess('리뷰 수정이 완료되었습니다.', bookDetail.bookIdx)}
               onClose={handleClosePopup}
               selectedReview={selectedReview}

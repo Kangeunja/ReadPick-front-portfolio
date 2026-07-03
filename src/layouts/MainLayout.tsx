@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 
+import { useAuthQuery } from 'hooks/queries/useAuthQuery';
+import { useAuthStore } from 'store/authStore';
+
 import Header from './Header';
 import Footer from './Footer';
-
-import useAuthStore from '../store/authStore';
-
-import { useAuthQuery } from '../hooks/queries/useAuthQuery';
 
 const MainLayout = () => {
   const location = useLocation();

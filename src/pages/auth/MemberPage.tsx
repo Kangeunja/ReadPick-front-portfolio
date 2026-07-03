@@ -1,6 +1,6 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 
-import { ROUTES } from '../../constants/routes';
+import { ROUTES } from 'constants/routes';
 
 const MemberPage = () => {
   const navigate = useNavigate();

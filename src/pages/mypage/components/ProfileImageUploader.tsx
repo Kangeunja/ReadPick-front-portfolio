@@ -1,13 +1,13 @@
 import { useRef } from 'react';
-import { UserProfile } from '../../../types/user';
+import { UserProfile } from 'types/user';
 
-interface ProfileImageUploaderProps {
+type ProfileImageUploaderProps = {
   isDefaultImage: boolean;
   uploadedImage: string | null;
   userInfo: UserProfile;
   handleFileChange: (e: any) => void;
   onClose: () => void;
-}
+};
 
 const ProfileImageUploader = ({ isDefaultImage, uploadedImage, userInfo, handleFileChange, onClose }: ProfileImageUploaderProps) => {
   const editImgRef = useRef<HTMLInputElement | null>(null);
@@ -28,16 +28,16 @@ const ProfileImageUploader = ({ isDefaultImage, uploadedImage, userInfo, handleF
 
       <div className="mb-[60px] flex w-[100px] justify-between">
         <div onClick={() => editImgRef.current?.click()}>
-          <button className="h-[30px] w-[61px] cursor-pointer rounded-[5px] border-none bg-[#a0a0a0] text-[12px] text-white hover:bg-btnhoverColor">
+          <button className="h-[30px] w-[61px] cursor-pointer rounded-[5px] bg-[#a0a0a0] text-[12px] text-white hover:bg-btnhoverColor">
             {isDefaultImage ? '사진추가' : '사진수정'}
           </button>
-          <input type="file" ref={editImgRef} accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
+          <input type="file" ref={editImgRef} accept="image/*" className="hidden" onChange={handleFileChange} />
         </div>
 
         <button
-          className={`h-[30px] w-[30px] rounded-[5px] border-none bg-[#a0a0a0] bg-icon-trash bg-[length:15px_15px] bg-center bg-no-repeat text-[12px] text-white ${isDefaultImage ? 'cursor-not-allowed opacity-[0.3]' : 'hover:bg-btnhoverColor'}`}
-          onClick={() => onClose()}
+          className={`h-[30px] w-[30px] rounded-[5px] bg-[#a0a0a0] bg-icon-trash bg-[length:15px_15px] bg-center bg-no-repeat text-[12px] text-white ${isDefaultImage ? 'cursor-not-allowed opacity-[0.3]' : 'hover:bg-btnhoverColor'}`}
           disabled={isDefaultImage}
+          onClick={() => onClose()}
         ></button>
       </div>
     </>

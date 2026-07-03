@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { toggleRecommend, toggleBookmark } from 'api/bookApi';
 import { reportReview } from 'api/reviewApi';
-import { toggleBookmark, toggleRecommend } from 'api/userPickApi';
 
 export const useBookActionsMutation = () => {
   const queryClient = useQueryClient();
