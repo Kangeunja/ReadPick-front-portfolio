@@ -1,42 +1,36 @@
-import { useState } from 'react';
-import { User } from '../../../types/user';
-import {
-  checkIdLive,
-  checkPwLive,
-  checkPwConfirmLive,
-  checkEmailLive,
-  checkUserNameLive,
-  checkNickNameLive,
-} from '../../../utils/liveValidator';
-
-import { useDeleteProfileImageMutation, useUpdateProfileMutation, useUpdateUserInfoMutation } from './useUserInfoQueries';
-
-import { ROUTES } from '../../../constants/routes';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { validateFormSubmit } from '../../../utils/submitValidator';
-import { useCheckIdMutation } from 'hooks/mutations/useAuthMutation';
 
-export const useMyPageEdit = ({ userInfo }: any) => {
+import { useCheckIdMutation } from 'hooks/mutations/useAuthMutation';
+import { useDeleteProfileImageMutation, useUpdateProfileMutation, useUpdateUserInfoMutation } from './useUserInfoQueries';
+import { ROUTES } from 'constants/routes';
+import { checkIdLive, checkPwLive, checkPwConfirmLive, checkEmailLive, checkUserNameLive, checkNickNameLive } from 'utils/liveValidator';
+import { validateFormSubmit } from 'utils/submitValidator';
+import { MyPageOutletContext } from 'types/mypage';
+import { usePopupStore } from 'store/popupStore';
+
+export const useMyPageEdit = ({ userInfo }: MyPageOutletContext) => {
   const navigate = useNavigate();
+  const openPopup = usePopupStore((state) => state.openPopup);
+
   const { mutate: checkIdMutate } = useCheckIdMutation();
   const { mutateAsync: uploadProfileImage } = useUpdateProfileMutation();
   const { mutateAsync: updateUserInfoMutate } = useUpdateUserInfoMutation();
   const { mutateAsync: deleteProfileImageAsync } = useDeleteProfileImageMutation();
 
+  // 상태 관리
   const [editInfo, setEditInfo] = useState({ ...userInfo });
 
-  // 아이디 중복확인 상태(메세지,글자색)
-  const [idValidation, setIdValidation] = useState({ message: '', isValid: false });
-  // 아이디 변경하기 버튼 클릭시 상태변화모드
-  const [idEditMode, setIdEditMode] = useState<'default' | 'checking' | 'confirmed'>('default');
-
-  // 비밀번호 변경하기 버튼 클릭시 ui 상태변화모드
+  const [idEditMode, setIdEditMode] = useState<'default' | 'checking'>('default');
   const [pwEditMode, setPwEditMode] = useState<'default' | 'checking'>('default');
+
+  const [idValidation, setIdValidation] = useState({ message: '', isValid: false });
   const [passwordForm, setPasswordForm] = useState({
     currentPw: '',
     newPw: '',
     confirmPw: '',
   });
+
   // 비밀번호 유효성 상태
   const [passwordValidation, setPwValidation] = useState({
     currentPwMessage: '',
@@ -56,59 +50,67 @@ export const useMyPageEdit = ({ userInfo }: any) => {
   });
 
   const [error, setError] = useState<{ field: string; message: string } | null>(null);
-  // UI 및 모달 상태
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const fieldRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   // 기본 정보 변경
   const handleInfoChange = (field: string, value: string) => {
-    setEditInfo((prev: any) => ({ ...prev, [field]: value }));
+    setEditInfo((prev) => ({ ...prev, [field]: value }));
 
-    if (field === 'nickName') {
-      setInfoValidation((prev) => ({ ...prev, nickNameMessage: checkNickNameLive(value) }));
-    }
-    if (field === 'userName') {
-      setInfoValidation((prev) => ({ ...prev, userNameMessage: checkUserNameLive(value) }));
-    }
-    if (field === 'email') {
-      setInfoValidation((prev) => ({ ...prev, emailMessage: checkEmailLive(value) }));
+    const validatorMap: Record<string, (val: string) => string> = {
+      nickName: checkNickNameLive,
+      userName: checkUserNameLive,
+      email: checkEmailLive,
+    };
+
+    if (field in validatorMap) {
+      setInfoValidation((prev) => ({
+        ...prev,
+        [`${field}Message`]: validatorMap[field](value),
+      }));
     }
   };
 
   // 아이디 실시간 유효성 검사
   const handleIdChange = (value: string) => {
-    setEditInfo((prev: User) => ({ ...prev, id: value }));
+    setError((prev) => (prev?.field === 'id' ? null : prev));
+    setEditInfo((prev) => ({ ...prev, id: value }));
 
-    let message = checkIdLive(value, userInfo.id);
-
-    if (!message) {
-      message = '중복확인이 필요합니다.';
+    const liveMessage = checkIdLive(value, userInfo.id);
+    if (liveMessage) {
+      setIdValidation({
+        message: liveMessage || '중복확인이 필요합니다.',
+        isValid: false,
+      });
     }
-
-    setIdValidation({ message, isValid: false });
   };
 
   // 아이디 변경 모드 진입
-  const startIdCheckMode = () => {
-    setIdEditMode('checking');
-  };
+  const startIdCheckMode = () => setIdEditMode('checking');
 
   // 아이디 중복확인
   const handleIdCheck = async () => {
+    setError((prev) => (prev?.field === 'id' || prev?.field === 'form' ? null : prev));
+
     const liveMessage = checkIdLive(editInfo.id, userInfo.id);
     if (!editInfo.id || liveMessage !== '') {
-      return setIdValidation({
+      setIdValidation({
         message: liveMessage || '올바른 ID 형식을 입력한 후 중복확인을 해주세요.',
         isValid: false,
       });
+      fieldRefs.current['id']?.focus();
+      return;
     }
 
     checkIdMutate(editInfo.id, {
       onSuccess: (res) => {
-        const isAvailable = res.data !== false;
+        const isAvailable = res.result !== false;
         setIdValidation({
           message: isAvailable ? '사용 가능한 ID 입니다.' : '사용 불가능한 ID 입니다.',
           isValid: isAvailable,
         });
+        if (!isAvailable) {
+          fieldRefs.current['id']?.focus();
+        }
       },
       onError: () => {
         console.error('아이디 중복확인 실패');
@@ -121,25 +123,25 @@ export const useMyPageEdit = ({ userInfo }: any) => {
     setEditInfo((prev: any) => ({ ...prev, id: userInfo.id }));
     setIdEditMode('default');
     setIdValidation({ message: '', isValid: false });
+    setError(null);
   };
 
   // 비밀번호 변경 모드 진입
-  const startPwCheckMode = () => {
-    setPwEditMode('checking');
-  };
+  const startPwCheckMode = () => setPwEditMode('checking');
 
   // 비밀번호 실시간 유효성 검사
   const handlePwChange = (field: string, value: string) => {
+    setError((prev) => (prev?.field === field ? null : prev));
+
     const nextPasswordForm = { ...passwordForm, [field]: value };
     setPasswordForm(nextPasswordForm);
 
-    let nextValidation = { ...passwordValidation };
+    const nextValidation = { ...passwordValidation };
 
     if (field === 'currentPw') {
       nextValidation.currentPwMessage = value ? '' : '현재 비밀번호를 입력해주세요.';
       nextValidation.isCurrentPwValid = !!value;
     }
-    console.log(nextValidation.isCurrentPwValid);
 
     if (field === 'newPw') {
       const msg = checkPwLive(value, nextPasswordForm.currentPw);
@@ -164,12 +166,8 @@ export const useMyPageEdit = ({ userInfo }: any) => {
   // 비밀번호 변경 취소
   const cancelPwEdit = () => {
     setPwEditMode('default');
-    setPasswordForm({
-      currentPw: '',
-      newPw: '',
-      confirmPw: '',
-    });
-
+    setPasswordForm({ currentPw: '', newPw: '', confirmPw: '' });
+    setError(null);
     setPwValidation({
       currentPwMessage: '',
       newPwMessage: '',
@@ -182,18 +180,33 @@ export const useMyPageEdit = ({ userInfo }: any) => {
 
   // 저장버튼
   const handleSave = async (imageState: { isDeleted: boolean; selectedFile: File | null; previewUrl: string | null }) => {
+    const isImageUnchanged = !imageState.isDeleted && !imageState.selectedFile;
+    const isInfoUnchanged =
+      editInfo.nickName === userInfo.nickName &&
+      editInfo.userName === userInfo.userName &&
+      editInfo.id === userInfo.id &&
+      editInfo.pw === userInfo.pw &&
+      editInfo.email === userInfo.email;
+
+    const isModeActive = idEditMode === 'default' && pwEditMode === 'default';
+
+    if (isImageUnchanged && isInfoUnchanged && isModeActive) {
+      openPopup('수정된 내용이 없습니다.');
+      return;
+    }
+
     // 최종 유효성 검사
     const validationError = validateFormSubmit({
       formData: {
-        id: editInfo.id,
-        userName: editInfo.userName,
         nickName: editInfo.nickName,
-        email: editInfo.email,
-        currentPw: passwordForm.currentPw,
+        userName: editInfo.userName,
+        id: editInfo.id,
         pw: passwordForm.newPw,
         pwConfirm: passwordForm.confirmPw,
+        currentPw: passwordForm.currentPw,
+        email: editInfo.email,
       },
-      isIdValid: idEditMode !== 'checking' ? true : idValidation.isValid,
+      isIdValid: idEditMode === 'checking' ? idValidation.isValid : true,
       isPwCheckMode: pwEditMode === 'checking',
       liveValidation: {
         idMessage: idValidation.message,
@@ -205,6 +218,9 @@ export const useMyPageEdit = ({ userInfo }: any) => {
 
     if (validationError) {
       setError(validationError);
+      if (validationError.field && fieldRefs.current[validationError.field]) {
+        fieldRefs.current[validationError.field]?.focus();
+      }
       return;
     }
 
@@ -230,26 +246,24 @@ export const useMyPageEdit = ({ userInfo }: any) => {
     promises.push(updateUserInfoMutate(requestBody));
 
     try {
-      // 4️⃣ 이미지와 텍스트 정보를 동시에 병렬로 처리!
+      // 이미지와 텍스트 정보를 동시에 병렬로 처리!
       await Promise.all(promises);
-      setSuccessMessage('변경 사항이 저장되었습니다.');
+      openPopup('변경 사항이 저장되었습니다.');
       setTimeout(() => navigate(ROUTES.MYPAGE), 2000);
     } catch (error: any) {
-      console.log(error.message);
       if (error.message === 'fail:wrongCurrentPassword') {
         setError({ field: 'currentPw', message: '현재 비밀번호가 일치하지 않습니다.' });
       } else if ((error.message = 'fail:emptyCurrentPassword')) {
         setError({ field: 'currentPw', message: '현재 비밀번호를 입력해주세요.' });
-      } else if (error.message('fail:userNull')) {
+      } else if (error.message === 'fail:userNull') {
         setError({ field: 'form', message: '로그인 세션이 만료되었습니다. 다시 로그인해주세요.' });
       } else {
         setError({ field: 'form', message: '오류가 발생했습니다. 다시 시도해주세요.' });
       }
+
+      fieldRefs.current['currentPw']?.focus();
     }
   };
-
-  const clearSuccessMessage = () => setSuccessMessage(null);
-  const clearError = () => setError(null);
 
   return {
     editInfo,
@@ -267,10 +281,8 @@ export const useMyPageEdit = ({ userInfo }: any) => {
     handlePwChange,
     passwordValidation,
     cancelPwEdit,
-    error,
     handleSave,
-    successMessage,
-    clearSuccessMessage,
-    clearError,
+    error,
+    fieldRefs,
   };
 };

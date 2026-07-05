@@ -5,10 +5,13 @@ export interface SignupFormData {
   email: string;
   pw: string;
   pwConfirm: string;
-  currentPw?: string;
 }
 
 export interface LoginRequest {
   id: string;
   pw: string;
+}
+
+export interface UserProfileUpdateForm extends SignupFormData {
+  currentPw: string;
 }

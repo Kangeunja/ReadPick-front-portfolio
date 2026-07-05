@@ -1,20 +1,19 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { useProfileImage } from '../hooks/useProfileImage';
+import { useMyPageEdit } from '../hooks/useMyPageEdit';
+import { ROUTES } from 'constants/routes';
+import { MyPageOutletContext } from 'types/mypage';
 
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
-import FormField from '../../../components/common/FormField';
-import MessagePopup from '../../../components/popup/MessagePopup';
+import FormField from 'components/common/FormField';
 import MypageProfileDeletePopup from './MypageImgDeletePopup';
 import ProfileImageUploader from './ProfileImageUploader';
 
-import { ROUTES } from '../../../constants/routes';
-
-import { useProfileImage } from '../hooks/useProfileImage';
-import { useMyPageEdit } from '../hooks/useMyPageEdit';
-
-const MyPageEdit = ({ userInfo, fetchUserInfo }: any) => {
+const MyPageEdit = ({ userInfo, fetchUserInfo }: MyPageOutletContext) => {
   const navigate = useNavigate();
 
   const {
@@ -22,10 +21,10 @@ const MyPageEdit = ({ userInfo, fetchUserInfo }: any) => {
     previewUrl,
     handleFileChange,
     selectedFile,
-    // isDeleted,
     handleRemoveTempImage,
     isTempImage,
     handleSetDeleteState,
+    isDeleted,
   } = useProfileImage();
 
   const {
@@ -44,25 +43,13 @@ const MyPageEdit = ({ userInfo, fetchUserInfo }: any) => {
     handlePwChange,
     passwordValidation,
     cancelPwEdit,
-    error,
     handleSave,
-    successMessage,
-    clearSuccessMessage,
-    clearError,
+    error,
+    fieldRefs,
   } = useMyPageEdit({ userInfo, fetchUserInfo });
 
   // 프로필 이미지 삭제 팝업 모달여부
   const [isProfileDeletePopup, setIsProfileDeletePopup] = useState(false);
-
-  const fieldRefs: Record<string, React.RefObject<any>> = {
-    nickName: useRef(null),
-    userName: useRef(null),
-    id: useRef(null),
-    email: useRef(null),
-    currentPw: useRef(null),
-    newPw: useRef(null),
-    confirmPw: useRef(null),
-  };
 
   // 토글 상태변화모드
   const [visibility, setVisibility] = useState({
@@ -78,7 +65,7 @@ const MyPageEdit = ({ userInfo, fetchUserInfo }: any) => {
 
   return (
     <>
-      <div className="mx-auto mb-[200px] flex w-main-w flex-col items-center pt-[50px]">
+      <form className="mx-auto mb-[200px] flex w-main-w flex-col items-center pt-[50px]" onSubmit={(e) => e.preventDefault()}>
         <ProfileImageUploader
           isDefaultImage={isDefaultImage}
           uploadedImage={previewUrl}
@@ -94,9 +81,9 @@ const MyPageEdit = ({ userInfo, fetchUserInfo }: any) => {
         />
 
         <FormField
-          id="nickname"
+          id="nickName"
           direction="column"
-          ref={fieldRefs.nickName}
+          ref={(el) => (fieldRefs.current.nickName = el)}
           label="닉네임"
           placeholder="닉네임을 입력해주세요"
           value={editInfo.nickName}
@@ -113,7 +100,7 @@ const MyPageEdit = ({ userInfo, fetchUserInfo }: any) => {
         <FormField
           id="userName"
           direction="column"
-          ref={fieldRefs.userName}
+          ref={(el) => (fieldRefs.current.userName = el)}
           label="이름"
           placeholder="이름을 입력해주세요"
           value={editInfo.userName}
@@ -130,17 +117,17 @@ const MyPageEdit = ({ userInfo, fetchUserInfo }: any) => {
         <FormField
           id="id"
           direction="column"
-          ref={fieldRefs.id}
+          ref={(el) => (fieldRefs.current.id = el)}
           label="아이디"
           disabled={idEditMode === 'default'}
           placeholder="아이디를 입력해주세요"
           value={editInfo.id}
-          onChange={(value) => {
-            handleIdChange(value);
-          }}
+          autoComplete="username"
+          onChange={(value) => handleIdChange(value)}
           actionSlot={
             idEditMode === 'default' ? (
               <button
+                type="button"
                 className="h-[35px] w-[75px] border bg-[#a0a0a0] text-[12px] text-white hover:bg-btnhoverColor hover:text-white"
                 onClick={startIdCheckMode}
               >
@@ -149,12 +136,14 @@ const MyPageEdit = ({ userInfo, fetchUserInfo }: any) => {
             ) : (
               <div className="flex gap-[6px]">
                 <button
+                  type="button"
                   className="h-[35px] w-[75px] border bg-[#a0a0a0] text-[12px] text-white hover:bg-btnhoverColor hover:text-white"
                   onClick={handleIdCheck}
                 >
                   중복확인
                 </button>
                 <button
+                  type="button"
                   className="h-[35px] w-[75px] border bg-[#a0a0a0] text-[12px] text-white hover:bg-btnhoverColor"
                   onClick={cancelIdEdit}
                 >
@@ -164,8 +153,12 @@ const MyPageEdit = ({ userInfo, fetchUserInfo }: any) => {
             )
           }
           messageSlot={
-            idValidation && (
-              <p className={`text-[12px] ${idValidation.isValid ? 'text-[#008000]' : 'text-[#ff0004]'}`}>{idValidation.message}</p>
+            error?.field === 'id' ? (
+              <p className="text-[12px] text-[#ff0004]">{error.message}</p>
+            ) : (
+              idValidation.message && (
+                <p className={`text-[12px] ${idValidation.isValid ? 'text-[#008000]' : 'text-[#ff0004]'}`}>{idValidation.message}</p>
+              )
             )
           }
         />
@@ -174,14 +167,17 @@ const MyPageEdit = ({ userInfo, fetchUserInfo }: any) => {
           <FormField
             id="pw"
             direction="column"
+            ref={(el) => (fieldRefs.current.pw = el)}
             label="비밀번호"
             type="password"
             disabled={true}
             placeholder="비밀번호를 입력해주세요"
             value={editInfo.pw}
+            autoComplete="current-password"
             onChange={(value) => handleInfoChange('pw', value)}
             actionSlot={
               <button
+                type="button"
                 className="h-[35px] w-[75px] border bg-[#a0a0a0] text-[12px] text-white hover:bg-btnhoverColor"
                 onClick={startPwCheckMode}
               >
@@ -196,7 +192,7 @@ const MyPageEdit = ({ userInfo, fetchUserInfo }: any) => {
             <FormField
               id="currentPw"
               direction="column"
-              ref={fieldRefs.currentPw}
+              ref={(el) => (fieldRefs.current.currentPw = el)}
               label="현재 비밀번호"
               type={visibility.currentPw ? 'text' : 'password'}
               placeholder="현재 비밀번호를 입력해주세요"
@@ -208,10 +204,14 @@ const MyPageEdit = ({ userInfo, fetchUserInfo }: any) => {
                 </span>
               }
               messageSlot={
-                passwordValidation.currentPwMessage && (
-                  <p className={`text-[12px] ${passwordValidation.isCurrentPwValid ? 'text-[#008000]' : 'text-[#ff0004]'}`}>
-                    {passwordValidation.currentPwMessage}
-                  </p>
+                error?.field === 'currentPw' ? (
+                  <p className="text-[12px] text-[#ff0004]">{error.message}</p>
+                ) : (
+                  passwordValidation.currentPwMessage && (
+                    <p className={`text-[12px] ${passwordValidation.isCurrentPwValid ? 'text-[#008000]' : 'text-[#ff0004]'}`}>
+                      {passwordValidation.currentPwMessage}
+                    </p>
+                  )
                 )
               }
             />
@@ -219,7 +219,7 @@ const MyPageEdit = ({ userInfo, fetchUserInfo }: any) => {
             <FormField
               id="newPw"
               direction="column"
-              ref={fieldRefs.newPw}
+              ref={(el) => (fieldRefs.current.newPw = el)}
               label="새 비밀번호"
               type={visibility.newPw ? 'text' : 'password'}
               placeholder="새 비밀번호를 입력해주세요"
@@ -231,10 +231,14 @@ const MyPageEdit = ({ userInfo, fetchUserInfo }: any) => {
                 </span>
               }
               messageSlot={
-                passwordValidation.newPwMessage && (
-                  <p className={`text-[12px] ${passwordValidation.isNewPwValid ? 'text-[#008000]' : 'text-[#ff0004]'}`}>
-                    {passwordValidation.newPwMessage}
-                  </p>
+                error?.field === 'newPw' ? (
+                  <p className="text-[12px] text-[#ff0004]">{error.message}</p>
+                ) : (
+                  passwordValidation.newPwMessage && (
+                    <p className={`text-[12px] ${passwordValidation.isNewPwValid ? 'text-[#008000]' : 'text-[#ff0004]'}`}>
+                      {passwordValidation.newPwMessage}
+                    </p>
+                  )
                 )
               }
             />
@@ -242,7 +246,7 @@ const MyPageEdit = ({ userInfo, fetchUserInfo }: any) => {
             <FormField
               id="confirmPw"
               direction="column"
-              ref={fieldRefs.confirmPw}
+              ref={(el) => (fieldRefs.current.confirmPw = el)}
               label="새 비밀번호 확인"
               type={visibility.confirmPw ? 'text' : 'password'}
               placeholder="새 비밀번호 확인을 입력해주세요"
@@ -254,10 +258,14 @@ const MyPageEdit = ({ userInfo, fetchUserInfo }: any) => {
                 </span>
               }
               messageSlot={
-                passwordValidation.confirmPwMessage && (
-                  <p className={`text-[12px] ${passwordValidation.isConfirmPwValid ? 'text-[#008000]' : 'text-[#ff0004]'}`}>
-                    {passwordValidation.confirmPwMessage}
-                  </p>
+                error?.field === 'confirmPw' ? (
+                  <p className="text-[12px] text-[#ff0004]">{error.message}</p>
+                ) : (
+                  passwordValidation.confirmPwMessage && (
+                    <p className={`text-[12px] ${passwordValidation.isConfirmPwValid ? 'text-[#008000]' : 'text-[#ff0004]'}`}>
+                      {passwordValidation.confirmPwMessage}
+                    </p>
+                  )
                 )
               }
             />
@@ -277,7 +285,7 @@ const MyPageEdit = ({ userInfo, fetchUserInfo }: any) => {
         <FormField
           id="email"
           direction="column"
-          ref={fieldRefs.email}
+          ref={(el) => (fieldRefs.current.email = el)}
           label="이메일"
           placeholder="이메일을 입력해주세요"
           value={editInfo.email}
@@ -291,19 +299,21 @@ const MyPageEdit = ({ userInfo, fetchUserInfo }: any) => {
 
         <div className="flex gap-[15px]">
           <button
+            type="button"
             className="h-[40px] w-[174px] cursor-pointer rounded-[3px] border bg-gray-100 text-[12px] font-bold text-gray-700 hover:bg-gray-500 hover:text-white"
             onClick={() => navigate(ROUTES.MYPAGE)}
           >
             취소
           </button>
-          {/* <button
+          <button
+            type="button"
             className="h-[40px] w-[174px] cursor-pointer rounded-[3px] border bg-gray-100 text-[12px] font-bold text-gray-700 hover:bg-pointColor hover:text-white"
             onClick={() => handleSave({ isDeleted, selectedFile, previewUrl })}
           >
             저장
-          </button> */}
+          </button>
         </div>
-      </div>
+      </form>
 
       {isProfileDeletePopup && (
         <MypageProfileDeletePopup
@@ -313,18 +323,6 @@ const MyPageEdit = ({ userInfo, fetchUserInfo }: any) => {
           onClose={() => setIsProfileDeletePopup(false)}
         />
       )}
-
-      {/* {successMessage && <MessagePopup message={successMessage} onFinish={clearSuccessMessage} />} */}
-
-      {/* {error && (
-        <MessagePopup
-          message={error.message}
-          onFinish={() => {
-            fieldRefs[error.field].current?.focus();
-            clearError();
-          }}
-        />
-      )} */}
     </>
   );
 };

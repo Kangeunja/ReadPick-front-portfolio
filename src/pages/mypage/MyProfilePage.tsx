@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import { useProfileImage } from './hooks/useProfileImage';
 
 import MypageProfileDeletePopup from './components/MypageImgDeletePopup';

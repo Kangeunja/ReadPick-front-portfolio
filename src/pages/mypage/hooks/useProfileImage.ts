@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 
-import { MyPageOutletContext } from 'types/mypage';
 import { useDeleteProfileImageMutation, useUpdateProfileMutation, useUpdateUserInfoMutation } from './useUserInfoQueries';
 import { ROUTES } from 'constants/routes';
 import { usePopupStore } from 'store/popupStore';
+import { MyPageOutletContext } from 'types/mypage';
 
 export const useProfileImage = () => {
   const { userInfo } = useOutletContext<MyPageOutletContext>();
@@ -26,8 +26,6 @@ export const useProfileImage = () => {
   const [isDeleted, setIsDeleted] = useState(false);
   // 닉네임 수정용 로컬 상태
   const [editedNickName, setEditedNickName] = useState(userInfo.nickName);
-
-  const [completeMessage, setCompleteMessage] = useState<string | null>(null);
 
   // 기본 프로필 이미지 조건
   const isDefaultImage = (userInfo.fileName === 'default' && !selectedFile) || isDeleted;
@@ -123,5 +121,6 @@ export const useProfileImage = () => {
     isTempImage,
     handleRemoveTempImage,
     handleSetDeleteState,
+    isDeleted,
   };
 };

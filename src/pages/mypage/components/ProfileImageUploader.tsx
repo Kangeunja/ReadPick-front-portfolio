@@ -1,10 +1,10 @@
 import { useRef } from 'react';
-import { UserProfile } from 'types/user';
+import { User } from 'types/user';
 
 type ProfileImageUploaderProps = {
   isDefaultImage: boolean;
   uploadedImage: string | null;
-  userInfo: UserProfile;
+  userInfo: User;
   handleFileChange: (e: any) => void;
   onClose: () => void;
 };

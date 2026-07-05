@@ -17,12 +17,12 @@ export const useSignupForm = () => {
 
   // 회원정보 입력 폼 상태
   const [userInfo, setUserInfo] = useState<SignupFormData>({
+    id: '',
     userName: '',
     nickName: '',
-    id: '',
+    email: '',
     pw: '',
     pwConfirm: '',
-    email: '',
   });
 
   const [validation, setValidation] = useState({
@@ -136,7 +136,7 @@ export const useSignupForm = () => {
   // ===== 회원가입 버튼 클릭 =====
   const handleSignup = () => {
     const error = validateFormSubmit({
-      formData: userInfo,
+      formData: { ...userInfo, currentPw: '' },
       isIdValid: isIdValid,
       isPwCheckMode: true,
       liveValidation: validation,

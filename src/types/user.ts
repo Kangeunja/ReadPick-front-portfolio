@@ -1,15 +1,14 @@
 export interface User {
   userIdx: number;
-  nickName: string;
-  userName: string;
   fileName: string;
-  email: string;
-  adminAt: string;
-  firstAt: string;
-  id: string;
+  // adminAt: string;
 }
 
 export interface UserProfile extends User {
+  id: string;
+  userName: string;
+  nickName: string;
+  email: string;
   pw: string;
 }
 

@@ -37,9 +37,9 @@ const BrowserRouterDom = () => {
             <Route
               path={ROUTES.MYPAGE}
               element={
-                // <ProtectedRoute>
-                <MyPage />
-                // </ProtectedRoute>
+                <ProtectedRoute>
+                  <MyPage />
+                </ProtectedRoute>
               }
             >
               <Route index element={<MyPageHome />} />

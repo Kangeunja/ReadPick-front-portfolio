@@ -17,6 +17,7 @@ interface FormFieldProps {
   actionSlot?: ReactNode;
   rightSlot?: ReactNode;
   messageSlot?: ReactNode;
+  autoComplete?: string;
 }
 
 const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
@@ -36,6 +37,7 @@ const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
       messageSlot,
       direction,
       isFullWidth,
+      autoComplete,
     },
     ref,
   ) => {
@@ -70,6 +72,7 @@ const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
               placeholder={placeholder}
               disabled={disabled}
               value={value}
+              autoComplete={autoComplete}
               onChange={(e) => onChange(e.target.value)}
             />
             {rightSlot && (
@@ -82,7 +85,7 @@ const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
 
             {actionSlot && <div className="flex items-center">{actionSlot}</div>}
           </div>
-          {messageSlot && <p className="ml-[5px] mt-[5px] block">{messageSlot}</p>}
+          {messageSlot && <div className="ml-[5px] mt-[5px] block">{messageSlot}</div>}
         </div>
       </div>
     );

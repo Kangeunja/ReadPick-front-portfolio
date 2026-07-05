@@ -1,7 +1,7 @@
-import { SignupFormData } from '../types/auth';
+import { UserProfileUpdateForm } from '../types/auth';
 
 interface ValidateFormArgs {
-  formData: SignupFormData;
+  formData: UserProfileUpdateForm;
   isIdValid: boolean;
   isPwCheckMode?: boolean;
   liveValidation: {
@@ -12,6 +12,12 @@ interface ValidateFormArgs {
   };
 }
 export const validateFormSubmit = ({ formData, isIdValid, isPwCheckMode = true, liveValidation }: ValidateFormArgs) => {
+  // 닉네임 검증
+  if (!formData.nickName) return { field: 'nickName', message: '닉네임을 입력해주세요.' };
+
+  // 이름 검증
+  if (!formData.userName) return { field: 'userName', message: '이름을 입력해주세요.' };
+
   // 아이디 검증
   if (!formData.id) return { field: 'id', message: '아이디를 입력해주세요.' };
   if (liveValidation.idMessage && liveValidation.idMessage !== '사용 가능한 ID 입니다.')
@@ -24,7 +30,7 @@ export const validateFormSubmit = ({ formData, isIdValid, isPwCheckMode = true, 
       if (!formData.currentPw) return { field: 'currentPw', message: '현재 비밀번호를 입력해주세요.' };
       if (!formData.pw) return { field: 'newPw', message: '새 비밀번호를 입력해주세요.' };
       if (liveValidation.pwMessage) return { field: 'newPw', message: liveValidation.pwMessage };
-      if (!formData.pwConfirm) return { field: 'conf  irmPw', message: '새 비밀번호 확인을 입력해주세요.' };
+      if (!formData.pwConfirm) return { field: 'confirmPw', message: '새 비밀번호 확인을 입력해주세요.' };
     } else {
       if (!formData.pw) return { field: 'pw', message: '비밀번호를 입력해주세요.' };
       if (liveValidation.pwMessage) return { field: 'pw', message: liveValidation.pwMessage };
@@ -33,12 +39,6 @@ export const validateFormSubmit = ({ formData, isIdValid, isPwCheckMode = true, 
         return { field: 'pwConfirm', message: liveValidation.pwConfirmMessage };
     }
   }
-
-  // 이름 검증
-  if (!formData.userName) return { field: 'userName', message: '이름을 입력해주세요.' };
-
-  // 닉네임 검증
-  if (!formData.nickName) return { field: 'nickName', message: '닉네임을 입력해주세요.' };
 
   // 이메일 검증
   if (!formData.email) return { field: 'email', message: '이메일을 입력해주세요.' };

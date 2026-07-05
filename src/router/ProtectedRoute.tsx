@@ -7,19 +7,16 @@ import { ROUTES } from 'constants/routes';
 
 const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   const user = useAuthStore((state) => state.user);
-  const hasToken = !!localStorage.getItem('accessToken');
+  const hasSessionHint = localStorage.getItem('isLoggedInHint') === 'true';
+  // const hasToken = !!localStorage.getItem('accessToken');
 
-  if (hasToken && !user) {
+  if (hasSessionHint && !user) {
     return <div>권한 확인 중...</div>;
   }
 
   // 인증 실패
-  if (!user && !hasToken) {
+  if (!user && !hasSessionHint) {
     return <Navigate to={ROUTES.MAIN} replace />;
-  }
-
-  if (!user && hasToken) {
-    return <div>권한 확인 중...</div>;
   }
 
   // 인증 성공

@@ -1,13 +1,12 @@
 import { useState } from 'react';
-
 import { useOutletContext } from 'react-router-dom';
+
+import { MyPageOutletContext } from 'types/mypage';
 
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 import MyPageEdit from './components/MyPageEdit';
-
-import { MyPageOutletContext } from '../../types/mypage';
 
 const MyPageEditGuard = () => {
   const { userInfo, fetchUserInfo } = useOutletContext<MyPageOutletContext>();
@@ -33,7 +32,7 @@ const MyPageEditGuard = () => {
     if (e.key === 'Enter') handlePasswordConfirm();
   };
 
-  if (isPasswordVerified) {
+  if (!isPasswordVerified) {
     return <MyPageEdit userInfo={userInfo} fetchUserInfo={fetchUserInfo} />;
   }
 
@@ -41,7 +40,7 @@ const MyPageEditGuard = () => {
     <div className="mb-[200px] box-border w-full pt-[50px]">
       <div className="mx-auto flex w-main-w flex-col items-center">
         <div className="mb-[31px] box-border flex h-[50px] w-[50px] items-center justify-center rounded-[50px] bg-[#ffe019]">
-          <div className="bg-icon-pw-check h-[18px] w-[14px]"></div>
+          <div className="h-[18px] w-[14px] bg-icon-pw-check"></div>
         </div>
 
         <div className="text-center">

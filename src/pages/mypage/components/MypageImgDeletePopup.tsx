@@ -7,6 +7,7 @@ interface MypageImgDeletePopupProps {
 
 const MypageProfileDeletePopup = ({ isTempImage, onRemoveTempImage, onSetDeleteState, onClose }: MypageImgDeletePopupProps) => {
   const handleDelete = () => {
+    console.log('이거 왜이래?');
     if (isTempImage) {
       onRemoveTempImage();
     } else {
