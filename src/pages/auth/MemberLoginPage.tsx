@@ -46,6 +46,7 @@ const MemberLogin = () => {
           required={true}
           placeholder="6~15자의 영문 혹은 영문+숫자 조합"
           maxLength={15}
+          autoComplete="username"
           ref={(el) => (inputRefs.current.id = el)}
           value={userInfo.id}
           onChange={(value) => handleChange('id', value)}
@@ -74,6 +75,7 @@ const MemberLogin = () => {
           placeholder="영문과 숫자를 포함하여 8자 이상"
           isFullWidth={true}
           maxLength={15}
+          autoComplete="new-password"
           ref={(el) => (inputRefs.current.pw = el)}
           value={userInfo.pw}
           onChange={(value) => handleChange('pw', value)}
@@ -103,6 +105,7 @@ const MemberLogin = () => {
           placeholder="영문과 숫자를 포함하여 8자 이상"
           isFullWidth={true}
           maxLength={15}
+          autoComplete="new-password"
           ref={(el) => (inputRefs.current.pwConfirm = el)}
           value={userInfo.pwConfirm}
           onChange={(value) => handleChange('pwConfirm', value)}
