@@ -2,11 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getAuthUser } from 'api/authApi';
 
 export const useAuthQuery = () => {
-  // 토큰이 있을 때만 서버에 로그인 연장/검증 요청
-
   const hasSessionHint = localStorage.getItem('isLoggedInHint') === 'true';
-
-  // const hasToken = !!localStorage.getItem('accessToken');
 
   return useQuery({
     queryKey: ['auth'],

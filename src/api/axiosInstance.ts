@@ -21,13 +21,12 @@ const axiosInstance = axios.create({
   withCredentials: true, // Refresh Token을 httpOnly 쿠키로 저장할 경우
 });
 
+// 응답 인터셉터
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('accessToken');
       useAuthStore.getState().logout();
-      // window.location.href = "/login";
     }
     return Promise.reject(error);
   },

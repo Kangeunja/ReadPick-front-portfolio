@@ -20,15 +20,10 @@ const Header = ({ isMain }: HeaderProps) => {
   const logoutStore = useAuthStore((state) => state.logout);
   const { mutate: logoutMutate } = useLogoutMutation();
 
-  // selectbox 클릭유무
-  const [isOpen, setIsOpen] = useState(false);
-  // 선택된 selectbox
-  const [selected, setSelected] = useState('선택');
-  // 검색포커싱
-  const [isFocused, setIsFocused] = useState(false);
-  // 검색어 상태
-  const [keyword, setKeyword] = useState('');
-
+  const [isOpen, setIsOpen] = useState(false); // selectbox 클릭유무
+  const [selected, setSelected] = useState('선택'); // 선택된 selectbox
+  const [isFocused, setIsFocused] = useState(false); // 검색포커싱
+  const [keyword, setKeyword] = useState(''); // 검색어 상태
   const selectRef = useOutsideClick(() => setIsOpen(false));
 
   // url 검색옵션과 키워드 추출
@@ -56,7 +51,6 @@ const Header = ({ isMain }: HeaderProps) => {
 
     logoutMutate(undefined, {
       onSuccess: () => {
-        localStorage.removeItem('accessToken');
         logoutStore();
 
         alert('로그아웃되었습니다.');

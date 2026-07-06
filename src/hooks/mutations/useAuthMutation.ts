@@ -24,6 +24,7 @@ export const useLoginMutation = () => {
     mutationFn: login,
     onSuccess: (res) => {
       if (res === 'fail') return;
+      localStorage.setItem('isLoggedInHint', 'true')
 
       const { pw, ...user } = res;
       setUser(user);

@@ -124,6 +124,7 @@ const LoginPage = () => {
                 placeholder="아이디를 입력해주세요."
                 maxLength={15}
                 value={userLogin.username}
+                autoComplete="username"
                 onChange={(value) => handleChange('username', value)}
               />
 
@@ -135,6 +136,7 @@ const LoginPage = () => {
                 placeholder="비밀번호를 입력해주세요."
                 maxLength={15}
                 value={userLogin.password}
+                autoComplete="current-password"
                 onChange={(value) => handleChange('password', value)}
                 rightSlot={
                   <span onClick={() => setPasswordVisible(!isPasswordVisible)}>
