@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { useLockBodyScroll } from 'hooks/useLockBodyScroll';
 import { useUserPickMutation, useUserPickQuery } from 'hooks/useUserPick';
+import { UserPickCategory, UserPickSubCategory } from 'types/user';
 
 type Props = {
   onConfirm: () => void;
@@ -78,11 +79,11 @@ const FirstVisitPopup = ({ onConfirm, onClose }: Props) => {
         </div>
 
         <div className="scrollbar-thin mb-[30px] h-[350px] overflow-auto [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:w-1.5">
-          {data.map((item) => (
+          {data.map((item: UserPickCategory) => (
             <div key={item.bsName}>
               <div className="mb-[15px] text-[14px]">{`# ${item.bsName}`}</div>
               <ul className="mb-[20px] flex w-[580px] flex-wrap gap-[10px]">
-                {item.bssList.map((subitem) => {
+                {item.bssList.map((subitem: UserPickSubCategory) => {
                   const isSelected = selectedItems.some((selected) => selected.bssIdx === subitem.bssIdx);
                   return (
                     <li
