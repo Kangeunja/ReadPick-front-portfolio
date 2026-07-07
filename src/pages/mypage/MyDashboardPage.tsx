@@ -5,6 +5,7 @@ import { useCarousel } from 'hooks/useCarousel';
 import { useFavoritImgQuery, useFavoritQuery } from './hooks/useUserInfoQueries';
 import { ROUTES } from 'constants/routes';
 import type { MyPageOutletContext } from 'types/mypage';
+import { getProfileImage } from 'utils/image';
 
 import FavoriteBookCard from './components/FavoriteBookCard';
 
@@ -43,7 +44,7 @@ const MyDashboardPage = () => {
               {isDefaultImage ? (
                 <div className="h-[30px] w-[30px] bg-icon-default bg-cover object-cover" />
               ) : (
-                <img className="h-[80px] w-[80px] rounded-[50px]" src={userInfo.fileName} alt="프로필 이미지" />
+                <img className="h-[80px] w-[80px] rounded-[50px]" src={getProfileImage(userInfo.fileName)} alt="프로필 이미지" />
               )}
             </div>
             <div

@@ -4,6 +4,7 @@ import { Review } from 'types/review';
 import { User } from 'types/user';
 
 import { ReviewActionMenu } from 'components/review/ReviewActionMenu';
+import { getProfileImage } from 'utils/image';
 
 type ReviewItemProps = {
   item: Review;
@@ -34,7 +35,7 @@ const ReviewItem = ({
         {item.fileName === 'default' ? (
           <div className="h-[20px] w-[20px] bg-icon-default" />
         ) : (
-          <img src={item.fileName} alt="프로필 이미지" className="h-[40px] w-[40px] rounded-[50px]" />
+          <img src={getProfileImage(item.fileName)} alt="프로필 이미지" className="h-[40px] w-[40px] rounded-[50px]" />
         )}
       </div>
       <div className="w-[600px]">

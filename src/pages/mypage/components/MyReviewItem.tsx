@@ -2,7 +2,7 @@ import { MutableRefObject } from 'react';
 
 import { Review } from 'types/review';
 import { User } from 'types/user';
-import { getLargeBookImage } from 'utils/image';
+import { getLargeBookImage, getProfileImage } from 'utils/image';
 
 import { ReviewActionMenu } from 'components/review/ReviewActionMenu';
 
@@ -25,7 +25,7 @@ const MyReviewItem = ({ item, openMoreReviewId, moreMenuRef, userInfo, onToggleM
           {userInfo.fileName === 'default' ? (
             <div className="h-[15px] w-[15px] bg-icon-default bg-cover" />
           ) : (
-            <img className="h-[28px] w-[28px] rounded-[50px]" src={userInfo.fileName} alt="프로필 이미지" />
+            <img className="h-[28px] w-[28px] rounded-[50px]" src={getProfileImage(userInfo.fileName)} alt="프로필 이미지" />
           )}
         </div>
         <div className="flex w-full justify-between leading-[30px]">
