@@ -1,11 +1,10 @@
 import { MainBookCard } from './components/MainBookCard';
 import { MainFeatures } from './components/MainFeatures';
 
-import { getLargeBookImage } from 'utils/image';
-
 import { useMainData } from './hooks/useMainData';
-
-import { keywordSubtitles } from 'types/keyword';
+import { getLargeBookImage } from 'utils/image';
+import { keywordSubtitles, SearchCategory } from 'types/keyword';
+import { BookItem } from 'types/book';
 
 const MainPage = () => {
   const { isLogin, todayBookData, keywordListData, genreBookData, isLoading, gotoDetail, handleKeyWordIdx } = useMainData();
@@ -53,7 +52,7 @@ const MainPage = () => {
           </div>
 
           <div className="flex w-full flex-wrap gap-x-[50px] gap-y-[20px]">
-            {keywordListData.map((item) => (
+            {keywordListData.map((item: SearchCategory) => (
               <div
                 key={item.bsIdx}
                 className="box-border flex h-[80px] w-[200px] cursor-pointer flex-col items-center justify-center rounded-[8px] border border-[#cbcbcb] font-inter transition-all duration-[0.25s] ease-in-out hover:-translate-y-1 hover:border-pointColor hover:shadow-borderShadow"
@@ -76,7 +75,7 @@ const MainPage = () => {
 
           {genreBookData.length > 0 ? (
             <div className="flex w-full flex-wrap gap-x-[30px] gap-y-[30px]">
-              {genreBookData.map((item) => (
+              {genreBookData.map((item: BookItem) => (
                 <MainBookCard key={item.bookIdx} item={item} gotoDetail={gotoDetail} />
               ))}
             </div>

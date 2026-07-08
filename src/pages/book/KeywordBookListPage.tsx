@@ -2,6 +2,7 @@ import KeywordLayout from './components/KeywordLayout';
 import BookCard from './components/BookCard';
 
 import { useKeywordBookList } from './hooks/useKeywordBookList';
+import { BookItem } from 'types/book';
 
 const KeywordBookListPage = () => {
   const { bsIdx, bssIdx, keyword, books, images, isLoading, handleCategoryChange, goToDetail } = useKeywordBookList();
@@ -27,7 +28,7 @@ const KeywordBookListPage = () => {
           ) : (
             <div className="mb-[200px] flex flex-wrap gap-[45px]">
               {books.length > 0 ? (
-                books.map((item, idx) => (
+                books.map((item: BookItem, idx: number) => (
                   <BookCard
                     key={idx}
                     item={item}

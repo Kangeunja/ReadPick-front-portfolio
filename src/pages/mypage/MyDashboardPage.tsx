@@ -5,6 +5,7 @@ import { useCarousel } from 'hooks/useCarousel';
 import { useFavoritImgQuery, useFavoritQuery } from './hooks/useUserInfoQueries';
 import { ROUTES } from 'constants/routes';
 import type { MyPageOutletContext } from 'types/mypage';
+import { BookDetail } from 'types/book';
 import { getProfileImage } from 'utils/image';
 
 import FavoriteBookCard from './components/FavoriteBookCard';
@@ -91,7 +92,7 @@ const MyDashboardPage = () => {
 
             <div className="flex w-[700px] gap-[18px] overflow-x-hidden scroll-smooth" ref={listRef} onScroll={handleScroll}>
               {favoriteBooks.length > 0 ? (
-                favoriteBooks.map((item) => (
+                favoriteBooks.map((item: BookDetail) => (
                   <FavoriteBookCard
                     key={item.bookIdx}
                     item={item}

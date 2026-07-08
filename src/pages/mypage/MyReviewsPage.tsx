@@ -49,7 +49,7 @@ const MyReviewsPage = () => {
         <div className="mx-auto w-[613px]">
           <div className="mb-[28px] text-[14px] text-[#333333]">전체({reviewData.length})</div>
           {reviewData.length > 0 ? (
-            reviewData.map((item) => (
+            reviewData.map((item: Review) => (
               <MyReviewItem
                 key={item.rvIdx}
                 item={item}
