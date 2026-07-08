@@ -1,13 +1,18 @@
-const express = require("express");
-const { createProxyMiddleware } = require("http-proxy-middleware");
-const cors = require("cors");
+const express = require('express');
+const { createProxyMiddleware } = require('http-proxy-middleware');
+const cors = require('cors');
 
 const app = express();
 
 // CORS 설정
+const ALLOWED_ORIGIN =
+  process.env.NODE_ENV === 'production'
+    ? 'https://readpick-portfolio.netlify.app' // 내 실제 넷리파이 주소
+    : 'http://localhost:3000';
+
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: ALLOWED_ORIGIN,
     credentials: true,
   }),
 );
@@ -19,39 +24,41 @@ app.use((req, res, next) => {
 });
 
 // 자바 서버로 프록시 전달
+const JAVA_SERVER_URL =
+  process.env.NODE_ENV === 'production'
+    ? 'https://readpick-bff.onrender.com/api' // 실제 자바 서버
+    : 'http://localhost:8080/api';
+
 app.use(
-  "/api",
+  '/api',
   createProxyMiddleware({
-    target: "http://localhost:8080/api",
+    // target: "http://localhost:8080/api",
+    target: JAVA_SERVER_URL,
     changeOrigin: true,
 
     // /api를 유지하면서 자바에게 그대로 전달
     pathRewrite: {
-      "^/api": "/api",
+      '^/api': '/api',
     },
 
     on: {
       proxyReq: (proxyReq, req, res) => {
-        console.log(
-          `[BFF 배달] 자바로 쏘는 최종 주소: http://localhost:8080${req.url}`,
-        );
+        console.log(`[BFF 배달] 자바로 쏘는 최종 주소: http://localhost:8080${req.url}`);
       },
       error: (err, req, res) => {
-        console.error("[BFF 에러] 자바 서버 연결 실패!", err);
+        console.error('[BFF 에러] 자바 서버 연결 실패!', err);
       },
     },
 
     onProxyReq: (proxyReq, req) => {
-      console.log(
-        `[BFF 배달] 자바로 쏘는 주소: http://localhost:8080${req.url}`,
-      );
+      console.log(`[BFF 배달] 자바로 쏘는 주소: http://localhost:8080${req.url}`);
     },
     onError: (err, req, res) => {
-      console.error("[BFF 에러] 자바 서버에 연결할 수 없습니다:", err.message);
+      console.error('[BFF 에러] 자바 서버에 연결할 수 없습니다:', err.message);
     },
   }),
 );
 
 app.listen(4000, () => {
-  console.log("🚀 노드 서버(BFF)가 4000번 포트에서 실행 중입니다!");
+  console.log('🚀 노드 서버(BFF)가 4000번 포트에서 실행 중입니다!');
 });
