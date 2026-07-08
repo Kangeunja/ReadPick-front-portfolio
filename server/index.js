@@ -43,7 +43,7 @@ app.use(
 
     on: {
       proxyReq: (proxyReq, req, res) => {
-        console.log(`[BFF 배달] 자바로 쏘는 최종 주소:${JAVA_SERVER_URL}${cleanUrl}`);
+        console.log(`[BFF 배달] 자바로 쏘는 최종 주소:${JAVA_SERVER_URL}`);
       },
       error: (err, req, res) => {
         console.error('[BFF 에러] 자바 서버 연결 실패!', err);
