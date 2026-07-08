@@ -7,7 +7,7 @@ const app = express();
 // CORS 설정
 const ALLOWED_ORIGIN =
   process.env.NODE_ENV === 'production'
-    ? 'https://readpick-portfolio.netlify.app' // 내 실제 넷리파이 주소
+    ? 'https://fascinating-muffin-92a8a5.netlify.app' // 내 실제 넷리파이 주소
     : 'http://localhost:3000';
 
 app.use(
@@ -26,7 +26,7 @@ app.use((req, res, next) => {
 // 자바 서버로 프록시 전달
 const JAVA_SERVER_URL =
   process.env.NODE_ENV === 'production'
-    ? 'https://readpick-bff.onrender.com/api' // 실제 자바 서버
+    ? 'https://readpick-backend-portfolio-c7rj.onrender.com/api' // 실제 자바 서버
     : 'http://localhost:8080/api';
 
 app.use(
@@ -43,7 +43,7 @@ app.use(
 
     on: {
       proxyReq: (proxyReq, req, res) => {
-        console.log(`[BFF 배달] 자바로 쏘는 최종 주소: http://localhost:8080${req.url}`);
+        console.log(`[BFF 배달] 자바로 쏘는 최종 주소:${JAVA_SERVER_URL}${cleanUrl}`);
       },
       error: (err, req, res) => {
         console.error('[BFF 에러] 자바 서버 연결 실패!', err);
