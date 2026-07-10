@@ -7,7 +7,7 @@ const app = express();
 // CORS 설정
 const ALLOWED_ORIGIN =
   process.env.NODE_ENV === 'production'
-    ? 'https://readpick-front-portfolio.netlify.app/' // 내 실제 넷리파이 주소
+    ? 'https://readpick-front-portfolio.netlify.app' // 내 실제 넷리파이 주소
     : 'http://localhost:3000';
 
 app.use(
