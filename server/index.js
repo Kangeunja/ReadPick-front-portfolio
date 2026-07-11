@@ -52,6 +52,8 @@ app.use(
   }),
 );
 
-app.listen(4000, () => {
-  console.log('🚀 노드 서버(BFF)가 4000번 포트에서 실행 중입니다!');
+const PORT = process.env.PORT || 4000;
+
+app.listen(PORT, () => {
+  console.log(`🚀 노드 서버(BFF)가 ${PORT}번 포트에서 실행 중입니다!`);
 });
