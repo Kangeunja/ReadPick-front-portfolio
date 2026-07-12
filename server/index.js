@@ -26,7 +26,7 @@ app.use((req, res, next) => {
 // 자바 서버로 프록시 전달
 const JAVA_SERVER_URL =
   process.env.NODE_ENV === 'production'
-    ? 'https://readpick-backend-portfolio.onrender.com/api' // 실제 자바 서버
+    ? 'https://readpick-backend-portfolio-c7rj.onrender.com/api' // 실제 자바 서버
     : 'http://localhost:8080/api';
 
 app.use(
