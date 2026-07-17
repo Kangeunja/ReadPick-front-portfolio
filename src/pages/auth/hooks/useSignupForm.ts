@@ -149,6 +149,7 @@ export const useSignupForm = () => {
       return;
     }
 
+    console.log('2. 검사 결과(error):', error);
     signUpMutate(userInfo, {
       onSuccess: (res) => {
         console.log('응답 결과', res);
