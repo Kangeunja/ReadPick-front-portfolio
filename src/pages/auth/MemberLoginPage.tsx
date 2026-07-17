@@ -24,8 +24,6 @@ const MemberLogin = () => {
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        alert('진입 확인');
-        handleSignup();
       }}
       className="relative mx-auto box-border w-[500px] border border-borderLightColor p-[20px] laptop-lg:mb-[50px] laptop-lg:p-[25px]"
     >
@@ -185,7 +183,7 @@ const MemberLogin = () => {
         <button type="button" className="member-btn hover:bg-gray-500" onClick={() => navigate(ROUTES.MEMBER)}>
           취소
         </button>
-        <button type="submit" className="member-btn hover:bg-pointColor">
+        <button type="button" className="member-btn hover:bg-pointColor" onClick={() => handleSignup()}>
           회원가입
         </button>
       </div>
