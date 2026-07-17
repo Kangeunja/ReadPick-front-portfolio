@@ -135,6 +135,7 @@ export const useSignupForm = () => {
 
   // ===== 회원가입 버튼 클릭 =====
   const handleSignup = () => {
+    console.log('handleSignup 함수 진입 성공!');
     const error = validateFormSubmit({
       formData: { ...userInfo, currentPw: '' },
       isIdValid: isIdValid,
@@ -149,7 +150,8 @@ export const useSignupForm = () => {
     }
 
     signUpMutate(userInfo, {
-      onSuccess: () => {
+      onSuccess: (res) => {
+        console.log('응답 결과', res);
         alert('회원가입이 완료되었습니다!');
         navigate(ROUTES.MAIN);
       },
