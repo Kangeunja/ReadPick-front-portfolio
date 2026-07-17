@@ -24,6 +24,7 @@ const MemberLogin = () => {
     <form
       onSubmit={(e) => {
         e.preventDefault();
+        alert('진입 확인');
         handleSignup();
       }}
       className="relative mx-auto box-border w-[500px] border border-borderLightColor p-[20px] laptop-lg:mb-[50px] laptop-lg:p-[25px]"
