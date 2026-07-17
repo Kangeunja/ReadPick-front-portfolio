@@ -143,7 +143,10 @@ export const useSignupForm = () => {
       liveValidation: validation,
     });
 
+    console.log('2. 검사 결과(error):');
+
     if (error) {
+      console.log('3. 에러 발견되어 종료됨:', error);
       setErrors((prev) => ({ ...prev, [error.field]: error.message }));
       inputRefs.current[error.field]?.focus();
       return;
