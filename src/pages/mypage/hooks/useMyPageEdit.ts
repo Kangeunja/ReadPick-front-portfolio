@@ -5,7 +5,7 @@ import { useCheckIdMutation } from 'hooks/mutations/useAuthMutation';
 import { useDeleteProfileImageMutation, useUpdateProfileMutation, useUpdateUserInfoMutation } from './useUserInfoQueries';
 import { ROUTES } from 'constants/routes';
 import { checkIdLive, checkPwLive, checkPwConfirmLive, checkEmailLive, checkUserNameLive, checkNickNameLive } from 'utils/liveValidator';
-import { validateFormSubmit } from 'utils/submitValidator';
+import { myPageValidation } from 'utils/validateFormSubmit';
 import { MyPageOutletContext } from 'types/mypage';
 import { usePopupStore } from 'store/popupStore';
 
@@ -196,7 +196,7 @@ export const useMyPageEdit = ({ userInfo }: MyPageOutletContext) => {
     }
 
     // 최종 유효성 검사
-    const validationError = validateFormSubmit({
+    const validationError = myPageValidation({
       formData: {
         nickName: editInfo.nickName,
         userName: editInfo.userName,

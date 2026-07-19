@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useCheckIdMutation, useSignupMutation } from 'hooks/mutations/useAuthMutation';
 import { checkEmailLive, checkIdLive, checkNickNameLive, checkPwConfirmLive, checkPwLive, checkUserNameLive } from 'utils/liveValidator';
-import { validateFormSubmit } from 'utils/submitValidator';
+import { signupValidation } from 'utils/validateFormSubmit';
 import { ROUTES } from 'constants/routes';
 import { SignupFormData } from 'types/auth';
 
@@ -135,15 +135,12 @@ export const useSignupForm = () => {
 
   // ===== 회원가입 버튼 클릭 =====
   const handleSignup = () => {
-    console.log('handleSignup 함수 진입 성공!');
-    const error = validateFormSubmit({
+    const error = signupValidation({
       formData: { ...userInfo, currentPw: '' },
       isIdValid: isIdValid,
       isPwCheckMode: true,
       liveValidation: validation,
     });
-
-    console.log('2. 검사 결과(error):');
 
     if (error) {
       console.log('3. 에러 발견되어 종료됨:', error);
@@ -152,7 +149,6 @@ export const useSignupForm = () => {
       return;
     }
 
-    console.log('2. 검사 결과(error):', error);
     signUpMutate(userInfo, {
       onSuccess: (res) => {
         console.log('응답 결과', res);
