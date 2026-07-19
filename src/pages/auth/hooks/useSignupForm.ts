@@ -1,11 +1,13 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 
-import { useCheckIdMutation, useSignupMutation } from 'hooks/mutations/useAuthMutation';
+import { useCheckIdMutation, useLoginMutation, useSignupMutation } from 'hooks/mutations/useAuthMutation';
 import { checkEmailLive, checkIdLive, checkNickNameLive, checkPwConfirmLive, checkPwLive, checkUserNameLive } from 'utils/liveValidator';
 import { signupValidation } from 'utils/validateFormSubmit';
 import { ROUTES } from 'constants/routes';
 import { SignupFormData } from 'types/auth';
+import { useAuthStore } from 'store/authStore';
 
 type ErrorState = Partial<Record<keyof SignupFormData, string>>;
 
@@ -14,6 +16,7 @@ export const useSignupForm = () => {
 
   const { mutate: checkIdMutate } = useCheckIdMutation();
   const { mutate: signUpMutate } = useSignupMutation();
+  const { mutate: loginMutate } = useLoginMutation();
 
   // 회원정보 입력 폼 상태
   const [userInfo, setUserInfo] = useState<SignupFormData>({
@@ -150,10 +153,22 @@ export const useSignupForm = () => {
     }
 
     signUpMutate(userInfo, {
-      onSuccess: (res) => {
-        console.log('응답 결과', res);
-        alert('회원가입이 완료되었습니다!');
-        navigate(ROUTES.MAIN);
+      onSuccess: () => {
+        loginMutate(
+          {
+            id: userInfo.id,
+            pw: userInfo.pw,
+          },
+          {
+            onSuccess: async (res) => {
+              useAuthStore.getState().setUser(res);
+              localStorage.setItem('isLoggedInHint', 'true');
+
+              navigate(ROUTES.MAIN);
+            },
+          },
+        );
+        alert('회원가입이 완료되었습니다. 환영합니다!');
       },
       onError: (error) => {
         console.error('회원가입 실패', error);
