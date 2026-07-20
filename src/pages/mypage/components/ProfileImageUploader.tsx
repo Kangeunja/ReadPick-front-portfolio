@@ -13,6 +13,12 @@ type ProfileImageUploaderProps = {
 const ProfileImageUploader = ({ isDefaultImage, uploadedImage, userInfo, handleFileChange, onClose }: ProfileImageUploaderProps) => {
   const editImgRef = useRef<HTMLInputElement | null>(null);
 
+  const imageSource = uploadedImage
+    ? uploadedImage.startsWith('blob:')
+      ? uploadedImage
+      : getProfileImage(uploadedImage)
+    : getProfileImage(userInfo.fileName);
+
   return (
     <>
       <div className="flex w-[100px] justify-center">
@@ -22,11 +28,7 @@ const ProfileImageUploader = ({ isDefaultImage, uploadedImage, userInfo, handleF
           {isDefaultImage ? (
             <div className="h-[30px] w-[30px] bg-icon-default bg-cover" />
           ) : (
-            <img
-              src={getProfileImage(uploadedImage || userInfo.fileName)}
-              alt="프로필 이미지"
-              className="h-[80px] w-[80px] rounded-[50px]"
-            />
+            <img src={imageSource} alt="프로필 이미지" className="h-[80px] w-[80px] rounded-[50px]" />
           )}
         </div>
       </div>
@@ -40,6 +42,7 @@ const ProfileImageUploader = ({ isDefaultImage, uploadedImage, userInfo, handleF
         </div>
 
         <button
+          type="button"
           className={`h-[30px] w-[30px] rounded-[5px] bg-[#a0a0a0] bg-icon-trash bg-[length:15px_15px] bg-center bg-no-repeat text-[12px] text-white ${isDefaultImage ? 'cursor-not-allowed opacity-[0.3]' : 'hover:bg-btnhoverColor'}`}
           disabled={isDefaultImage}
           onClick={() => onClose()}
