@@ -39,7 +39,15 @@ export const updateProfileImage = async (file: File, isDefaultImage: boolean) =>
   }
 
   const endpoint = isDefaultImage ? '/userImageInsert' : '/userImageUpdate';
-  const res = await api.post(endpoint, { fileName });
+  const res = await api.post(
+    endpoint,
+    { fileName },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  );
   return res.data;
 
   // const formData = new FormData();
