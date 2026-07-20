@@ -43,7 +43,7 @@ export const useDeleteProfileImageMutation = () => {
     mutationFn: deleteProfileImage,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['userInfo'] });
-      queryClient.invalidateQueries({ queryKey: ['reviews'] });
+      queryClient.invalidateQueries({ queryKey: ['reviewList'] });
     },
   });
 };
@@ -56,7 +56,7 @@ export const useUpdateProfileMutation = () => {
     mutationFn: ({ file, isDefaultImage }: { file: File; isDefaultImage: boolean }) => updateProfileImage(file, isDefaultImage),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['userInfo'] });
-      queryClient.invalidateQueries({ queryKey: ['reviews'] });
+      queryClient.invalidateQueries({ queryKey: ['reviewList'] });
     },
   });
 };
@@ -77,7 +77,7 @@ export const useUpdateUserInfoMutation = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['userInfo'] });
-      queryClient.invalidateQueries({ queryKey: ['reviews'] });
+      queryClient.invalidateQueries({ queryKey: ['reviewList'] });
     },
   });
 };
