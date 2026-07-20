@@ -28,7 +28,11 @@ const ProfileImageUploader = ({ isDefaultImage, uploadedImage, userInfo, handleF
           {isDefaultImage ? (
             <div className="h-[30px] w-[30px] bg-icon-default bg-cover" />
           ) : (
-            <img src={imageSource} alt="프로필 이미지" className="h-[80px] w-[80px] rounded-[50px]" />
+            <img
+              src={getProfileImage(uploadedImage || userInfo.fileName)}
+              alt="프로필 이미지"
+              className="h-[80px] w-[80px] rounded-[50px]"
+            />
           )}
         </div>
       </div>
