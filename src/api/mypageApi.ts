@@ -1,6 +1,7 @@
 import api from './axiosInstance';
 import { BookDetail, BookImg } from '../types/book';
 import { UserProfile } from '../types/user';
+import { supabase } from 'utils/supabase';
 
 // 사용자 정보 조회 api
 export const getUserInfo = async () => {
@@ -28,17 +29,30 @@ export const deleteProfileImage = async () => {
 
 // 프로필 이미지 등록/수정 api
 export const updateProfileImage = async (file: File, isDefaultImage: boolean) => {
-  const formData = new FormData();
-  formData.append('file', file);
+  const fileExt = file.name.split('.').pop();
+  const fileName = `${crypto.randomUUID()}.${fileExt}`;
 
-  const uploadUrl = isDefaultImage ? '/userImageInsert' : '/userImageUpdate';
+  const { error: uploadError } = await supabase.storage.from('profile-images').upload(fileName, file);
 
-  const res = await api.post(uploadUrl, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
+  if (uploadError) {
+    throw new Error('Supabase 업로드 실패: ' + uploadError.message);
+  }
+
+  const endpoint = isDefaultImage ? '/userImageInsert' : '/userImageUpdate';
+  const res = await api.post(endpoint, { fileName });
   return res.data;
+
+  // const formData = new FormData();
+  // formData.append('file', file);
+
+  // const uploadUrl = isDefaultImage ? '/userImageInsert' : '/userImageUpdate';
+
+  // const res = await api.post(uploadUrl, formData, {
+  //   headers: {
+  //     'Content-Type': 'multipart/form-data',
+  //   },
+  // });
+  // return res.data;
 };
 
 // 회원정보 수정 api

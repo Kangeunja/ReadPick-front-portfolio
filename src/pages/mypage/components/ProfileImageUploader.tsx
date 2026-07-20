@@ -13,12 +13,6 @@ type ProfileImageUploaderProps = {
 const ProfileImageUploader = ({ isDefaultImage, uploadedImage, userInfo, handleFileChange, onClose }: ProfileImageUploaderProps) => {
   const editImgRef = useRef<HTMLInputElement | null>(null);
 
-  const imageSource = uploadedImage
-    ? uploadedImage.startsWith('blob:')
-      ? uploadedImage
-      : getProfileImage(uploadedImage)
-    : getProfileImage(userInfo.fileName);
-
   return (
     <>
       <div className="flex w-[100px] justify-center">
