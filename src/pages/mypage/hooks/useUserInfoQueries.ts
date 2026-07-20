@@ -43,6 +43,7 @@ export const useDeleteProfileImageMutation = () => {
     mutationFn: deleteProfileImage,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['userInfo'] });
+      queryClient.invalidateQueries({ queryKey: ['reviews'] });
     },
   });
 };
@@ -76,6 +77,7 @@ export const useUpdateUserInfoMutation = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['userInfo'] });
+      queryClient.invalidateQueries({ queryKey: ['reviews'] });
     },
   });
 };
