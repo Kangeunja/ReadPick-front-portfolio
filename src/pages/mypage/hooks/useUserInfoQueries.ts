@@ -55,6 +55,7 @@ export const useUpdateProfileMutation = () => {
     mutationFn: ({ file, isDefaultImage }: { file: File; isDefaultImage: boolean }) => updateProfileImage(file, isDefaultImage),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['userInfo'] });
+      queryClient.invalidateQueries({ queryKey: ['reviews'] });
     },
   });
 };
