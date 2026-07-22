@@ -35,6 +35,8 @@ app.use(
     // target: "http://localhost:8080/api",
     target: JAVA_SERVER_URL,
     changeOrigin: true,
+    proxyTimeout: 60000,
+    timeout: 60000,
 
     // /api를 유지하면서 자바에게 그대로 전달
     pathRewrite: {
@@ -46,7 +48,7 @@ app.use(
         console.log(`[BFF 배달] 자바로 쏘는 최종 주소:${JAVA_SERVER_URL}`);
       },
       error: (err, req, res) => {
-        console.error('[BFF 에러] 자바 서버 연결 실패!', err);
+        console.error('[BFF 경고] 자바 서버가 아직 잠들어 있거나 응답이 지연됩니다. (콜드 스타트 중)', err.message);
       },
     },
   }),
