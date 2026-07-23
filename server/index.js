@@ -29,6 +29,39 @@ const JAVA_SERVER_URL =
     ? 'https://readpick-backend-portfolio-c7rj.onrender.com/api' // 실제 자바 서버
     : 'http://localhost:8080/api';
 
+app.get('/api/main', async (req, res) => {
+  console.log('[BFF 통합 요청] 메인 화면 데이터 조합 시작...');
+
+  try {
+    const [todayBookRes, bsListRes] = await Promise.all([
+      fetch(`${JAVA_SERVER_URL}/todayBook`)
+        .then(async (r) => {
+          // 자바 서버가 200이 아니거나 데이터가 없을 때의 예외 처리
+          if (!r.ok) return null;
+          return r.json();
+        })
+        .catch(() => null),
+
+      fetch(`${JAVA_SERVER_URL}/bsList`)
+        .then(async (r) => {
+          if (!r.ok) return [];
+          return r.json();
+        })
+        .catch(() => []),
+    ]);
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        todayBook: todayBookRes?.data || todayBookRes || null,
+        bsList: bsListRes?.data || bsListRes || [],
+      },
+    });
+  } catch (error) {
+    console.error('[BFF 에러] 메인 데이터 통합 조회 중 문제 발생:', error.message);
+  }
+});
+
 app.use(
   '/api',
   createProxyMiddleware({
