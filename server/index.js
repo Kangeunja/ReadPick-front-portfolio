@@ -29,6 +29,33 @@ const JAVA_SERVER_URL =
     ? 'https://readpick-backend-portfolio-c7rj.onrender.com/api' // 실제 자바 서버
     : 'http://localhost:8080/api';
 
+// 자바 서버가 잠들어 있을 때 재시도 함수
+async function fetchWithRetry(url, options = {}, retries = 5, delay = 10000) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const controller = new AbortController();
+      // 각 시도당 60초 대기
+      const timeoutId = setTimeout(() => controller.abort(), 60000);
+
+      const res = await fetch(url, { ...options, signal: controller.signal });
+      clearTimeout(timeoutId);
+
+      if (res.ok) {
+        return await res.json();
+      }
+    } catch (err) {
+      console.log(`[BFF] 자바 백엔드 콜드 스타트 대기 중... (${i + 1}/${retries}번째 시도 실패): ${err.message}`);
+
+      // 마지막 시도까지 실패하면 에러 던지기
+      if (i === retries - 1) throw err;
+
+      // 다음 시도 전 10초 대기
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    }
+  }
+  return null;
+}
+
 app.get('/api/main', async (req, res) => {
   console.log('[BFF 통합 요청] 메인 화면 데이터 조합 시작...');
 
