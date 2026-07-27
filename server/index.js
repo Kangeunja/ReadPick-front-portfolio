@@ -30,18 +30,19 @@ const JAVA_SERVER_URL =
     : 'http://localhost:8080/api';
 
 // 자바 서버가 잠들어 있을 때 재시도 함수
-async function fetchWithRetry(url, options = {}, retries = 5, delay = 10000) {
+async function fetchWithRetry(url, retries = 5, delay = 10000) {
   for (let i = 0; i < retries; i++) {
     try {
       const controller = new AbortController();
-      // 각 시도당 60초 대기
-      const timeoutId = setTimeout(() => controller.abort(), 60000);
+      // 각 시도당 90초 대기
+      const timeoutId = setTimeout(() => controller.abort(), 90000);
 
-      const res = await fetch(url, { ...options, signal: controller.signal });
+      const res = await fetch(url, { signal: controller.signal });
       clearTimeout(timeoutId);
 
       if (res.ok) {
-        return res;
+        const json = await res.json();
+        return json;
       }
     } catch (err) {
       console.log(`[BFF] 자바 백엔드 콜드 스타트 대기 중... (${i + 1}/${retries}번째 시도 실패): ${err.message}`);
