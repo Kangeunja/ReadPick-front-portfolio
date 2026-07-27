@@ -10,7 +10,7 @@
 <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
 
 * **개발 환경:** JDK 17, Maven, Lombok
-* **핵심 기술:** Spring Boot, JAVA, MyBatis, MySQL, Node JS(프론트엔드와 백엔드 사이의 BFF 및 데이터 중계 역할)
+* **핵심 기술:** Spring Boot, JAVA, MyBatis, MySQL, Supabase Storage, Node JS(프론트엔드와 백엔드 사이의 BFF 및 데이터 중계 역할)
 * **배포 및 인프라:** Docker, Render
 * **설정 관리:** Spring Profile 활용 (`dev` - 로컬, `prod` - 배포)
 
@@ -21,7 +21,7 @@
 <img src="https://img.shields.io/badge/Supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white">
 
 * **개발 환경:** Node.js / npm
-* **핵심 기술:** React, Axios (인스턴스 기반 통신 구조화), Supabase Storage
+* **핵심 기술:** React, TypeScript, Axios (인스턴스 기반 통신 구조화)
 * **배포:** Netlify
 * **설정 관리:** `.env` 환경 변수를 통한 API URL 동적 관리
 
