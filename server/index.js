@@ -41,7 +41,7 @@ async function fetchWithRetry(url, options = {}, retries = 5, delay = 10000) {
       clearTimeout(timeoutId);
 
       if (res.ok) {
-        return await res.json();
+        return res;
       }
     } catch (err) {
       console.log(`[BFF] 자바 백엔드 콜드 스타트 대기 중... (${i + 1}/${retries}번째 시도 실패): ${err.message}`);
@@ -61,7 +61,7 @@ app.get('/api/main', async (req, res) => {
 
   try {
     const [todayBookRes, bsListRes] = await Promise.all([
-      fetch(`${JAVA_SERVER_URL}/todayBook`)
+      fetchWithRetry(`${JAVA_SERVER_URL}/todayBook`)
         .then(async (r) => {
           // 자바 서버가 200이 아니거나 데이터가 없을 때의 예외 처리
           if (!r.ok) return null;
@@ -69,11 +69,8 @@ app.get('/api/main', async (req, res) => {
         })
         .catch(() => null),
 
-      fetch(`${JAVA_SERVER_URL}/bsList`)
-        .then(async (r) => {
-          if (!r.ok) return [];
-          return r.json();
-        })
+      fetchWithRetry(`${JAVA_SERVER_URL}/bsList`)
+        .then(async (r) => (r && r.ok ? r.json() : []))
         .catch(() => []),
     ]);
 
