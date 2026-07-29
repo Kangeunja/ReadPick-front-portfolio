@@ -18,7 +18,7 @@ export const getProfileImage = (fileName: any) => {
   }
 
   // Render 배포 서버 환경일 때
-  const SUPABASE_URL = 'https://dumfuajtcinawmxbyqmr.supabase.co';
+  const SUPABASE_URL = 'https://rzzwtstbwfdzuadaixay.supabase.co';
   const BUCKET_NAME = 'profile-images';
 
   return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/${fileName}`;
