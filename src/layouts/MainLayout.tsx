@@ -6,6 +6,7 @@ import { useAuthStore } from 'store/authStore';
 
 import Header from './Header';
 import Footer from './Footer';
+import BookBuddyChatBot from 'components/common/BookBuddyChatBot';
 
 const MainLayout = () => {
   const location = useLocation();
@@ -55,6 +56,8 @@ const MainLayout = () => {
       <main className="flex-1">
         <Outlet />
       </main>
+
+      <BookBuddyChatBot />
 
       {/* 푸터 */}
       <Footer />

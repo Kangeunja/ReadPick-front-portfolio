@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import SpinnerIcon from 'assets/icon/SpinnerIcon';
 
 import { useKeywordBookDetail } from './hooks/useKeywordBookDetail';
@@ -40,11 +42,27 @@ const KeywordBookDetailPage = () => {
     handleReviewSuccess,
     selectedReview,
     handleReportReview,
+    reviewSummary,
+    isReviewSummaryLoading,
   } = useKeywordBookDetail();
 
   const { recommendMutation, bookmarkMutation } = useBookActionsMutation();
 
   const isContentEmpty = !bookDetail?.bookContent || bookDetail.bookContent.trim() === '';
+
+  useEffect(() => {
+    if (!bookDetail) return;
+    const contextData = {
+      title: bookDetail.bookName,
+      author: bookDetail.author,
+    };
+
+    const contextEvent = new CustomEvent('book-buddy-context', {
+      detail: bookDetail ? contextData : null,
+    });
+
+    window.dispatchEvent(contextEvent);
+  }, [bookDetail]);
 
   return (
     <>
@@ -120,6 +138,42 @@ const KeywordBookDetailPage = () => {
                 <p>{hasMyReview ? '리뷰 수정하기' : '리뷰 작성하기'}</p>
               </button>
             </div>
+
+            {reviews.length > 0 && (
+              <div className="mb-6 rounded-[16px] bg-[#f7f9fb] p-5 shadow-sm">
+                <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-[#333333]">
+                  <span className="inline-block h-2 w-2 rounded-full bg-pointColor" />
+                  <span>AI가 요약했어요</span>
+                </div>
+
+                {isReviewSummaryLoading ? (
+                  <div className="flex flex-col rounded-[12px] bg-white p-5 text-sm text-[#555555] shadow-sm">
+                    <div className="mb-3 flex items-center gap-2 text-[#666666]">
+                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-solid border-gray-300 border-t-pointColor" />
+                      <span>AI가 독자들의 리뷰를 분석하고 있습니다.</span>
+                    </div>
+                    <p className="text-sm text-[#888888]">잠시만 기다려 주세요.</p>
+                  </div>
+                ) : reviewSummary ? (
+                  <>
+                    <div className="mb-3 flex flex-wrap gap-2 text-[13px] text-[#444444]">
+                      {reviewSummary.tags.map((tag: string) => (
+                        <span key={tag} className="rounded-full bg-[#e8f2ff] px-3 py-1 text-[#1755c7]">
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="rounded-[14px] bg-white p-5 text-[14px] leading-relaxed text-[#3d3d3d] shadow-sm">
+                      {reviewSummary.summary}
+                    </p>
+                  </>
+                ) : (
+                  <div className="rounded-[14px] bg-[#f9fafb] p-4 text-center text-[13px] text-[#8c8c8c]">
+                    리뷰 요약을 불러올 수 없습니다. 잠시 후 다시 시도해 주세요.
+                  </div>
+                )}
+              </div>
+            )}
 
             <div className="mb-[200px]">
               {reviews.length !== 0 ? (

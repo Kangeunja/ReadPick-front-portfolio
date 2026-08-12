@@ -24,3 +24,22 @@ export interface UpdateReviewParams {
   bookIdx: number;
   content: string;
 }
+
+// export interface ReviewAnalysisRequest {
+//   reviewText: string;
+//   title?: string;
+//   author?: string;
+//   genre?: string;
+// }
+
+export interface ReviewArrayRequest {
+  reviews: string[];
+  title?: string;
+  author?: string;
+  genre?: string;
+}
+
+export interface ReviewSummaryResponse {
+  summary: string;
+  tags: string[];
+}

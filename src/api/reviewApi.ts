@@ -1,5 +1,17 @@
 import api from './axiosInstance';
-import { Review, insertReviewParams, UpdateReviewParams } from 'types/review';
+import { BookBuddyRequest, BookBuddyResponse } from 'types/chat';
+import { Review, insertReviewParams, UpdateReviewParams, ReviewSummaryResponse, ReviewArrayRequest } from 'types/review';
+
+// export interface TagRecommendResponse {
+//   tags: string[];
+// }
+
+// export interface SingleReviewRequest {
+//   reviewText: string;
+//   title?: string;
+//   author?: string;
+//   genre?: string;
+// }
 
 // 총 리뷰 수 api
 export const getReviewCount = async (bookIdx: number): Promise<number> => {
@@ -49,4 +61,33 @@ export const deleteReview = async (bookIdx: number) => {
 export const reportReview = async (rvIdx: number) => {
   const res = await api.get('/reportReview', { params: { rvIdx: rvIdx } });
   return res.data;
+};
+
+// 리뷰 요약 API
+export const getReviewSummary = async (data: ReviewArrayRequest): Promise<ReviewSummaryResponse> => {
+  const res = await api.post('/review/summary-all', data);
+  return res.data.data;
+  // try {
+  //   return res.data?.data || { summary: '', tags: [] };
+  // } catch (error: any) {
+  //   const status = error?.response?.status;
+
+  //   if (status === 429) {
+  //     return {
+  //       summary: '리뷰 요약을 잠시 불러올 수 없습니다. 잠시 후 다시 시도해 주세요.',
+  //       tags: [],
+  //     };
+  //   }
+
+  //   return {
+  //     summary: '리뷰 요약을 불러올 수 없습니다.',
+  //     tags: [],
+  //   };
+  // }
+};
+
+// AI 북버디 Q&A API
+export const getBookBuddyReply = async (data: BookBuddyRequest): Promise<BookBuddyResponse> => {
+  const res = await api.post('/review/book-buddy', data);
+  return res.data.data;
 };

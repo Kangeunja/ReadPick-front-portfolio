@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -8,6 +8,7 @@ import { useBookSearchParams } from 'hooks/useBookSearchParams';
 import { useBookDetailQueries } from 'hooks/queries/useBookQueries';
 import { useBookActionsMutation } from './useBookActionsMutation';
 import { useReviewListQuery } from './useReviewListQuery';
+import { useReviewSummaryQuery } from './useReviewSummaryQuery';
 import { useAuthStore } from 'store/authStore';
 import { usePopupStore } from 'store/popupStore';
 import { ROUTES } from 'constants/routes';
@@ -27,7 +28,8 @@ export const useKeywordBookDetail = () => {
   const { bsIdx, bssIdx } = useBookSearchParams();
 
   // 서버 데이터 조회
-  const { data: keywordList } = useSubCategoryQuery();
+  const { data: keywordList = [] } = useSubCategoryQuery();
+
   const {
     bookDetail: bookDetailQuery,
     bookImg: bookImgQuery,
@@ -51,6 +53,19 @@ export const useKeywordBookDetail = () => {
   const reviews = reviewPages?.pages.flat() || [];
   const myReview = reviews.find((rv) => rv.userIdx === user?.userIdx);
   const hasMyReview = !!myReview;
+  const selectedBs = keywordList.find((item: any) => item.bsIdx === bsIdx);
+  const currentGenre = selectedBs?.bsName || '기타';
+
+  const reviewSummaryRequest = useMemo(() => {
+    return {
+      reviews: reviews.map((item) => item.content).filter(Boolean),
+      title: bookDetailQuery.data?.bookName || '',
+      author: bookDetailQuery.data?.author || '',
+      genre: currentGenre,
+    };
+  }, [reviews, bookDetailQuery.data?.bookName, bookDetailQuery.data?.author, currentGenre]);
+
+  const { data: reviewSummary, isLoading: isReviewSummaryLoading } = useReviewSummaryQuery(reviewSummaryRequest);
 
   const moreMenuRef = useOutsideClick(() => setOpenMoreReviewId(null));
 
@@ -197,5 +212,7 @@ export const useKeywordBookDetail = () => {
     handleReviewSuccess,
     selectedReview,
     handleReportReview,
+    reviewSummary,
+    isReviewSummaryLoading,
   };
 };

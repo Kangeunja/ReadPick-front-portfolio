@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 
@@ -13,6 +14,8 @@ export const useMainData = () => {
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
   const isLogin = !!user?.userIdx; // 사용자 로그인 여부
+
+  const [selectedKeywordIdx, setSelectedKeywordIdx] = useState<number | null>(null);
 
   // const { data: todayBookData, isLoading: isTodayLoading } = useTodayBookQuery();
   // const { data: keywordListData = [], isLoading: isKeywordLoading } = useBsListQuery();
@@ -31,9 +34,14 @@ export const useMainData = () => {
   const isLoading = isMainLoading || (isLogin && isGenreLoading); // 로그인한 사용자에 대해서만 장르별 도서 로딩 상태 고려
 
   // 키워드별 페이지이동
-  const handleKeyWordIdx = (bsIdx: number) => {
+  const handleChipClick = (bsIdx: number) => {
+    setSelectedKeywordIdx(bsIdx);
     navigate(`${ROUTES.KEYWORD}/?bsIdx=${bsIdx}`);
   };
+
+  // const handleKeyWordIdx = (bsIdx: number) => {
+  //   navigate(`${ROUTES.KEYWORD}/?bsIdx=${bsIdx}`);
+  // };
 
   // 상세 페이지 이동함수
   const gotoDetail = (bookIdx: number, bsIdx: number) => {
@@ -47,7 +55,8 @@ export const useMainData = () => {
     keywordListData,
     genreBookData,
     isLoading,
+    selectedKeywordIdx,
+    handleChipClick,
     gotoDetail,
-    handleKeyWordIdx,
   };
 };
