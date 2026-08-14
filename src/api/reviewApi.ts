@@ -1,6 +1,13 @@
 import api from './axiosInstance';
 import { BookBuddyRequest, BookBuddyResponse } from 'types/chat';
-import { Review, insertReviewParams, UpdateReviewParams, ReviewSummaryResponse, ReviewArrayRequest } from 'types/review';
+import {
+  Review,
+  insertReviewParams,
+  UpdateReviewParams,
+  ReviewSummaryResponse,
+  ReviewArrayRequest,
+  ReviewRealtimeParams,
+} from 'types/review';
 
 // export interface TagRecommendResponse {
 //   tags: string[];
@@ -89,5 +96,11 @@ export const getReviewSummary = async (data: ReviewArrayRequest): Promise<Review
 // AI 북버디 Q&A API
 export const getBookBuddyReply = async (data: BookBuddyRequest): Promise<BookBuddyResponse> => {
   const res = await api.post('/review/book-buddy', data);
+  return res.data.data;
+};
+
+// 실시간 리뷰 조회 api
+export const getRealtimeReviews = async (): Promise<ReviewRealtimeParams[]> => {
+  const res = await api.get('/review/realtime');
   return res.data.data;
 };

@@ -11,7 +11,7 @@ export const MainFeatures = () => {
   }));
 
   return (
-    <div className="mx-auto mb-[150px] w-container-w">
+    <div className="mx-auto mb-[130px] w-container-w pt-[100px]">
       <div className="mb-[30px]">
         <p className="sub-title-label">도서 탐색과 리뷰 기능을 제공해요</p>
         <p className="sub-title-p">책의 줄거리와 리뷰를 통해 관심 있는 도서를 살펴볼 수 있어요</p>

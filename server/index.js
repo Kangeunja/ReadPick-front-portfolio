@@ -19,6 +19,8 @@ const ALLOWED_ORIGIN = process.env.NODE_ENV === 'production' ? 'https://readpick
 const JAVA_SERVER_URL =
   process.env.NODE_ENV === 'production' ? 'https://readpick-backend-portfolio-c7rj.onrender.com/api' : 'http://localhost:8080/api';
 
+app.set('JAVA_SERVER_URL', JAVA_SERVER_URL);
+
 app.use(
   cors({
     origin: ALLOWED_ORIGIN,

@@ -43,3 +43,14 @@ export interface ReviewSummaryResponse {
   summary: string;
   tags: string[];
 }
+
+export interface ReviewRealtimeParams {
+  id: number;
+  bookIdx: number;
+  bookTitle: string;
+  bookCoverUrl: string;
+  reviewText: string;
+  userProfileUrl: string;
+  userNickname: string;
+  createdAt: string;
+}

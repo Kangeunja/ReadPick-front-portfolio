@@ -16,6 +16,9 @@ export const useBookActionsMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['isRecommend', bookIdxNumber] });
       queryClient.invalidateQueries({ queryKey: ['recommedCount', bookIdxNumber] });
+      queryClient.invalidateQueries({
+        queryKey: ['userGenreBook'],
+      });
     },
   });
 
@@ -24,6 +27,7 @@ export const useBookActionsMutation = () => {
     mutationFn: () => toggleBookmark(bookIdxNumber),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['isBookmark', bookIdxNumber] });
+      queryClient.invalidateQueries({ queryKey: ['favorit'] });
     },
   });
 

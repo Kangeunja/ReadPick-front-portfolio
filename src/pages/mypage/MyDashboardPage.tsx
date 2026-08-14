@@ -1,12 +1,15 @@
 import { useMemo } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 
-import { useCarousel } from 'hooks/useCarousel';
+import { useHorizontalScroll } from 'hooks/useHorizontalScroll';
 import { useFavoritImgQuery, useFavoritQuery } from './hooks/useUserInfoQueries';
 import { ROUTES } from 'constants/routes';
 import type { MyPageOutletContext } from 'types/mypage';
 import { BookDetail } from 'types/book';
 import { getProfileImage } from 'utils/image';
+
+import mainArrowLeft from 'assets/img/main-arrow-left.png';
+import mainArrowRight from 'assets/img/main-arrow-right.png';
 
 import FavoriteBookCard from './components/FavoriteBookCard';
 
@@ -14,10 +17,11 @@ const MyDashboardPage = () => {
   const navigate = useNavigate();
 
   const { userInfo } = useOutletContext<MyPageOutletContext>();
-  const { listRef, canScrollLeft, canScrollRight, scroll, handleScroll } = useCarousel();
 
   const { data: favoriteBooks = [] } = useFavoritQuery();
   const { data: favoriteBooksImg = [] } = useFavoritImgQuery();
+
+  const { scrollRef, showLeftArrow, showRightArrow, handleScrollButtonClick } = useHorizontalScroll([favoriteBooks]);
 
   const isDefaultImage = userInfo.fileName === 'default';
 
@@ -79,18 +83,22 @@ const MyDashboardPage = () => {
         <div className="flex flex-col">
           <div className="mb-5 text-left text-lg">찜목록</div>
 
-          <div className="relative">
-            {canScrollLeft && (
+          <div className="group relative">
+            {showLeftArrow && (
               <button
                 type="button"
-                className="mypage-nav-arrow pointer-events-auto left-[-50px] cursor-pointer"
-                onClick={() => scroll('left')}
+                aria-label="이전 키워드 보기"
+                onClick={() => handleScrollButtonClick(-1)}
+                className="absolute -left-8 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white opacity-0 shadow-md transition-all duration-200 hover:scale-105 hover:shadow-lg group-hover:opacity-100"
               >
-                ◀
+                <img src={mainArrowLeft} alt="" className="h-5 w-5 object-contain" />
               </button>
             )}
 
-            <div className="flex w-[700px] gap-[18px] overflow-x-hidden scroll-smooth" ref={listRef} onScroll={handleScroll}>
+            <div
+              ref={scrollRef}
+              className="flex w-[700px] gap-[18px] overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            >
               {favoriteBooks.length > 0 ? (
                 favoriteBooks.map((item: BookDetail) => (
                   <FavoriteBookCard
@@ -109,13 +117,14 @@ const MyDashboardPage = () => {
               )}
             </div>
 
-            {canScrollRight && favoriteBooks.length > 0 && (
+            {showRightArrow && (
               <button
                 type="button"
-                className="mypage-nav-arrow pointer-events-auto right-[-50px] cursor-pointer"
-                onClick={() => scroll('right')}
+                aria-label="다음 키워드 보기"
+                onClick={() => handleScrollButtonClick(1)}
+                className="absolute -right-8 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white opacity-0 shadow-md transition-all duration-200 hover:scale-105 hover:shadow-lg group-hover:opacity-100"
               >
-                ▶
+                <img src={mainArrowRight} alt="" className="h-5 w-5 object-contain" />
               </button>
             )}
           </div>

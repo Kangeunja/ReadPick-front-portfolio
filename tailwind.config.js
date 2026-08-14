@@ -7,6 +7,7 @@ module.exports = {
         'login-back': "url('/src/assets/img/login-background.png')",
         'login-woman': "url('/src/assets/img/login-woman.png')",
         'main-logo': "url('/src/assets/img/main-logo.png')",
+
         'icon-check-color': "url('/src/assets/img/icon-check-color.png')",
         'icon-check': "url('/src/assets/img/icon-check.png')",
         'main-book': "url('/src/assets/img/main-book.png')",
@@ -49,6 +50,11 @@ module.exports = {
         noto: ['Noto Sans KR', 'sans-serif'],
       },
 
+      spacing: {
+        'main-w': '1300px',
+        'container-w': '1200px',
+      },
+
       colors: {
         borderLightColor: '#c9c9c9',
         pointColor: '#248f8f',
@@ -57,13 +63,7 @@ module.exports = {
         textGrayColor: '#555555',
         btnhoverColor: '#1e7373',
         borderMColor: '#393939',
-
         borderLightGray: '#c4bfbf',
-      },
-
-      spacing: {
-        'main-w': '1300px',
-        'container-w': '1200px',
       },
 
       boxShadow: {

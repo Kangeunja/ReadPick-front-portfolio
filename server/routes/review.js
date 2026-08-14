@@ -81,7 +81,7 @@ const generateReviewAnalysisFromArray = async ({ reviews, title, author, genre }
 };
 
 // 종합 리뷰 요약 엔드포인트 (배열 입력)
-router.post('/review/summary-all', async (req, res) => {
+router.post('/summary-all', async (req, res) => {
   try {
     const { reviews, title, author, genre } = req.body || {};
 
@@ -160,7 +160,7 @@ const generateBookBuddyReply = async ({ title, author, category, history, messag
   }
 };
 
-router.post('/review/book-buddy', async (req, res) => {
+router.post('/book-buddy', async (req, res) => {
   try {
     const { title, author, category, history, message } = req.body || {};
 
@@ -184,6 +184,57 @@ router.post('/review/book-buddy', async (req, res) => {
     return res.status(500).json({
       success: false,
       message: 'AI 북버디 응답 생성 중 오류가 발생했습니다.',
+      error: error.message,
+    });
+  }
+});
+
+// 실시간 리뷰 조회 api
+router.get('/realtime', async (req, res) => {
+  try {
+    // 기존 백엔드 리뷰 API (또는 DB)에서 최신 리뷰 4개 가져오기
+    const reviewResponse = req.app.get('JAVA_SERVER_URL');
+    const reviewRes = await fetch(`${reviewResponse}/reviewUserView`);
+    const reviewData = await reviewRes.json();
+
+    // 각 리뷰의 bookIdx로 책api를 병렬 호출하여 데이터 조합
+    const recentReviews = Array.isArray(reviewData) ? reviewData : [];
+    const combinedReviews = await Promise.all(
+      recentReviews.slice(0, 4).map(async (review) => {
+        try {
+          // 각 책 정보 api
+          const [bookRes, imageRes] = await Promise.all([
+            fetch(`${reviewResponse}/bookOne?bookIdx=${review.bookIdx}`),
+            fetch(`${reviewResponse}/bookImageOne?bookIdx=${review.bookIdx}`),
+          ]);
+          // const bookRes = await fetch(`${reviewResponse}/bookOne?bookIdx=${review.bookIdx}`);
+          const bookData = await bookRes.json();
+          const imageData = await imageRes.json();
+
+          return {
+            id: review.userIdx,
+            bookIdx: bookData.bookIdx,
+            bookTitle: bookData.bookName,
+            bookCoverUrl: imageData.fileName,
+            reviewText: review.content,
+            userProfileUrl: review.fileName,
+            userNickname: review.nickName,
+            createdAt: review.regDate,
+          };
+        } catch (innerError) {
+          console.error(`[BFF] bookIdx(${review?.bookIdx}) 조회 실패:`, innerError.message);
+        }
+      }),
+    );
+    return res.status(200).json({
+      success: true,
+      data: combinedReviews,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: '실시간 리뷰를 가져오는 중 오류가 발생했습니다.',
       error: error.message,
     });
   }

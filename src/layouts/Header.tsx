@@ -64,9 +64,9 @@ const Header = ({ isMain }: HeaderProps) => {
   };
 
   return (
-    <div className={`border-gray-line h-[120px] w-full border ${isMain ? 'border-none' : ''}`}>
-      <div className="mx-auto my-[20px] flex h-[100px] w-main-w items-center justify-around">
-        <div className="h-[54px] w-[127px] cursor-pointer bg-main-logo bg-cover" onClick={() => navigate(ROUTES.MAIN)}></div>
+    <div className={`border-gray-linew-full ${isMain ? 'border-none' : ''} border`}>
+      <div className="mx-auto my-[20px] flex h-[50px] w-main-w items-center justify-between">
+        <div className="h-[50px] w-[127px] cursor-pointer bg-main-logo bg-cover" onClick={() => navigate(ROUTES.MAIN)}></div>
 
         <div className="mr-5 flex gap-[20px]">
           <div className="relative" ref={selectRef}>
@@ -97,9 +97,9 @@ const Header = ({ isMain }: HeaderProps) => {
           </div>
 
           <div
-            className={`flex h-[40px] w-[400px] items-center rounded-[10px] border border-borderLightGray ${isFocused ? 'border-borderMColor' : ''}`}
+            className={`flex h-[40px] w-[400px] items-center rounded-[10px] border border-borderLightGray p-[10px] ${isFocused ? 'border-borderMColor' : ''}`}
           >
-            <i className="ml-5 h-[20px] w-[20px] bg-icon-search bg-cover"></i>
+            <i className="h-[20px] w-[20px] bg-icon-search bg-cover"></i>
             <input
               className="ml-[15px] h-full w-[350px] border-none bg-transparent text-base text-borderMColor outline-none"
               type="search"
@@ -110,26 +110,33 @@ const Header = ({ isMain }: HeaderProps) => {
               onChange={(e) => setKeyword(e.target.value)}
               onKeyDown={handleSearchKeyDown}
             />
+
+            {keyword && (
+              <button
+                type="button"
+                onClick={() => setKeyword('')}
+                className="ml-2 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gray-200 text-[11px] font-bold text-gray-500 transition-colors hover:bg-gray-300 hover:text-gray-700"
+                aria-label="검색어 지우기"
+              >
+                ✕
+              </button>
+            )}
           </div>
         </div>
 
-        <div className="flex h-[50px] leading-[50px]">
+        <div className="flex h-[50px] items-center gap-[15px]">
           {user ? (
             <>
-              <button className="side-btn mr-[15px] hover:text-gray-700" onClick={() => navigate(ROUTES.MYPAGE)}>
-                마이페이지
-              </button>
-              <button className="side-btn mr-[15px] hover:text-gray-700" onClick={handleLogout}>
-                로그아웃
-              </button>
+              <button onClick={() => navigate(ROUTES.MYPAGE)}>마이페이지</button>
+              <button onClick={handleLogout}>로그아웃</button>
             </>
           ) : (
             <>
-              <button className="side-btn mr-[15px] hover:text-gray-700" onClick={() => navigate(ROUTES.LOGIN)}>
-                로그인
-              </button>
-              <button className="side-btn mr-[15px] hover:text-gray-700" onClick={() => navigate(ROUTES.MEMBER)}>
+              <button className="side-btn bg-[#e5e7eb] text-[#374151] hover:bg-[#d1d5db]" onClick={() => navigate(ROUTES.MEMBER)}>
                 회원가입
+              </button>
+              <button className="side-btn bg-[#111827] text-white hover:bg-[#1f2937]" onClick={() => navigate(ROUTES.LOGIN)}>
+                로그인
               </button>
             </>
           )}

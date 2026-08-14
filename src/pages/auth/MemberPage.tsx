@@ -11,9 +11,13 @@ const MemberPage = () => {
         className="mx-auto mb-[20px] mt-[80px] h-[54px] w-[127px] cursor-pointer bg-main-logo bg-cover laptop-lg:mt-[50px]"
         onClick={() => navigate(ROUTES.MAIN)}
       ></div>
-      <div className="mb-[30px] flex justify-center text-[14px]">
-        <p className="mr-[10px]">이미 회원이신가요?</p>
-        <button type="button" className="cursor-pointer border-none bg-transparent hover:underline" onClick={() => navigate(ROUTES.LOGIN)}>
+      <div className="mb-[30px] flex h-[30px] items-center justify-center">
+        <p className="mr-[15px] text-[15px]">이미 회원이신가요?</p>
+        <button
+          type="button"
+          className="rounded-[6px] bg-[#111827] px-[16px] py-[5px] text-[14px] font-medium text-white hover:bg-[#1f2937]"
+          onClick={() => navigate(ROUTES.LOGIN)}
+        >
           로그인
         </button>
       </div>
