@@ -28,10 +28,11 @@ export const useMainData = () => {
       return res.data.data;
     },
   });
-  const { data: realtimeData } = useReviewRealtimeQuery();
+  // const { data: realtimeData } = useReviewRealtimeQuery();
 
   const todayBookData = data?.todayBook;
   const keywordListData = data?.bsList || [];
+  const realtimeData = data?.realtime || [];
 
   const isLoading = isMainLoading || (isLogin && isGenreLoading); // 로그인한 사용자에 대해서만 장르별 도서 로딩 상태 고려
 

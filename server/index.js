@@ -1,6 +1,5 @@
 // 서버 설정 및 환경변수
 const path = require('path');
-console.log(path);
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 // API 키 로드 테스트 로그
@@ -11,6 +10,7 @@ const { createProxyMiddleware, fixRequestBody } = require('http-proxy-middleware
 const cors = require('cors');
 const reviewRouter = require('./routes/review');
 const fetchWithRetry = require('./utils/fetchWithRetry');
+const { getRealtimeReviews } = require('./routes/review');
 
 const app = express();
 
@@ -19,7 +19,7 @@ const ALLOWED_ORIGIN = process.env.NODE_ENV === 'production' ? 'https://readpick
 const JAVA_SERVER_URL =
   process.env.NODE_ENV === 'production' ? 'https://readpick-backend-portfolio-c7rj.onrender.com/api' : 'http://localhost:8080/api';
 
-app.set('JAVA_SERVER_URL', JAVA_SERVER_URL);
+// app.set('JAVA_SERVER_URL', JAVA_SERVER_URL);
 
 app.use(
   cors({
@@ -39,7 +39,7 @@ app.get('/api/main', async (req, res) => {
   console.log('[BFF 통합 요청] 메인 화면 데이터 조합 시작...');
 
   try {
-    const [todayBookRes, bsListRes] = await Promise.all([
+    const [todayBookRes, bsListRes, realtimeRes] = await Promise.all([
       fetchWithRetry(`${JAVA_SERVER_URL}/todayBook`)
         .then(async (r) => {
           if (!r.ok) return null;
@@ -50,6 +50,8 @@ app.get('/api/main', async (req, res) => {
       fetchWithRetry(`${JAVA_SERVER_URL}/bsList`)
         .then(async (r) => (r && r.ok ? r.json() : []))
         .catch(() => []),
+
+      getRealtimeReviews(JAVA_SERVER_URL, fetchWithRetry),
     ]);
 
     return res.status(200).json({
@@ -57,6 +59,7 @@ app.get('/api/main', async (req, res) => {
       data: {
         todayBook: todayBookRes?.data || todayBookRes || null,
         bsList: bsListRes?.data || bsListRes || [],
+        realtime: realtimeRes?.data || realtimeRes || [],
       },
     });
   } catch (error) {
