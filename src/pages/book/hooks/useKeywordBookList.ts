@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import { useKeywordBooksQuery } from 'hooks/queries/useKeywordQueries';
+import { useKeywordBooksQuery, useSubCategoryQuery } from 'hooks/queries/useKeywordQueries';
 import { useBookSearchParams } from 'hooks/useBookSearchParams';
 import { ROUTES } from 'constants/routes';
 
@@ -9,6 +9,7 @@ export const useKeywordBookList = () => {
 
   // URL 파라미터 추출
   const { bsIdx, bssIdx, option, keyword } = useBookSearchParams();
+  const { data: keywordList = [] } = useSubCategoryQuery();
   const { data, isLoading } = useKeywordBooksQuery({ bsIdx, bssIdx, option, keyword });
 
   // ===== 이벤트 핸들러 =====
@@ -27,6 +28,7 @@ export const useKeywordBookList = () => {
     bsIdx,
     bssIdx,
     keyword,
+    keywordList,
     books: data?.books || [],
     images: data?.images || [],
     isLoading,

@@ -5,12 +5,17 @@ import { useKeywordBookList } from './hooks/useKeywordBookList';
 import { BookItem } from 'types/book';
 
 const KeywordBookListPage = () => {
-  const { bsIdx, bssIdx, keyword, books, images, isLoading, handleCategoryChange, goToDetail } = useKeywordBookList();
+  const { bsIdx, bssIdx, keyword, keywordList, books, images, isLoading, handleCategoryChange, goToDetail } = useKeywordBookList();
+
+  if (keywordList.length === 0 && isLoading) {
+    return <div className="w-full py-[200px] text-center text-gray-500">페이지를 불러오는 중입니다... 📚</div>;
+  }
 
   return (
     <div className="w-full">
       <div className="mx-auto w-main-w laptop-lg:w-[1240px]">
         <KeywordLayout
+          keywordList={keywordList}
           selectedBsIdx={bsIdx}
           selectedBssIdx={bssIdx}
           onBsClick={(idx) => handleCategoryChange('bs', idx)}

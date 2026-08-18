@@ -13,8 +13,13 @@ export const getProfileImage = (fileName: any) => {
   }
 
   // 로컬 개발 환경일 때
-  if (window.location.hostname === 'localhost') {
-    return `http://localhost:8080/ReadPickImages/${fileName}`;
+  // if (window.location.hostname === 'localhost') {
+  //   return `http://localhost:8080/ReadPickImages/${fileName}`;
+  // }
+
+  // 3. 기존 백엔드/외부 URL 형태 그대로 들어오는 경우 예외 처리
+  if (fileName.startsWith('http://') || fileName.startsWith('https://')) {
+    return fileName;
   }
 
   // Render 배포 서버 환경일 때

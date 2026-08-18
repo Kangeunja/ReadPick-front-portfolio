@@ -3,21 +3,18 @@ import { useState } from 'react';
 import TopMenu from './TopMenu';
 import KeywordNav from './KeywordNav';
 
-import { useSubCategoryQuery } from 'hooks/queries/useKeywordQueries';
-
 type KeywordLayoutProps = {
+  keywordList: [];
   selectedBsIdx: number | null;
   selectedBssIdx: number | null;
   onBsClick: (bsIdx: number) => void;
   onBssClick: (bssIdx: number) => void;
 };
 
-const KeywordLayout = ({ selectedBsIdx, selectedBssIdx, onBsClick, onBssClick }: KeywordLayoutProps) => {
+const KeywordLayout = ({ keywordList, selectedBsIdx, selectedBssIdx, onBsClick, onBssClick }: KeywordLayoutProps) => {
   // 현재 펼쳐진 대분류 ID
   const [keywordToggle, setKeywordToggle] = useState<number | null>(selectedBsIdx);
   const [prevSelectedBsIdx, setPrevSelectedBsIdx] = useState<number | null>(selectedBsIdx);
-
-  const { data: keywordList = [] } = useSubCategoryQuery();
 
   if (selectedBsIdx !== prevSelectedBsIdx) {
     setKeywordToggle(selectedBsIdx);
