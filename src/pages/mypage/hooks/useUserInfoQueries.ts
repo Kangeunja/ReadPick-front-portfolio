@@ -44,6 +44,7 @@ export const useDeleteProfileImageMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['userInfo'] });
       queryClient.invalidateQueries({ queryKey: ['reviewList'] });
+      queryClient.invalidateQueries({ queryKey: ['mainData'] });
     },
   });
 };
@@ -57,6 +58,7 @@ export const useUpdateProfileMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['userInfo'] });
       queryClient.invalidateQueries({ queryKey: ['reviewList'] });
+      queryClient.invalidateQueries({ queryKey: ['mainData'] });
     },
   });
 };
@@ -78,6 +80,7 @@ export const useUpdateUserInfoMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['userInfo'] });
       queryClient.invalidateQueries({ queryKey: ['reviewList'] });
+      queryClient.invalidateQueries({ queryKey: ['mainData'] });
     },
   });
 };
