@@ -10,13 +10,12 @@ export const useKeywordBookList = () => {
   // URL 파라미터 추출
   const { bsIdx, bssIdx, option, keyword } = useBookSearchParams();
   const { data: keywordList = [], isLoading: isKeywordLoading } = useSubCategoryQuery();
-  const { data, isLoading, isFetching } = useKeywordBooksQuery({ bsIdx, bssIdx, option, keyword });
-
-  const isBookLoading = isLoading || isFetching;
+  const { data: bookList, isFetching, isPending } = useKeywordBooksQuery({ bsIdx, bssIdx, option, keyword });
+  const isBookLoading = !bookList || isFetching || isPending;
 
   // ===== 이벤트 핸들러 =====
   const handleCategoryChange = (type: string, idx: number) => {
-    const path = type === 'bs' ? `${ROUTES.KEYWORD}/?bsIdx=${idx}` : `/member/keyword?bsIdx=${bsIdx}&bssIdx=${idx}`;
+    const path = type === 'bs' ? `${ROUTES.KEYWORD}?bsIdx=${idx}` : `${ROUTES.KEYWORD}?bsIdx=${bsIdx}&bssIdx=${idx}`;
     navigate(path);
   };
 
@@ -31,8 +30,8 @@ export const useKeywordBookList = () => {
     bssIdx,
     keyword,
     keywordList,
-    books: data?.books || [],
-    images: data?.images || [],
+    books: bookList?.books || [],
+    images: bookList?.images || [],
     isKeywordLoading,
     isBookLoading,
     handleCategoryChange,

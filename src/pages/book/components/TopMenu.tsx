@@ -51,7 +51,7 @@ const TopMenu = ({ keywordList, selectedBsIdx, selectedBssIdx, onBsClick, onBssC
             </div>
 
             {isOpen && (
-              <ul className="absolute left-[-10px] top-[30px] z-[10] box-border w-[140px] border border-pointColor bg-white p-[15px] text-[13px] text-textGrayColor">
+              <ul className="absolute top-[30px] z-[10] box-border w-max min-w-[170px] border border-pointColor bg-white p-[15px] text-[13px] text-textGrayColor">
                 {selectedBs?.bssList.map((item) => (
                   <li
                     key={item.bssIdx}

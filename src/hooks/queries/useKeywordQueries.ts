@@ -20,6 +20,8 @@ export const useBsListQuery = () => {
 
 // 키워드/검색 기반 책 목록 조회
 export const useKeywordBooksQuery = ({ bsIdx, bssIdx, option, keyword }: KeywordParams) => {
+  const isEnabled = Boolean((option && keyword) || bsIdx || bssIdx);
+
   return useQuery({
     queryKey: ['keywordBooks', { bsIdx, bssIdx, option, keyword }],
     queryFn: async () => {
@@ -39,5 +41,6 @@ export const useKeywordBooksQuery = ({ bsIdx, bssIdx, option, keyword }: Keyword
 
       return { books: [], images: [] }; // 기본값으로 빈 배열 반환
     },
+    enabled: isEnabled,
   });
 };

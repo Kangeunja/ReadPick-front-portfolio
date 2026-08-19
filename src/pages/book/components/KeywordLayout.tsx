@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import TopMenu from './TopMenu';
 import KeywordNav from './KeywordNav';
@@ -14,12 +14,10 @@ type KeywordLayoutProps = {
 const KeywordLayout = ({ keywordList, selectedBsIdx, selectedBssIdx, onBsClick, onBssClick }: KeywordLayoutProps) => {
   // 현재 펼쳐진 대분류 ID
   const [keywordToggle, setKeywordToggle] = useState<number | null>(selectedBsIdx);
-  const [prevSelectedBsIdx, setPrevSelectedBsIdx] = useState<number | null>(selectedBsIdx);
 
-  if (selectedBsIdx !== prevSelectedBsIdx) {
+  useEffect(() => {
     setKeywordToggle(selectedBsIdx);
-    setPrevSelectedBsIdx(selectedBsIdx);
-  }
+  }, [selectedBsIdx]);
 
   return (
     <>

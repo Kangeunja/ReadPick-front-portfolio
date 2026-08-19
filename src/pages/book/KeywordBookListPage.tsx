@@ -23,12 +23,12 @@ const KeywordBookListPage = () => {
           keywordList={keywordList}
           selectedBsIdx={bsIdx}
           selectedBssIdx={bssIdx}
-          onBsClick={(idx) => handleCategoryChange('bs', idx)}
-          onBssClick={(idx) => handleCategoryChange('bss', idx)}
+          onBsClick={(bsIdx) => handleCategoryChange('bs', bsIdx)}
+          onBssClick={(bssIdx) => handleCategoryChange('bss', bssIdx)}
         />
 
-        <div className="float-right w-[980px]">
-          <div className="mb-[20px] w-full border-b border-borderGrayColor pb-[5px] font-medium">
+        <div className="float-right w-[930px]">
+          <div className="mb-[20px] mt-[10px] w-full border-b border-borderGrayColor pb-[5px] font-medium">
             <p className="text-[14px]">
               전체<span className="font-bold text-pointColor">{books.length}</span>건
             </p>
@@ -36,11 +36,11 @@ const KeywordBookListPage = () => {
           {isBookLoading ? (
             <p className="w-full py-[100px] text-center text-gray-500">도서를 불러오는 중입니다... 📚</p>
           ) : (
-            <div className="mb-[200px] flex flex-wrap gap-[45px]">
+            <div className="mb-[200px] flex flex-wrap gap-[32px]">
               {books.length > 0 ? (
                 books.map((item: BookItem, idx: number) => (
                   <BookCard
-                    key={idx}
+                    key={item.bookIdx}
                     item={item}
                     imgUrl={item.bookImageName || images[idx]?.fileName}
                     onCardClick={() => goToDetail(item.bookIdx)}
