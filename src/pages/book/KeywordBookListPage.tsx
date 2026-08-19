@@ -8,56 +8,52 @@ const KeywordBookListPage = () => {
   const { bsIdx, bssIdx, keyword, keywordList, books, images, isKeywordLoading, isBookLoading, handleCategoryChange, goToDetail } =
     useKeywordBookList();
 
-  // if (keywordList.length === 0 || isLoading) {
-  //   return <div className="w-full py-[200px] text-center text-gray-500">페이지를 불러오는 중입니다... 📚</div>;
-  // }
+  if (isKeywordLoading) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <div className="text-gray-500">페이지를 불러오는 중입니다... 📚</div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
       <div className="mx-auto w-main-w laptop-lg:w-[1240px]">
-        {isKeywordLoading ? (
-          <div className="flex h-screen w-full items-center justify-center">
-            <div className="text-gray-500">페이지를 불러오는 중입니다... 📚</div>
-          </div>
-        ) : (
-          <>
-            <KeywordLayout
-              keywordList={keywordList}
-              selectedBsIdx={bsIdx}
-              selectedBssIdx={bssIdx}
-              onBsClick={(idx) => handleCategoryChange('bs', idx)}
-              onBssClick={(idx) => handleCategoryChange('bss', idx)}
-            />
+        <KeywordLayout
+          keywordList={keywordList}
+          selectedBsIdx={bsIdx}
+          selectedBssIdx={bssIdx}
+          onBsClick={(idx) => handleCategoryChange('bs', idx)}
+          onBssClick={(idx) => handleCategoryChange('bss', idx)}
+        />
 
-            <div className="float-right w-[980px]">
-              <div className="mb-[20px] w-full border-b border-borderGrayColor pb-[5px] font-medium">
-                <p className="text-[14px]">
-                  전체<span className="font-bold text-pointColor">{books.length}</span>건
-                </p>
-              </div>
-              {isBookLoading ? (
-                <p className="w-full py-[100px] text-center text-gray-500">도서를 불러오는 중입니다... 📚</p>
+        <div className="float-right w-[980px]">
+          <div className="mb-[20px] w-full border-b border-borderGrayColor pb-[5px] font-medium">
+            <p className="text-[14px]">
+              전체<span className="font-bold text-pointColor">{books.length}</span>건
+            </p>
+          </div>
+          {isKeywordLoading && isBookLoading ? (
+            <p className="w-full py-[100px] text-center text-gray-500">도서를 불러오는 중입니다... 📚</p>
+          ) : (
+            <div className="mb-[200px] flex flex-wrap gap-[45px]">
+              {books.length > 0 ? (
+                books.map((item: BookItem, idx: number) => (
+                  <BookCard
+                    key={idx}
+                    item={item}
+                    imgUrl={item.bookImageName || images[idx]?.fileName}
+                    onCardClick={() => goToDetail(item.bookIdx)}
+                  />
+                ))
               ) : (
-                <div className="mb-[200px] flex flex-wrap gap-[45px]">
-                  {books.length > 0 ? (
-                    books.map((item: BookItem, idx: number) => (
-                      <BookCard
-                        key={idx}
-                        item={item}
-                        imgUrl={item.bookImageName || images[idx]?.fileName}
-                        onCardClick={() => goToDetail(item.bookIdx)}
-                      />
-                    ))
-                  ) : (
-                    <p className="mp-[100px] w-full text-center text-[14px] text-[#555555]">
-                      {keyword ? '검색 결과가 없습니다.' : '도서 데이터가 없습니다.'}
-                    </p>
-                  )}
-                </div>
+                <p className="mp-[100px] w-full text-center text-[14px] text-[#555555]">
+                  {keyword ? '검색 결과가 없습니다.' : '도서 데이터가 없습니다.'}
+                </p>
               )}
             </div>
-          </>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
