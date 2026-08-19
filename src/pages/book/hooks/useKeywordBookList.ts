@@ -10,7 +10,9 @@ export const useKeywordBookList = () => {
   // URL 파라미터 추출
   const { bsIdx, bssIdx, option, keyword } = useBookSearchParams();
   const { data: keywordList = [], isLoading: isKeywordLoading } = useSubCategoryQuery();
-  const { data, isLoading: isBookLoading } = useKeywordBooksQuery({ bsIdx, bssIdx, option, keyword });
+  const { data, isLoading, isFetching } = useKeywordBooksQuery({ bsIdx, bssIdx, option, keyword });
+
+  const isBookLoading = isLoading || isFetching;
 
   // ===== 이벤트 핸들러 =====
   const handleCategoryChange = (type: string, idx: number) => {
