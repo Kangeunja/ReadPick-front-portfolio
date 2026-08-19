@@ -5,22 +5,27 @@ import { useKeywordBookList } from './hooks/useKeywordBookList';
 import { BookItem } from 'types/book';
 
 const KeywordBookListPage = () => {
-  const { bsIdx, bssIdx, keyword, keywordList, books, images, isLoading, handleCategoryChange, goToDetail } = useKeywordBookList();
+  const { bsIdx, bssIdx, keyword, keywordList, books, images, isKeywordLoading, isBookLoading, handleCategoryChange, goToDetail } =
+    useKeywordBookList();
 
-  if (keywordList.length === 0 && isLoading) {
-    return <div className="w-full py-[200px] text-center text-gray-500">페이지를 불러오는 중입니다... 📚</div>;
-  }
+  // if (keywordList.length === 0 || isLoading) {
+  //   return <div className="w-full py-[200px] text-center text-gray-500">페이지를 불러오는 중입니다... 📚</div>;
+  // }
 
   return (
     <div className="w-full">
       <div className="mx-auto w-main-w laptop-lg:w-[1240px]">
-        <KeywordLayout
-          keywordList={keywordList}
-          selectedBsIdx={bsIdx}
-          selectedBssIdx={bssIdx}
-          onBsClick={(idx) => handleCategoryChange('bs', idx)}
-          onBssClick={(idx) => handleCategoryChange('bss', idx)}
-        />
+        {isKeywordLoading ? (
+          <div className="w-full py-[200px] text-center text-gray-500">페이지를 불러오는 중입니다... 📚</div>
+        ) : (
+          <KeywordLayout
+            keywordList={keywordList}
+            selectedBsIdx={bsIdx}
+            selectedBssIdx={bssIdx}
+            onBsClick={(idx) => handleCategoryChange('bs', idx)}
+            onBssClick={(idx) => handleCategoryChange('bss', idx)}
+          />
+        )}
 
         <div className="float-right w-[980px]">
           <div className="mb-[20px] w-full border-b border-borderGrayColor pb-[5px] font-medium">
@@ -28,7 +33,7 @@ const KeywordBookListPage = () => {
               전체<span className="font-bold text-pointColor">{books.length}</span>건
             </p>
           </div>
-          {isLoading ? (
+          {isBookLoading ? (
             <p className="w-full py-[100px] text-center text-gray-500">도서를 불러오는 중입니다... 📚</p>
           ) : (
             <div className="mb-[200px] flex flex-wrap gap-[45px]">

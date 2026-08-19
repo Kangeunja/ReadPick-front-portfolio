@@ -9,8 +9,8 @@ export const useKeywordBookList = () => {
 
   // URL 파라미터 추출
   const { bsIdx, bssIdx, option, keyword } = useBookSearchParams();
-  const { data: keywordList = [] } = useSubCategoryQuery();
-  const { data, isLoading } = useKeywordBooksQuery({ bsIdx, bssIdx, option, keyword });
+  const { data: keywordList = [], isLoading: isKeywordLoading } = useSubCategoryQuery();
+  const { data, isLoading: isBookLoading } = useKeywordBooksQuery({ bsIdx, bssIdx, option, keyword });
 
   // ===== 이벤트 핸들러 =====
   const handleCategoryChange = (type: string, idx: number) => {
@@ -31,7 +31,8 @@ export const useKeywordBookList = () => {
     keywordList,
     books: data?.books || [],
     images: data?.images || [],
-    isLoading,
+    isKeywordLoading,
+    isBookLoading,
     handleCategoryChange,
     goToDetail,
   };
