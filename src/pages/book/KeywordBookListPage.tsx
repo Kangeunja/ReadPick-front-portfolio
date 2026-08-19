@@ -33,7 +33,7 @@ const KeywordBookListPage = () => {
               전체<span className="font-bold text-pointColor">{books.length}</span>건
             </p>
           </div>
-          {isKeywordLoading && isBookLoading ? (
+          {isBookLoading ? (
             <p className="w-full py-[100px] text-center text-gray-500">도서를 불러오는 중입니다... 📚</p>
           ) : (
             <div className="mb-[200px] flex flex-wrap gap-[45px]">
