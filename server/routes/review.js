@@ -1,5 +1,17 @@
 const express = require('express');
 const Groq = require('groq-sdk');
+
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+groq.models
+  .list()
+  .then((models) => {
+    console.log(
+      '현재 사용 가능한 Groq 모델 목록:',
+      models.data.map((m) => m.id),
+    );
+  })
+  .catch(console.error);
+
 const router = express.Router();
 
 // 환경변수 api 키 확인 변수
@@ -59,7 +71,7 @@ const generateReviewAnalysisFromArray = async ({ reviews, title, author, genre }
   요청사항:
   1. 전체 리뷰들을 종합하여 핵심을 3~4문장으로 요약해 주세요.
   2. 리뷰들의 분위기와 반복되는 키워드를 바탕으로 태그 5개를 추천해 주세요.
-  3. 반드시 JSON 형식으로만 응답해 주세요.
+  3. 반드시 오직 JSON 형식으로만 응답해 주세요. 다른 설명은 하지 마세요.
   4. JSON 구조는 다음과 같아야 합니다:
   {
     "summary": "요약 내용",
@@ -70,8 +82,8 @@ const generateReviewAnalysisFromArray = async ({ reviews, title, author, genre }
 
   const completion = await groq.chat.completions.create({
     messages: [{ role: 'user', content: prompt }],
-    model: 'llama-3.3-70b-versatile',
-    response_format: { type: 'json_object' },
+    model: 'openai/gpt-oss-120b',
+    // response_format: { type: 'json_object' },
   });
 
   const responseText = completion.choices[0]?.message?.content;
@@ -143,8 +155,8 @@ const generateBookBuddyReply = async ({ title, author, category, history, messag
   const prompt = buildBookBuddyPrompt({ title, author, category, history, message });
   const completion = await groq.chat.completions.create({
     messages: [{ role: 'user', content: prompt }],
-    model: 'llama-3.3-70b-versatile',
-    response_format: { type: 'json_object' },
+    model: 'openai/gpt-oss-120b',
+    // response_format: { type: 'json_object' },
   });
 
   // ```json등을 제거해 파싱하기 편하게 정리
