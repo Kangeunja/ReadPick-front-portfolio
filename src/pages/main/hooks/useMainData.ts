@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 
@@ -7,9 +7,7 @@ import axiosInstance from 'api/axiosInstance';
 import { ROUTES } from 'constants/routes';
 import { useAuthStore } from 'store/authStore';
 
-import { useBsListQuery } from 'hooks/queries/useKeywordQueries';
-import { useGenreBooksQuery, useTodayBookQuery } from 'hooks/queries/useBookQueries';
-import { useReviewRealtimeQuery } from './useReviewRealtimeQuery';
+import { useGenreBooksQuery } from 'hooks/queries/useBookQueries';
 
 export const useMainData = () => {
   const navigate = useNavigate();
@@ -20,21 +18,20 @@ export const useMainData = () => {
 
   // const { data: todayBookData, isLoading: isTodayLoading } = useTodayBookQuery();
   // const { data: keywordListData = [], isLoading: isKeywordLoading } = useBsListQuery();
-  const { data: genreBookData = [], isLoading: isGenreLoading } = useGenreBooksQuery(isLogin);
-  const { data, isLoading: isMainLoading } = useQuery({
+  // const { data: realtimeData } = useReviewRealtimeQuery();
+
+  const { data: genreBookData = [], isLoading: isGenreLoading } = useGenreBooksQuery(isLogin); // 추천 도서 데이터
+  const { data: mainContentData, isLoading: isMainLoading } = useQuery({
     queryKey: ['mainData'],
     queryFn: async () => {
       const res = await axiosInstance.get('/main');
       return res.data.data;
     },
   });
-  // const { data: realtimeData } = useReviewRealtimeQuery();
 
-  const todayBookData = data?.todayBook;
-  const keywordListData = data?.bsList || [];
-  const realtimeData = data?.realtime || [];
-
-  const isLoading = isMainLoading || (isLogin && isGenreLoading); // 로그인한 사용자에 대해서만 장르별 도서 로딩 상태 고려
+  const todayBookData = mainContentData?.todayBook; // 오늘의 책 데이터
+  const keywordListData = mainContentData?.bsList || []; // 키워드 리스트 데이터
+  const realtimeData = mainContentData?.realtime || []; // 실시간 리뷰 데이터
 
   // 상세 페이지 이동함수
   const gotoDetail = (bookIdx: number, bsIdx: number) => {
@@ -62,7 +59,7 @@ export const useMainData = () => {
     keywordListData,
     genreBookData,
     realtimeData,
-    isLoading,
+    isGenreLoading,
     isMainLoading,
     selectedKeywordIdx,
     gotoDetail,
