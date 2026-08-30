@@ -40,13 +40,13 @@ const MainLayout = () => {
   }, [data, isSuccess, isError, isFetching, setUser, logout, setInitialized]);
 
   // 전역 장치
-  if (!isInitialized || isFetching) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <p className="font-gowun text-[20px] text-[#454545]">로그인 상태 확인 중... 🔐</p>
-      </div>
-    );
-  }
+  // if (!isInitialized || isFetching) {
+  //   return (
+  //     <div className="flex h-screen w-full items-center justify-center">
+  //       <p className="font-gowun text-[20px] text-[#454545]">로그인 상태 확인 중... 🔐</p>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="flex h-screen flex-col">

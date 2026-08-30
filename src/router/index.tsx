@@ -3,8 +3,8 @@ import Layout from 'layouts/MainLayout';
 import Main from 'pages/main/MainPage';
 import MemberLogin from 'pages/auth/MemberLoginPage';
 import KeywordBookListPage from 'pages/book/KeywordBookListPage';
-import KeywordBookDetailPage from 'pages/book/KeywordBookDetailPage';
-import MyPage from 'pages/mypage/MyPage';
+// import KeywordBookDetailPage from 'pages/book/KeywordBookDetailPage';
+// import MyPage from 'pages/mypage/MyPage';
 import { RecoilRoot } from 'recoil';
 import Admin from 'components/admin/Admin';
 import AdminMain from 'components/admin/AdminMain';
@@ -20,6 +20,10 @@ import { USER_ROLE } from 'constants/role';
 import ProtectedRoute from './ProtectedRoute';
 import LoginPage from 'pages/auth/LoginPage';
 import MessagePopup from 'components/popup/MessagePopup';
+import { lazy, Suspense } from 'react';
+
+const MyPage = lazy(() => import('pages/mypage/MyPage'));
+const KeywordBookDetailPage = lazy(() => import('pages/book/KeywordBookDetailPage'));
 
 const BrowserRouterDom = () => {
   return (
@@ -27,39 +31,40 @@ const BrowserRouterDom = () => {
       <BrowserRouter>
         <ScrollTop />
         <MessagePopup />
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path={ROUTES.MAIN} element={<Main />}></Route>
+        <Suspense>
+          <Routes>
+            <Route element={<Layout />}>
+              <Route path={ROUTES.MAIN} element={<Main />}></Route>
+              <Route path={ROUTES.KEYWORD} element={<KeywordBookListPage />}></Route>
+              <Route path={ROUTES.KEYWORDDETAIL} element={<KeywordBookDetailPage />}></Route>
 
-            <Route path={ROUTES.KEYWORD} element={<KeywordBookListPage />}></Route>
-            <Route path={ROUTES.KEYWORDDETAIL} element={<KeywordBookDetailPage />}></Route>
-
-            <Route
-              path={ROUTES.MYPAGE}
-              element={
-                <ProtectedRoute>
-                  <MyPage />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<MyPageHome />} />
-              <Route path={ROUTES.PROFILE} element={<ProfileManage />} />
-              <Route path={ROUTES.PWCONFIRM} element={<PasswordConfirm />}></Route>
-              <Route path={ROUTES.MYPAGEREVIEW} element={<MyPageReview />}></Route>
+              <Route
+                path={ROUTES.MYPAGE}
+                element={
+                  <ProtectedRoute>
+                    <MyPage />
+                  </ProtectedRoute>
+                }
+              >
+                <Route index element={<MyPageHome />} />
+                <Route path={ROUTES.PROFILE} element={<ProfileManage />} />
+                <Route path={ROUTES.PWCONFIRM} element={<PasswordConfirm />}></Route>
+                <Route path={ROUTES.MYPAGEREVIEW} element={<MyPageReview />}></Route>
+              </Route>
             </Route>
-          </Route>
 
-          {/* 로그인 페이지 */}
-          <Route path={ROUTES.LOGIN} element={<LoginPage />}></Route>
+            {/* 로그인 페이지 */}
+            <Route path={ROUTES.LOGIN} element={<LoginPage />}></Route>
 
-          <Route path={ROUTES.MEMBER} element={<Member />}>
-            <Route index element={<MemberAgreement />} />
-            <Route path={ROUTES.MEMBERLOGIN} element={<MemberLogin />} />
-          </Route>
+            <Route path={ROUTES.MEMBER} element={<Member />}>
+              <Route index element={<MemberAgreement />} />
+              <Route path={ROUTES.MEMBERLOGIN} element={<MemberLogin />} />
+            </Route>
 
-          <Route path={USER_ROLE.ADMIN} element={<Admin />}></Route>
-          <Route path={USER_ROLE.USER} element={<AdminMain />}></Route>
-        </Routes>
+            <Route path={USER_ROLE.ADMIN} element={<Admin />}></Route>
+            <Route path={USER_ROLE.USER} element={<AdminMain />}></Route>
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </RecoilRoot>
   );
