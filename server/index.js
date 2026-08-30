@@ -39,7 +39,7 @@ app.get('/api/main', async (req, res) => {
   console.log('[BFF 통합 요청] 메인 화면 데이터 조합 시작...');
 
   try {
-    const [todayBookRes, bsListRes, realtimeRes] = await Promise.all([
+    const [todayBookRes, bsListRes] = await Promise.all([
       fetchWithRetry(`${JAVA_SERVER_URL}/todayBook`)
         .then(async (r) => {
           if (!r.ok) return null;
@@ -51,7 +51,7 @@ app.get('/api/main', async (req, res) => {
         .then(async (r) => (r && r.ok ? r.json() : []))
         .catch(() => []),
 
-      getRealtimeReviews(JAVA_SERVER_URL, fetchWithRetry),
+      // getRealtimeReviews(JAVA_SERVER_URL, fetchWithRetry),
     ]);
 
     return res.status(200).json({
@@ -59,7 +59,7 @@ app.get('/api/main', async (req, res) => {
       data: {
         todayBook: todayBookRes?.data || todayBookRes || null,
         bsList: bsListRes?.data || bsListRes || [],
-        realtime: realtimeRes?.data || realtimeRes || [],
+        // realtime: realtimeRes?.data || realtimeRes || [],
       },
     });
   } catch (error) {

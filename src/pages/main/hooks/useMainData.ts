@@ -8,6 +8,7 @@ import { ROUTES } from 'constants/routes';
 import { useAuthStore } from 'store/authStore';
 
 import { useGenreBooksQuery } from 'hooks/queries/useBookQueries';
+import { useReviewRealtimeQuery } from './useReviewRealtimeQuery';
 
 export const useMainData = () => {
   const navigate = useNavigate();
@@ -18,9 +19,7 @@ export const useMainData = () => {
 
   // const { data: todayBookData, isLoading: isTodayLoading } = useTodayBookQuery();
   // const { data: keywordListData = [], isLoading: isKeywordLoading } = useBsListQuery();
-  // const { data: realtimeData } = useReviewRealtimeQuery();
 
-  const { data: genreBookData = [], isLoading: isGenreLoading } = useGenreBooksQuery(isLogin); // 추천 도서 데이터
   const { data: mainContentData, isLoading: isMainLoading } = useQuery({
     queryKey: ['mainData'],
     queryFn: async () => {
@@ -28,10 +27,11 @@ export const useMainData = () => {
       return res.data.data;
     },
   });
+  const { data: realtimeData = [], isLoading: isRealLoading } = useReviewRealtimeQuery({ enabled: !isMainLoading }); // 실시간 리뷰 데이터
+  const { data: genreBookData = [], isLoading: isGenreLoading } = useGenreBooksQuery(isLogin, { enabled: !isMainLoading }); // 추천 도서 데이터
 
   const todayBookData = mainContentData?.todayBook; // 오늘의 책 데이터
   const keywordListData = useMemo(() => mainContentData?.bsList || [], [mainContentData?.bsList]); // 키워드 리스트 데이터
-  const realtimeData = useMemo(() => mainContentData?.realtime || [], [mainContentData?.realtime]); // 실시간 리뷰 데이터
 
   // 상세 페이지 이동함수
   const gotoDetail = useCallback(
@@ -65,6 +65,7 @@ export const useMainData = () => {
     keywordListData,
     genreBookData,
     realtimeData,
+    isRealLoading,
     isGenreLoading,
     isMainLoading,
     selectedKeywordIdx,

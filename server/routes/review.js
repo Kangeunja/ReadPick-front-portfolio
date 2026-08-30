@@ -1,5 +1,6 @@
 const express = require('express');
 const Groq = require('groq-sdk');
+const fetchWithRetry = require('../utils/fetchWithRetry');
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 groq.models
@@ -244,5 +245,26 @@ const getRealtimeReviews = async (javaServerUrl, fetchWithRetry) => {
   }
 };
 
+router.get('/realtime', async (req, res) => {
+  try {
+    const JAVA_SERVER_URL =
+      process.env.NODE_ENV === 'production' ? 'https://readpick-backend-portfolio-c7rj.onrender.com/api' : 'http://localhost:8080/api';
+
+    const realtimeData = await getRealtimeReviews(JAVA_SERVER_URL, fetchWithRetry);
+
+    return res.status(200).json({
+      success: true,
+      data: realtimeData,
+    });
+  } catch (error) {
+    console.error('[BFF] /api/review/realtime 처리 오류:', error.message);
+    return res.status(500).json({
+      success: false,
+      message: '실시간 리뷰를 가져오는 중 오류가 발생했습니다.',
+      data: [],
+    });
+  }
+});
+
 module.exports = router;
-module.exports.getRealtimeReviews = getRealtimeReviews;
+// module.exports.getRealtimeReviews = getRealtimeReviews;

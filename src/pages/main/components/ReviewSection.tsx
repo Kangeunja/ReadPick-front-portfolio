@@ -9,13 +9,13 @@ import 'swiper/css';
 import 'swiper/css/free-mode';
 
 type ReviewSectionData = {
-  isMainLoading: boolean;
+  isRealLoading: boolean;
   realtimeData: ReviewRealtimeParams[];
 };
 
 const SKELETON_COUNT = [1, 2, 3, 4, 5];
 
-const ReviewSection = React.memo(({ isMainLoading, realtimeData }: ReviewSectionData) => {
+const ReviewSection = React.memo(({ isRealLoading, realtimeData }: ReviewSectionData) => {
   // 💡 데이터가 적을 때 무한 루프가 끊기는 것을 방지하기 위해 확장
   const displayReviews = useMemo(() => {
     if (!realtimeData || realtimeData.length === 0) return [];
@@ -29,7 +29,7 @@ const ReviewSection = React.memo(({ isMainLoading, realtimeData }: ReviewSection
           <h2 className="sub-title-label text-white">ReadPick 독자들의 실시간 리뷰</h2>
           <p className="sub-title-p text-purple-200/80">지금 이 순간 올라온 독자 리뷰를 한눈에 확인해보세요</p>
         </div>
-        {isMainLoading ? (
+        {isRealLoading ? (
           <div className="flex w-full gap-[20px] overflow-hidden !py-2">
             {SKELETON_COUNT.map((idx) => (
               <div

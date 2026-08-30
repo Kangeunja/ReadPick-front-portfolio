@@ -18,6 +18,7 @@ const MainPage = () => {
     keywordListData,
     genreBookData,
     realtimeData,
+    isRealLoading,
     isGenreLoading,
     isMainLoading,
     selectedKeywordIdx,
@@ -90,7 +91,7 @@ const MainPage = () => {
       <MainFeatures />
 
       <Suspense fallback={null}>
-        <ReviewSection isMainLoading={isMainLoading} realtimeData={realtimeData} />
+        <ReviewSection isRealLoading={isRealLoading} realtimeData={realtimeData} />
       </Suspense>
 
       <RankingSection isGenreLoading={isGenreLoading} genreBookData={genreBookData} isLogin={isLogin} gotoDetail={gotoDetail} />
