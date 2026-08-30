@@ -16,6 +16,7 @@ import { Autoplay, FreeMode } from 'swiper/modules';
 
 import 'swiper/css';
 import 'swiper/css/free-mode';
+import skeletonImg from 'assets/img/skeleton-cover.png';
 
 const MainPage = () => {
   const {
@@ -25,6 +26,7 @@ const MainPage = () => {
     genreBookData,
     realtimeData,
     isLoading,
+    isMainLoading,
     selectedKeywordIdx,
     gotoDetail,
     handleChipClick,
@@ -65,20 +67,22 @@ const MainPage = () => {
           </div>
         </div>
 
-        {todayBookData ? (
-          <div className="absolute right-[180px] h-[340px] w-[234px] shadow-[0_4px_17.2px_rgba(0,0,0,0.5)]">
+        <div className="absolute right-[180px] h-[340px] w-[234px] shadow-[0_4px_17.2px_rgba(0,0,0,0.5)]">
+          {isMainLoading || todayBookData ? (
             <img
               className="h-full w-full"
-              src={getLargeBookImage(todayBookData.bookImageName)}
-              alt={todayBookData.bookName}
+              src={todayBookData ? getLargeBookImage(todayBookData.bookImageName) : skeletonImg}
+              alt={todayBookData ? todayBookData.bookName : '오늘의 도서 로딩 중'}
               fetchPriority="high"
               loading="eager"
               decoding="async"
             />
-          </div>
-        ) : (
-          <p className="absolute right-[180px] h-[340px] w-[234px] text-center leading-[340px] text-white">오늘의 책을 준비 중이에요 📚</p>
-        )}
+          ) : (
+            <p className="absolute right-[180px] h-[340px] w-[234px] text-center leading-[340px] text-white">
+              오늘의 책을 준비 중이에요 📚
+            </p>
+          )}
+        </div>
       </div>
 
       <div className="w-full pt-[60px]">

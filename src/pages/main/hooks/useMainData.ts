@@ -63,6 +63,7 @@ export const useMainData = () => {
     genreBookData,
     realtimeData,
     isLoading,
+    isMainLoading,
     selectedKeywordIdx,
     gotoDetail,
     handleChipClick,
