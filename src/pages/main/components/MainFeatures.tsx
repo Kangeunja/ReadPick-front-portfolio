@@ -1,9 +1,11 @@
+import React from 'react';
+
 type FeatureBook = {
   book: string;
   author: string;
 };
 
-export const MainFeatures = () => {
+export const MainFeatures = React.memo(() => {
   // 기능 소개 영역에 사용할 기본(더미) 도서 데이터 3개 생성
   const DUMMY_FEATURE_BOOKS: FeatureBook[] = Array.from({ length: 3 }, () => ({
     book: '책제목',
@@ -84,4 +86,4 @@ export const MainFeatures = () => {
       </div>
     </div>
   );
-};
+});

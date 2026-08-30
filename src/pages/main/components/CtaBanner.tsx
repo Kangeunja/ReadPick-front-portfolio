@@ -1,9 +1,11 @@
+import React from 'react';
+
 type CtaBannerData = {
   handleCtaClick: () => void;
   isLogin: boolean;
 };
 
-const CtaBanner = ({ handleCtaClick, isLogin }: CtaBannerData) => {
+const CtaBanner = React.memo(({ handleCtaClick, isLogin }: CtaBannerData) => {
   return (
     <section className="mb-[150px] w-full pt-[100px]">
       <div className="mx-auto w-container-w">
@@ -52,6 +54,6 @@ const CtaBanner = ({ handleCtaClick, isLogin }: CtaBannerData) => {
       </div>
     </section>
   );
-};
+});
 
 export default CtaBanner;

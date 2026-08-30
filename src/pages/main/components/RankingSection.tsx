@@ -1,3 +1,4 @@
+import React from 'react';
 import { BookItem } from 'types/book';
 import { MainBookCard } from './MainBookCard';
 
@@ -10,7 +11,7 @@ type RankingSectionData = {
 
 const SKELETON_COUNT = [1, 2, 3, 4];
 
-const RankingSection = ({ isGenreLoading, genreBookData, isLogin, gotoDetail }: RankingSectionData) => {
+const RankingSection = React.memo(({ isGenreLoading, genreBookData, isLogin, gotoDetail }: RankingSectionData) => {
   return (
     <div className="w-full pt-[130px]">
       <div className="mx-auto w-container-w">
@@ -50,5 +51,5 @@ const RankingSection = ({ isGenreLoading, genreBookData, isLogin, gotoDetail }: 
       </div>
     </div>
   );
-};
+});
 export default RankingSection;

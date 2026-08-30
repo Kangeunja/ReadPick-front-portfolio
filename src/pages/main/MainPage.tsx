@@ -1,15 +1,17 @@
+import { lazy, Suspense } from 'react';
 import { MainFeatures } from './components/MainFeatures';
 
 import { useMainData } from './hooks/useMainData';
 import { getLargeBookImage } from 'utils/image';
 
+import KeywordChips from './components/KeywordChips';
+const ReviewSection = lazy(() => import('./components/ReviewSection'));
+const RankingSection = lazy(() => import('./components/RankingSection'));
+const CtaBanner = lazy(() => import('./components/CtaBanner'));
+
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import skeletonImg from 'assets/img/skeleton-cover.png';
-import KeywordChips from './components/KeywordChips';
-import ReviewSection from './components/ReviewSection';
-import CtaBanner from './components/CtaBanner';
-import RankingSection from './components/RankingSection';
 
 const MainPage = () => {
   const {
@@ -47,35 +49,35 @@ const MainPage = () => {
           </div>
         </div>
 
-        {isMainLoading ? (
-          <div className="absolute right-[180px] h-[340px] w-[234px] shadow-[0_4px_17.2px_rgba(0,0,0,0.5)]">
-            <div className="flex h-full w-full animate-pulse flex-col justify-between bg-gray-200/20 p-6">
-              <div className="flex flex-col gap-3">
-                <div className="h-5 w-1/3 rounded bg-white/20" />
-                <div className="h-8 w-4/5 rounded bg-white/30" />
-              </div>
-
-              <div className="flex flex-col items-center gap-3">
-                <div className="h-20 w-20 rounded-full bg-white/20" />
-                <div className="h-4 w-2/3 rounded bg-white/20" />
-                <div className="h-3 w-1/2 rounded bg-white/10" />
-              </div>
-            </div>
+        {!isMainLoading && !todayBookData ? (
+          <div className="flex h-full w-full items-center justify-center">
+            <p className="text-center font-gowun text-[20px] font-medium text-white">오늘의 책이 아직 준비되어 있지 않았어요! 📚</p>
           </div>
-        ) : todayBookData ? (
+        ) : (
           <div className="absolute right-[180px] h-[340px] w-[234px] shadow-[0_4px_17.2px_rgba(0,0,0,0.5)]">
+            {isMainLoading && (
+              <div className="absolute inset-0 z-0 flex h-full w-full animate-pulse flex-col justify-between bg-gray-200/20 p-6">
+                <div className="flex flex-col gap-3">
+                  <div className="h-5 w-1/3 rounded bg-white/20" />
+                  <div className="h-8 w-4/5 rounded bg-white/30" />
+                </div>
+
+                <div className="flex flex-col items-center gap-3">
+                  <div className="h-20 w-20 rounded-full bg-white/20" />
+                  <div className="h-4 w-2/3 rounded bg-white/20" />
+                  <div className="h-3 w-1/2 rounded bg-white/10" />
+                </div>
+              </div>
+            )}
+
             <img
-              className="h-full w-full object-cover"
-              src={getLargeBookImage(todayBookData.bookImageName)}
-              alt={todayBookData.bookName}
+              className={`relative z-10 aspect-[234/340] h-full w-full object-cover transition-opacity duration-300 ${isMainLoading ? 'opacity-0' : 'opacity-100'}`}
+              src={todayBookData ? getLargeBookImage(todayBookData.bookImageName) : skeletonImg}
+              alt={todayBookData ? todayBookData.bookName : '오늘의 도서 로딩 중'}
               fetchPriority="high"
               loading="eager"
               decoding="async"
             />
-          </div>
-        ) : (
-          <div className="flex h-full w-full items-center justify-center">
-            <p className="text-center font-gowun text-[20px] font-medium text-white">오늘의 책이 아직 준비되어 있지 않았어요! 📚</p>
           </div>
         )}
       </section>
@@ -89,11 +91,13 @@ const MainPage = () => {
 
       <MainFeatures />
 
-      <ReviewSection isMainLoading={isMainLoading} realtimeData={realtimeData} />
+      <Suspense fallback={null}>
+        <ReviewSection isMainLoading={isMainLoading} realtimeData={realtimeData} />
 
-      <RankingSection isGenreLoading={isGenreLoading} genreBookData={genreBookData} isLogin={isLogin} gotoDetail={gotoDetail} />
+        <RankingSection isGenreLoading={isGenreLoading} genreBookData={genreBookData} isLogin={isLogin} gotoDetail={gotoDetail} />
 
-      <CtaBanner handleCtaClick={handleCtaClick} isLogin={isLogin} />
+        <CtaBanner handleCtaClick={handleCtaClick} isLogin={isLogin} />
+      </Suspense>
     </div>
   );
 };

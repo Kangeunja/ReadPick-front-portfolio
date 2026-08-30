@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { useHorizontalScroll } from 'hooks/useHorizontalScroll';
 
 import mainArrowLeft from 'assets/img/main-arrow-left.png';
@@ -13,7 +15,7 @@ type KeywordChipsData = {
 
 const KEYWORD_SKELETON_WIDTHS = ['w-[157px]', 'w-[179px]', 'w-[179px]'];
 
-const KeywordChips = ({ keywordListData, isMainLoading, selectedKeywordIdx, handleChipClick }: KeywordChipsData) => {
+const KeywordChips = React.memo(({ keywordListData, isMainLoading, selectedKeywordIdx, handleChipClick }: KeywordChipsData) => {
   const { scrollRef, showLeftArrow, showRightArrow, handleScrollButtonClick } = useHorizontalScroll([keywordListData]);
 
   return (
@@ -93,6 +95,6 @@ const KeywordChips = ({ keywordListData, isMainLoading, selectedKeywordIdx, hand
       </div>
     </div>
   );
-};
+});
 
 export default KeywordChips;

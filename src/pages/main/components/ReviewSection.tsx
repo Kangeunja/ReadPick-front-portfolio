@@ -1,3 +1,4 @@
+import React from 'react';
 import { useMemo } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, FreeMode } from 'swiper/modules';
@@ -11,7 +12,7 @@ type ReviewSectionData = {
 
 const SKELETON_COUNT = [1, 2, 3, 4, 5];
 
-const ReviewSection = ({ isMainLoading, realtimeData }: ReviewSectionData) => {
+const ReviewSection = React.memo(({ isMainLoading, realtimeData }: ReviewSectionData) => {
   // 💡 데이터가 적을 때 무한 루프가 끊기는 것을 방지하기 위해 확장
   const displayReviews = useMemo(() => {
     if (!realtimeData || realtimeData.length === 0) return [];
@@ -123,6 +124,6 @@ const ReviewSection = ({ isMainLoading, realtimeData }: ReviewSectionData) => {
       </div>
     </div>
   );
-};
+});
 
 export default ReviewSection;

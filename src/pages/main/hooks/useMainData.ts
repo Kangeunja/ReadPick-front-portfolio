@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 
@@ -30,28 +30,34 @@ export const useMainData = () => {
   });
 
   const todayBookData = mainContentData?.todayBook; // 오늘의 책 데이터
-  const keywordListData = mainContentData?.bsList || []; // 키워드 리스트 데이터
-  const realtimeData = mainContentData?.realtime || []; // 실시간 리뷰 데이터
+  const keywordListData = useMemo(() => mainContentData?.bsList || [], [mainContentData?.bsList]); // 키워드 리스트 데이터
+  const realtimeData = useMemo(() => mainContentData?.realtime || [], [mainContentData?.realtime]); // 실시간 리뷰 데이터
 
   // 상세 페이지 이동함수
-  const gotoDetail = (bookIdx: number, bsIdx: number) => {
-    if (!bookIdx || !bsIdx) return;
-    navigate(`${ROUTES.KEYWORD}/detail/${bookIdx}?bsIdx=${bsIdx}`);
-  };
+  const gotoDetail = useCallback(
+    (bookIdx: number, bsIdx: number) => {
+      if (!bookIdx || !bsIdx) return;
+      navigate(`${ROUTES.KEYWORD}/detail/${bookIdx}?bsIdx=${bsIdx}`);
+    },
+    [navigate],
+  );
 
   // 키워드별 페이지이동
-  const handleChipClick = (bsIdx: number) => {
-    setSelectedKeywordIdx(bsIdx);
-    navigate(`${ROUTES.KEYWORD}/?bsIdx=${bsIdx}`);
-  };
+  const handleChipClick = useCallback(
+    (bsIdx: number) => {
+      setSelectedKeywordIdx(bsIdx);
+      navigate(`${ROUTES.KEYWORD}/?bsIdx=${bsIdx}`);
+    },
+    [navigate],
+  );
 
-  const handleCtaClick = () => {
+  const handleCtaClick = useCallback(() => {
     if (!isLogin) {
       navigate(ROUTES.LOGIN);
     } else {
       handleChipClick(keywordListData[0]?.bsIdx);
     }
-  };
+  }, [isLogin, navigate, keywordListData, handleChipClick]);
 
   return {
     isLogin,
