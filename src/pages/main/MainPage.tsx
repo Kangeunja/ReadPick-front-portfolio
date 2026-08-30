@@ -67,7 +67,14 @@ const MainPage = () => {
 
         {todayBookData ? (
           <div className="absolute right-[180px] h-[340px] w-[234px] shadow-[0_4px_17.2px_rgba(0,0,0,0.5)]">
-            <img className="h-full w-full" src={getLargeBookImage(todayBookData.bookImageName)} alt={todayBookData.bookName} />
+            <img
+              className="h-full w-full"
+              src={getLargeBookImage(todayBookData.bookImageName)}
+              alt={todayBookData.bookName}
+              fetchPriority="high"
+              loading="eager"
+              decoding="async"
+            />
           </div>
         ) : (
           <p className="absolute right-[180px] h-[340px] w-[234px] text-center leading-[340px] text-white">오늘의 책을 준비 중이에요 📚</p>
@@ -174,7 +181,13 @@ const MainPage = () => {
               <SwiperSlide key={`${review.id}-${index}`} className="!w-auto">
                 <div className="min-w-[280px] max-w-[280px] flex-shrink-0 rounded-[20px] border border-[#e8e2f4] bg-white p-[18px] shadow-[0_8px_20px_rgba(0,0,0,0.06)]">
                   <div className="mb-[14px] flex items-start gap-[12px]">
-                    <img src={review.bookCoverUrl} alt={review.bookTitle} className="h-[90px] w-[64px] rounded-[8px] object-cover" />
+                    <img
+                      src={review.bookCoverUrl}
+                      alt={review.bookTitle}
+                      className="h-[90px] w-[64px] rounded-[8px] object-cover"
+                      fetchPriority={index < 3 ? 'high' : 'auto'}
+                      loading={index < 3 ? 'eager' : 'lazy'}
+                    />
                     <div className="min-w-0">
                       <p className="mb-[6px] line-clamp-2 h-[39px] text-[13px] font-semibold text-[#2f2f2f]">{review.bookTitle}</p>
                       <p className="text-[12px] text-[#8a8a8a]">{review.createdAt}</p>
