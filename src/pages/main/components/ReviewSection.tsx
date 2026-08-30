@@ -5,6 +5,9 @@ import { Autoplay, FreeMode } from 'swiper/modules';
 import { getProfileImage } from 'utils/image';
 import { ReviewRealtimeParams } from 'types/review';
 
+import 'swiper/css';
+import 'swiper/css/free-mode';
+
 type ReviewSectionData = {
   isMainLoading: boolean;
   realtimeData: ReviewRealtimeParams[];

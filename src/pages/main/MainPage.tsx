@@ -1,17 +1,15 @@
 import { lazy, Suspense } from 'react';
+
 import { MainFeatures } from './components/MainFeatures';
+import KeywordChips from './components/KeywordChips';
+import RankingSection from './components/RankingSection';
+import CtaBanner from './components/CtaBanner';
 
 import { useMainData } from './hooks/useMainData';
 import { getLargeBookImage } from 'utils/image';
-
-import KeywordChips from './components/KeywordChips';
-const ReviewSection = lazy(() => import('./components/ReviewSection'));
-const RankingSection = lazy(() => import('./components/RankingSection'));
-const CtaBanner = lazy(() => import('./components/CtaBanner'));
-
-import 'swiper/css';
-import 'swiper/css/free-mode';
 import skeletonImg from 'assets/img/skeleton-cover.png';
+
+const ReviewSection = lazy(() => import('./components/ReviewSection'));
 
 const MainPage = () => {
   const {
@@ -93,11 +91,11 @@ const MainPage = () => {
 
       <Suspense fallback={null}>
         <ReviewSection isMainLoading={isMainLoading} realtimeData={realtimeData} />
-
-        <RankingSection isGenreLoading={isGenreLoading} genreBookData={genreBookData} isLogin={isLogin} gotoDetail={gotoDetail} />
-
-        <CtaBanner handleCtaClick={handleCtaClick} isLogin={isLogin} />
       </Suspense>
+
+      <RankingSection isGenreLoading={isGenreLoading} genreBookData={genreBookData} isLogin={isLogin} gotoDetail={gotoDetail} />
+
+      <CtaBanner handleCtaClick={handleCtaClick} isLogin={isLogin} />
     </div>
   );
 };
