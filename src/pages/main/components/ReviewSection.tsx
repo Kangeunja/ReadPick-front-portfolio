@@ -2,11 +2,14 @@ import { useMemo } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, FreeMode } from 'swiper/modules';
 import { getProfileImage } from 'utils/image';
+import { ReviewRealtimeParams } from 'types/review';
 
 type ReviewSectionData = {
   isMainLoading: boolean;
-  realtimeData: [];
+  realtimeData: ReviewRealtimeParams[];
 };
+
+const SKELETON_COUNT = [1, 2, 3, 4, 5];
 
 const ReviewSection = ({ isMainLoading, realtimeData }: ReviewSectionData) => {
   // 💡 데이터가 적을 때 무한 루프가 끊기는 것을 방지하기 위해 확장
@@ -19,51 +22,38 @@ const ReviewSection = ({ isMainLoading, realtimeData }: ReviewSectionData) => {
     <div className="w-full bg-[#181b1f] p-[60px]">
       <div className="mx-auto w-container-w">
         <div className="mb-[30px] text-center">
-          <p className="sub-title-label text-white">ReadPick 독자들의 실시간 리뷰</p>
+          <h2 className="sub-title-label text-white">ReadPick 독자들의 실시간 리뷰</h2>
           <p className="sub-title-p text-purple-200/80">지금 이 순간 올라온 독자 리뷰를 한눈에 확인해보세요</p>
         </div>
         {isMainLoading ? (
-          <Swiper
-            modules={[Autoplay, FreeMode]}
-            direction="horizontal"
-            slidesPerView="auto"
-            spaceBetween={20}
-            loop={true}
-            speed={6000}
-            autoplay={{
-              delay: 1,
-              disableOnInteraction: false,
-            }}
-            allowTouchMove={false}
-            simulateTouch={false}
-            className="pointer-events-none w-full !py-2"
-          >
-            {[1, 2, 3, 4, 5].map((idx) => (
-              <SwiperSlide key={idx} className="!w-auto">
-                <div className="min-w-[280px] max-w-[280px] flex-shrink-0 animate-pulse rounded-[20px] border border-[#e8e2f4] bg-white p-[18px] shadow-[0_8px_20px_rgba(0,0,0,0.06)]">
-                  <div className="mb-[14px] flex items-start gap-[12px]">
-                    <div className="h-[90px] w-[64px] flex-shrink-0 rounded-[8px] bg-gray-200" />
-                    <div className="flex flex-1 flex-col gap-2 pt-1">
-                      <div className="h-[14px] w-full rounded bg-gray-200" />
-                      <div className="h-[14px] w-2/3 rounded bg-gray-200" />
-                      <div className="mt-1 h-[11px] w-1/2 rounded bg-gray-100" />
-                    </div>
-                  </div>
-
-                  <div className="mb-[18px] flex flex-col gap-2">
-                    <div className="h-[13px] w-full rounded bg-gray-100" />
-                    <div className="h-[13px] w-5/6 rounded bg-gray-100" />
-                    <div className="h-[13px] w-2/3 rounded bg-gray-100" />
-                  </div>
-
-                  <div className="flex items-center gap-[10px] border-t border-[#f0ebf9] pt-[12px]">
-                    <div className="h-[36px] w-[36px] flex-shrink-0 rounded-full bg-gray-200" />
-                    <div className="h-[13px] w-20 rounded bg-gray-200" />
+          <div className="flex w-full gap-[20px] overflow-hidden !py-2">
+            {SKELETON_COUNT.map((idx) => (
+              <div
+                key={`review-skel-${idx}`}
+                className="min-w-[280px] max-w-[280px] flex-shrink-0 animate-pulse rounded-[20px] border border-[#2a2d32] bg-[#22262c] p-[18px]"
+              >
+                <div className="mb-[14px] flex items-start gap-[12px]">
+                  <div className="h-[90px] w-[64px] flex-shrink-0 rounded-[8px] bg-[#2e333b]" />
+                  <div className="flex flex-1 flex-col gap-2 pt-1">
+                    <div className="h-[14px] w-full rounded bg-[#2e333b]" />
+                    <div className="h-[14px] w-2/3 rounded bg-[#2e333b]" />
+                    <div className="mt-1 h-[11px] w-1/2 rounded bg-[#2a2d32]" />
                   </div>
                 </div>
-              </SwiperSlide>
+
+                <div className="mb-[18px] flex flex-col gap-2">
+                  <div className="h-[13px] w-full rounded bg-[#2a2d32]" />
+                  <div className="h-[13px] w-5/6 rounded bg-[#2a2d32]" />
+                  <div className="h-[13px] w-2/3 rounded bg-[#2a2d32]" />
+                </div>
+
+                <div className="flex items-center gap-[10px] border-t border-[#2e333b] pt-[12px]">
+                  <div className="h-[36px] w-[36px] flex-shrink-0 rounded-full bg-[#2e333b]" />
+                  <div className="h-[13px] w-20 rounded bg-[#2e333b]" />
+                </div>
+              </div>
             ))}
-          </Swiper>
+          </div>
         ) : (
           <Swiper
             modules={[Autoplay, FreeMode]}
@@ -86,7 +76,7 @@ const ReviewSection = ({ isMainLoading, realtimeData }: ReviewSectionData) => {
             simulateTouch={false}
             className="pointer-events-none w-full !py-2"
           >
-            {displayReviews?.map((review: any, index: number) => (
+            {displayReviews.map((review, index: number) => (
               <SwiperSlide key={`review-${review.id}-${index}`} className="!w-auto">
                 <div className="min-w-[280px] max-w-[280px] flex-shrink-0 rounded-[20px] border border-[#e8e2f4] bg-white p-[18px] shadow-[0_8px_20px_rgba(0,0,0,0.06)]">
                   <div className="mb-[14px] flex items-start gap-[12px]">
@@ -94,8 +84,8 @@ const ReviewSection = ({ isMainLoading, realtimeData }: ReviewSectionData) => {
                       src={review.bookCoverUrl}
                       alt={review.bookTitle}
                       className="h-[90px] w-[64px] rounded-[8px] object-cover"
-                      fetchPriority={index < 3 ? 'high' : 'auto'}
-                      loading={index < 3 ? 'eager' : 'lazy'}
+                      loading="lazy"
+                      decoding="async"
                     />
                     <div className="min-w-0">
                       <p className="mb-[6px] line-clamp-2 h-[39px] text-[13px] font-semibold text-[#2f2f2f]">{review.bookTitle}</p>
@@ -119,6 +109,8 @@ const ReviewSection = ({ isMainLoading, realtimeData }: ReviewSectionData) => {
                         src={getProfileImage(review.userProfileUrl)}
                         alt={review.userNickname}
                         className="h-[36px] w-[36px] rounded-full object-cover"
+                        loading="lazy"
+                        decoding="async"
                       />
                     )}
                     <p className="text-[13px] font-medium text-[#2f2f2f]">{review.userNickname}</p>

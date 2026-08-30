@@ -5,22 +5,22 @@ import mainArrowRight from 'assets/img/main-arrow-right.png';
 import { keywordSubtitles, SearchCategory } from 'types/keyword';
 
 type KeywordChipsData = {
-  keywordListData: [];
+  keywordListData: SearchCategory[];
   isMainLoading: boolean;
   selectedKeywordIdx: number | null;
   handleChipClick: (bsIdx: number) => void;
 };
 
+const KEYWORD_SKELETON_WIDTHS = ['w-[157px]', 'w-[179px]', 'w-[179px]'];
+
 const KeywordChips = ({ keywordListData, isMainLoading, selectedKeywordIdx, handleChipClick }: KeywordChipsData) => {
   const { scrollRef, showLeftArrow, showRightArrow, handleScrollButtonClick } = useHorizontalScroll([keywordListData]);
-
-  const KEYWORD_SKELETON_WIDTHS = ['w-[157px]', 'w-[179px]', 'w-[179px]', 'w-[168px]', 'w-[168px]', 'w-[179px]'];
 
   return (
     <div className="w-full pt-[60px]">
       <div className="mx-auto w-container-w">
         <div className="mb-[30px]">
-          <p className="sub-title-label">키워드로 골라보는 추천 책</p>
+          <h2 className="sub-title-label">키워드로 골라보는 추천 책</h2>
           <p className="sub-title-p">관심 있는 주제를 선택하면 관련 도서를 볼 수 있어요</p>
         </div>
 
@@ -43,14 +43,14 @@ const KeywordChips = ({ keywordListData, isMainLoading, selectedKeywordIdx, hand
             {isMainLoading
               ? KEYWORD_SKELETON_WIDTHS.map((widthClass, idx) => (
                   <div
-                    key={idx}
-                    className={`h-[58px] flex-shrink-0 ${widthClass} flex animate-pulse flex-col justify-center gap-1.5 rounded-full border border-gray-200 bg-gray-100 px-[18px] py-[10px]`}
+                    key={`keyword-skel-${idx}`}
+                    className={`h-[58px] flex-shrink-0 ${widthClass} flex flex-col justify-center gap-1.5 rounded-full border border-gray-200 bg-gray-100 px-[18px] py-[10px]`}
                   >
                     <div className="h-[9px] w-2/5 rounded bg-gray-200" />
                     <div className="h-[14px] w-4/5 rounded bg-gray-300" />
                   </div>
                 ))
-              : keywordListData.map((item: SearchCategory) => {
+              : keywordListData.map((item) => {
                   const isActive = selectedKeywordIdx === item.bsIdx;
 
                   return (

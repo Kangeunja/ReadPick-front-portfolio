@@ -8,18 +8,24 @@ type RankingSectionData = {
   gotoDetail: (bookIdx: number, bsIdx: number) => void;
 };
 
+const SKELETON_COUNT = [1, 2, 3, 4];
+
 const RankingSection = ({ isGenreLoading, genreBookData, isLogin, gotoDetail }: RankingSectionData) => {
   return (
     <div className="w-full pt-[130px]">
       <div className="mx-auto w-container-w">
         <div className="mb-[30px]">
-          <p className="sub-title-label">실시간 추천순 랭킹</p>
+          <h2 className="sub-title-label">실시간 추천순 랭킹</h2>
           <p className="sub-title-p">높은 추천 점수를 기록한 인기 도서들을 순서대로 보여드려요.</p>
         </div>
         {isGenreLoading ? (
           <div className="flex w-full flex-wrap gap-x-[30px] gap-y-[30px]">
-            {[1, 2, 3, 4].map((_, idx) => (
-              <div key={idx} className="h-[280px] w-[220px] animate-pulse rounded-[15px] bg-gray-200" />
+            {SKELETON_COUNT.map((idx) => (
+              <div key={`ranking-skel-${idx}`} className="w-[130px] animate-pulse">
+                <div className="h-[150px] w-full rounded-[5px] bg-gray-200" />
+                <div className="mt-4 h-[16px] w-3/4 rounded bg-gray-200" />
+                <div className="mt-2 h-[12px] w-1/2 rounded bg-gray-200" />
+              </div>
             ))}
           </div>
         ) : genreBookData && genreBookData.length > 0 ? (
