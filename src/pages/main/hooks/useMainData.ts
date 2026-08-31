@@ -27,8 +27,8 @@ export const useMainData = () => {
       return res.data.data;
     },
   });
-  const { data: realtimeData = [], isLoading: isRealLoading } = useReviewRealtimeQuery({ enabled: !isMainLoading }); // 실시간 리뷰 데이터
-  const { data: genreBookData = [], isLoading: isGenreLoading } = useGenreBooksQuery(isLogin, { enabled: !isMainLoading }); // 추천 도서 데이터
+  const { data: realtimeData = [], isLoading: isRealLoading } = useReviewRealtimeQuery(); // 실시간 리뷰 데이터
+  const { data: genreBookData = [], isLoading: isGenreLoading } = useGenreBooksQuery(isLogin); // 추천 도서 데이터
 
   const todayBookData = mainContentData?.todayBook; // 오늘의 책 데이터
   const keywordListData = useMemo(() => mainContentData?.bsList || [], [mainContentData?.bsList]); // 키워드 리스트 데이터

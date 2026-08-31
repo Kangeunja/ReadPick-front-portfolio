@@ -70,7 +70,7 @@ const MainPage = () => {
             )}
 
             <img
-              className="relative z-10 aspect-[234/340] h-full w-full object-cover"
+              className={`relative z-10 aspect-[234/340] h-full w-full object-cover transition-opacity duration-300 ${isMainLoading ? 'opacity-0' : 'opacity-100'}`}
               src={todayBookData ? getLargeBookImage(todayBookData.bookImageName) : skeletonImg}
               alt={todayBookData ? todayBookData.bookName : '오늘의 도서 로딩 중'}
               {...({ fetchpriority: 'high' } as React.ImgHTMLAttributes<HTMLImageElement>)}
