@@ -5,12 +5,14 @@ type FeatureBook = {
   author: string;
 };
 
+const DUMMY_FEATURE_BOOKS: FeatureBook[] = [
+  { book: '책제목', author: '지은이' },
+  { book: '책제목', author: '지은이' },
+  { book: '책제목', author: '지은이' },
+];
+
 export const MainFeatures = React.memo(() => {
   // 기능 소개 영역에 사용할 기본(더미) 도서 데이터 3개 생성
-  const DUMMY_FEATURE_BOOKS: FeatureBook[] = Array.from({ length: 3 }, () => ({
-    book: '책제목',
-    author: '지은이',
-  }));
 
   return (
     <div className="mx-auto mb-[130px] w-container-w pt-[100px]">

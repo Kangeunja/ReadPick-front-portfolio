@@ -54,7 +54,7 @@ const MainPage = () => {
           </div>
         ) : (
           <div className="absolute right-[180px] h-[340px] w-[234px] shadow-[0_4px_17.2px_rgba(0,0,0,0.5)]">
-            {isMainLoading && (
+            {isMainLoading ? (
               <div className="absolute inset-0 z-0 flex h-full w-full animate-pulse flex-col justify-between bg-gray-200/20 p-6">
                 <div className="flex flex-col gap-3">
                   <div className="h-5 w-1/3 rounded bg-white/20" />
@@ -67,16 +67,16 @@ const MainPage = () => {
                   <div className="h-3 w-1/2 rounded bg-white/10" />
                 </div>
               </div>
+            ) : (
+              <img
+                className="relative z-10 aspect-[234/340] h-full w-full object-cover"
+                src={todayBookData ? getLargeBookImage(todayBookData.bookImageName) : skeletonImg}
+                alt={todayBookData ? todayBookData.bookName : '오늘의 도서 로딩 중'}
+                {...({ fetchpriority: 'high' } as React.ImgHTMLAttributes<HTMLImageElement>)}
+                loading="eager"
+                decoding="async"
+              />
             )}
-
-            <img
-              className={`relative z-10 aspect-[234/340] h-full w-full object-cover transition-opacity duration-300 ${isMainLoading ? 'opacity-0' : 'opacity-100'}`}
-              src={todayBookData ? getLargeBookImage(todayBookData.bookImageName) : skeletonImg}
-              alt={todayBookData ? todayBookData.bookName : '오늘의 도서 로딩 중'}
-              {...({ fetchpriority: 'high' } as React.ImgHTMLAttributes<HTMLImageElement>)}
-              loading="eager"
-              decoding="async"
-            />
           </div>
         )}
       </section>

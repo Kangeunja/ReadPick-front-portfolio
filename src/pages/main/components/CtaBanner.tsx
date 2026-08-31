@@ -42,7 +42,9 @@ const CtaBanner = React.memo(({ handleCtaClick, isLogin }: CtaBannerData) => {
                 className="group flex items-center gap-2 rounded-[14px] bg-white px-[28px] py-[16px] text-[15px] font-bold text-[#311b92] shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-purple-50 hover:shadow-purple-900/30 active:translate-y-0"
               >
                 <span>{isLogin ? '지금 첫 독서 기록하기' : 'ReadPick 시작하기'}</span>
-                <span className="text-[16px] transition-transform duration-300 group-hover:translate-x-1">→</span>
+                <span className="text-[16px] transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">
+                  →
+                </span>
               </button>
 
               <p className="text-[12px] text-purple-200/60">

@@ -13,7 +13,7 @@ type ReviewSectionData = {
   realtimeData: ReviewRealtimeParams[];
 };
 
-const SKELETON_COUNT = [1, 2, 3, 4, 5];
+const SKELETON_COUNT = [1, 2, 3];
 
 const ReviewSection = React.memo(({ isRealLoading, realtimeData }: ReviewSectionData) => {
   // 💡 데이터가 적을 때 무한 루프가 끊기는 것을 방지하기 위해 확장
@@ -78,7 +78,7 @@ const ReviewSection = React.memo(({ isRealLoading, realtimeData }: ReviewSection
             }}
             allowTouchMove={false}
             simulateTouch={false}
-            className="pointer-events-none w-full !py-2"
+            className="pointer-events-none w-full !py-2 [will-change:transform]"
           >
             {displayReviews.map((review, index: number) => (
               <SwiperSlide key={`review-${review.id}-${index}`} className="!w-auto">

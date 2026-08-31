@@ -46,7 +46,7 @@ const KeywordChips = React.memo(({ keywordListData, isMainLoading, selectedKeywo
               ? KEYWORD_SKELETON_WIDTHS.map((widthClass, idx) => (
                   <div
                     key={`keyword-skel-${idx}`}
-                    className={`h-[58px] flex-shrink-0 ${widthClass} flex flex-col justify-center gap-1.5 rounded-full border border-gray-200 bg-gray-100 px-[18px] py-[10px]`}
+                    className={`h-[58px] flex-shrink-0 ${widthClass} flex animate-pulse flex-col justify-center gap-1.5 rounded-full border border-gray-200 bg-gray-100 px-[18px] py-[10px]`}
                   >
                     <div className="h-[9px] w-2/5 rounded bg-gray-200" />
                     <div className="h-[14px] w-4/5 rounded bg-gray-300" />
