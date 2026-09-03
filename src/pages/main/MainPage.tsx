@@ -40,6 +40,7 @@ const MainPage = () => {
           }
         }}
       >
+        {/* 좌측 고정 텍스트 영역 */}
         <div className="absolute bottom-[30px] flex items-end">
           <div className="h-[180px] w-[160px] bg-main-book" />
           <div className="text-white">
@@ -48,37 +49,36 @@ const MainPage = () => {
           </div>
         </div>
 
-        {!isMainLoading && !todayBookData ? (
-          <div className="flex h-full w-full items-center justify-center">
-            <p className="text-center font-gowun text-[20px] font-medium text-white">오늘의 책이 아직 준비되어 있지 않았어요! 📚</p>
-          </div>
-        ) : (
-          <div className="absolute right-[180px] h-[340px] w-[234px] shadow-[0_4px_17.2px_rgba(0,0,0,0.5)]">
-            {isMainLoading ? (
-              <div className="absolute inset-0 z-0 flex h-full w-full animate-pulse flex-col justify-between bg-gray-200/20 p-6">
-                <div className="flex flex-col gap-3">
-                  <div className="h-5 w-1/3 rounded bg-white/20" />
-                  <div className="h-8 w-4/5 rounded bg-white/30" />
-                </div>
-
-                <div className="flex flex-col items-center gap-3">
-                  <div className="h-20 w-20 rounded-full bg-white/20" />
-                  <div className="h-4 w-2/3 rounded bg-white/20" />
-                  <div className="h-3 w-1/2 rounded bg-white/10" />
-                </div>
+        {/* 우측 컨텐츠 영역 */}
+        <div className="absolute right-[180px] top-[30px] flex h-[340px] w-[234px] items-center justify-center">
+          {isMainLoading ? (
+            <div className="flex h-full w-full animate-pulse flex-col justify-between bg-gray-200/20 p-6 shadow-[0_4px_17.2px_rgba(0,0,0,0.5)]">
+              <div className="flex flex-col gap-3">
+                <div className="h-5 w-1/3 rounded bg-white/20" />
+                <div className="h-8 w-4/5 rounded bg-white/30" />
               </div>
-            ) : (
-              <img
-                className="relative z-10 aspect-[234/340] h-full w-full object-cover"
-                src={todayBookData ? getLargeBookImage(todayBookData.bookImageName) : skeletonImg}
-                alt={todayBookData ? todayBookData.bookName : '오늘의 도서 로딩 중'}
-                {...({ fetchpriority: 'high' } as React.ImgHTMLAttributes<HTMLImageElement>)}
-                loading="eager"
-                decoding="async"
-              />
-            )}
-          </div>
-        )}
+
+              <div className="flex flex-col items-center gap-3">
+                <div className="h-20 w-20 rounded-full bg-white/20" />
+                <div className="h-4 w-2/3 rounded bg-white/20" />
+                <div className="h-3 w-1/2 rounded bg-white/10" />
+              </div>
+            </div>
+          ) : todayBookData ? (
+            <img
+              className="relative z-10 aspect-[234/340] h-full w-full object-cover"
+              src={todayBookData ? getLargeBookImage(todayBookData.bookImageName) : skeletonImg}
+              width={234}
+              height={340}
+              alt={todayBookData ? todayBookData.bookName : '오늘의 도서 로딩 중'}
+              {...({ fetchpriority: 'high' } as React.ImgHTMLAttributes<HTMLImageElement>)}
+              loading="eager"
+              decoding="async"
+            />
+          ) : (
+            <p className="text-center font-gowun text-[20px] font-medium text-white">오늘의 책이 아직 준비되어 있지 않았어요! 📚</p>
+          )}
+        </div>
       </section>
 
       <KeywordChips
