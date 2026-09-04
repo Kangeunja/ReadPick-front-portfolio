@@ -2,34 +2,51 @@
 
 > **네이버와 알라딘 API를 활용한 실시간 도서 데이터 수집 및 도서 추천 시스템**
 > 
-> 본 프로젝트는 로컬 개발부터 Docker 기반 클라우드 배포, Netlify를 통한 정적 호스팅 배포를 통해 외부 API 통합 및 CORS 이슈 해결까지 전체 사이클을 직접 경험하며 구축했습니다.
+> 본 프로젝트에서 **Frontend 개발 및 Node.js 기반 데이터 중계(BFF) 구축**을 담당하였습니다. API 통신 구조화, CORS 이슈 해결, 사용자 경험 최적화 중심으로 리팩토링을 진행하였습니다. 또한 Groq LLM API를 연동하여 AI 도서 추천 챗봇 및 리뷰 요약 기능을 구현하고, Docker 기반 백엔드 배포와 Netlify 정적 호스팅 배포를 통해 외부 API 통합 과 CORS 이슈문제를 해결한 경험이 있습니다. 
 
-## 🛠 기술 스택 및 개발 환경
+---
 
-### **Backend**
-<img src="https://img.shields.io/badge/SpringBoot-6DB33F?style=for-the-badge&logo=SpringBoot&logoColor=white"> <img src="https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/MyBatis-000000?style=for-the-badge&logo=fluentd&logoColor=white">
-<img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+## 🛠 기술 스택
 
-* **개발 환경:** JDK 17, Maven, Lombok
-* **핵심 기술:** Spring Boot, JAVA, MyBatis, MySQL, Supabase Storage, Node JS(프론트엔드와 백엔드 사이의 BFF 및 데이터 중계 역할)
-* **배포 및 인프라:** Docker, Render
-* **설정 관리:** Spring Profile 활용 (`dev` - 로컬, `prod` - 배포)
-
-### **Frontend**
-<img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=black"> <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=Axios&logoColor=white"> <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=black">
+### **Frontend & BFF (담당 영역)**
+<img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=black">  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=black">
 <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
 <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white">
-<img src="https://img.shields.io/badge/Supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white">
+<img src="https://img.shields.io/badge/Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white">
 
-* **개발 환경:** Node.js / npm
-* **핵심 기술:** React, TypeScript, Axios (인스턴스 기반 통신 구조화)
+
+* **핵심 기술:** React, TypeScript, Javascript, Node.js (BFF 역할)
 * **배포:** Netlify
 * **설정 관리:** `.env` 환경 변수를 통한 API URL 동적 관리
 
+ ### **Backend (협업 영역)**
+<img src="https://img.shields.io/badge/SpringBoot-6DB33F?style=for-the-badge&logo=SpringBoot&logoColor=white"> <img src="https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/MyBatis-000000?style=for-the-badge&logo=fluentd&logoColor=white">
+<img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+<img src="https://img.shields.io/badge/Supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white">
+
+* **핵심 기술:** Spring Boot, JAVA, MyBatis, MySQL, Supabase Storage
+* **배포 및 인프라:** Render
+* **설정 관리:** Spring Profile 활용 (`dev` - 로컬, `prod` - 배포)
+
+---
+
+## 👨‍💻 주요 구현 기능
+
+**1. AI 기반 기능 도입(Groq LLM)**   
+* **AI 도서 추천 챗봇:** Groq LLM API를 연동하여 맞춤형 도서 추천과 사용자 질의응답 챗봇 구축
+* **리뷰 요약 기능:** 도서 상세페이지 내 다수의 사용자 리뷰를 AI가 핵심 내용 기반으로 요약하여 사용자 경험 향상
+  
+**2. Frontend & UX 최적화**
+* **웹 성능 최적화:** Lighthouse 지표 측정 기반으로 레이아웃 CLS 개선 및 초기 로딩 속도(FCP/LCP) 최적화
+* **사용자 흐름 및 Auth 분기처리:** 로그인 상태에 따른 조건부 렌더링 처리
+* **도서 검색 & 리뷰 CRUD:** 실시간 검색 기능 및 리뷰 작성/수정/삭제 기능
+
+**3. 상태 관리 아키텍처**
+* **커스텀 훅 패턴 구축:** 데이터 패칭 및 전역 상태 관리 로직을 커스텀 훅으로 분리하여 재사용성 및 유지보수성 향상
+
+---
 
 ## 🚀 데이터 파이프라인 (Data Pipeline)
-
-ReadPick은 정적인 데이터에 의존하지 않고, **자동화된 5단계 파이프라인**을 통해 데이터를 동적으로 구축합니다.
 
 | 단계 | 명칭 | 설명 |
 | :-- | :--- | :--- |
@@ -66,48 +83,37 @@ ReadPick은 정적인 데이터에 의존하지 않고, **자동화된 5단계 �
 
 ### **Architecture Update (BFF & Supabase)**
 * **Node.js 서버 도입:** 프론트엔드와 백엔드 사이에 Node.js 중계 서버를 두어, 데이터 통신 및 가공 로직을 분리하는 데이터 흐름을 구축했습니다.
-* **Supabase 스토리지 연동:** 사용자의 프로필 이미지 업로드 및 수정 기능을 구현하기 위해 백엔드단에서 Supabase Storage를 활용하였으며 업로드된 파일의 URL을 안전하게 관리하도록 구현했습니다. 
+* **Supabase 스토리지 연동:** 사용자의 프로필 이미지 업로드 및 수정 기능을 구현하기 위해 백엔드단에서 Supabase Storage를 활용하여 마이페이지 내 업로드된 프로필 이미지 URL을 안전하게 관리하도록 구현했습니다. 
 
 ### **환경 변수 관리 (Environment Variables)**
 | 플랫폼 | 관리 변수 | 용도 |
 | :--- | :--- | :--- |
 | **Netlify** | `REACT_APP_API_URL` | 백엔드 API 서버 주소 연결 |
-| **Render** | `DB_URL`, `TTB_API_KEY` | DB 접속 정보 및 외부 API 보안 키 관리 |
+| **Render** | `DB_URL`, `TTB_API_KEY`등 | DB 접속 정보 및 외부 API 보안 키 관리 |
 
 
-## 🔍 Troubleshooting (주요 이슈 해결)
+## ⚡ 성능 최적화 및 문제 해결 (Troubleshooting)
 
-### 1 배포 환경 데이터 공백 이슈
-* **문제**: 배포 서버 접속 시 도서 리스트 API가 빈 배열(`[]`)만 반환
-* **원인**: 서버 소스 코드만 배포되어, 로직의 연료인 **DB내 기초 키워드**가 존재하지 않음
-* **해결**: MySQL 배포용 DB에 키워드를 직접 주입하여 최소 데이터를 확보함
+### 웹 성능 지표(Lighthouse) 개선 및 초기 로딩 속도 최적화 
+* **문제**: 초기페이지 진입 시 레이아웃 흔들림(CLS) 및 API 데이터 로딩 지연 발생
+* **원인**: 이미지 고정 크기 미지정 및 비효율적인 초기 API 요청으로 FCP/LCP 지표 저하
+* **해결**: Suspense태그와 React.lazy기법 적용, Skeleton UI 도입, fetchpriority속성 적용
+* **결과**: Lighthouse Performance 점수 상승, CLS 지표 개선 및 FCP/LCP 로딩 시간 단축, 사용자 경험(UX) 증가로 TBT 단축
 
-### 2 CORS 및 세션 인증 문제 (Netlify ↔ Render)
+---
+
+## 🛠️ 배포 및 인프라 이슈 해결 (Deployment & Infra)
+
+### 1. Node.js BFF를 도입한 CORS 및 세션 인증 문제 (Netlify ↔ Render)
 * **문제**: 배포 환경에서 로그인 시 인증 유지가 안되는 현상 발생
 * **원인**: 브라우저의 보안 정책으로 인해 서로 다른 도메인 간 인증 정보 전송 차단 및 HTTPS 환경의 same-site 설정누락
 * **해결**: Backend 전역에 CORS 설정(allowCredentials, allowedOrigins) 적용 및 쿠키옵션(same-site=none, secure=true) 설정
+* **결과**: 새로고침이나 재방문시에도 끊김없이 유지하여 보안과 안정성 구축
 
-### 3 외부 API 연동 실패 및 환경별 설정관리
-* **문제**: 로컬 개발 환경과 배포 서버의 DB 정보 및 API URL 혼선 발생
-* **해결**: Spring Profile(application-dev, application-prod) 분리 운영
-Render/Netlify의 Environment Variables 기능을 통해 소스 코드 노출 없이 중요한 키 값(외부 API Key) 관리
-
-### 4 데이터 수집 엔진 가동 및 영속성 확보
-* **문제**: 설정 완료 후에도 DB가 비어 있음 및 대량 데이터 저장 시 휘발 우려 발생 
-* **해결**: 전용 API(DBDataInsert)를 설계하여 최초 1회 강제 구동 완료. 또한 ddl-auto: update 설정으로 서버 재시작 후에도 데이터가 유지되도록 영속성 확보
-
-### 5 프로필 이미지 스토리지 환경 전환(로컬 -> Supabase Storage)
+### 2. 클라우드 배포 환경의 프로필 이미지 휘발 문제
 * **문제**: 프로필 이미지 업로드 및 수정 시 파일을 로컬 폴더로 저장할 경우, 배포된 서버 환경에서는 해당 파일의 이미지가 깨지거나 보이지 않는 현상 발생
 * **원인**: 로컬 파일 시스템 기반 방식은 확장성이 떨어지고 클라우드 배포 시 데이터가 공유되지 않고 영속성이 보장되지 않음
 * **해결**: 파일 업로드 방식을 로컬 경로에서 **Supabase Storage**로 전환하여 이미지 업로드 시 Supabase에 안전하게 저장되도록 구현하고, 데이터베이스에 발급받은 URL을 저장하여 어느 환경에서든 일관되게 이미지를 보여줄 수 있도록 개선
+* **결과**: 서버 상태 및 배포 환경에서 영향받지 않는 일관된 이미지 업로드/렌더링 영속성 확보 
 
-### 6 Node.js 중계 서버 도입에 따른 통신 흐름 최적화
-* **문제**: 프론트엔드에서 직접 외부 API나 백엔드를 호출할때 발생하는 CORS 및 인증토큰 복잡성
-* **해결**: Node.js 서버가 중간에서 요청을 받아 가공할수 있도록 구조를 변경하여 보안성을 높이고 클라이언트 단의 로직을 단순화함
-  
 ---
-
-## 🔗 Deep Dive
-더욱 상세한 개발 과정, 기술적 고찰 및 단계별 해결과정은 아래 노션 링크에서 확인하실 수 있습니다.
->
-[👉 ReadPick 개발 일지 및 트러블슈팅 상세 (Notion)](https://app.notion.com/p/ReadPick-3ac94e097cd8805fa156c08316802ac5)
